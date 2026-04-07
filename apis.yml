@@ -7,11 +7,11 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Logging
   - Analytics
-  - Monitoring
   - Azure
   - Cloud
+  - Logging
+  - Monitoring
 url: >-
   https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/apis.yml
 created: '2024-01-01'
@@ -24,9 +24,9 @@ apis:
     humanURL: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/overview
     baseURL: https://api.loganalytics.io/v1
     tags:
-      - Query
-      - Logs
       - Analytics
+      - Logs
+      - Query
     properties:
       - type: Documentation
         url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/overview
@@ -40,9 +40,9 @@ apis:
     humanURL: https://learn.microsoft.com/en-us/rest/api/loganalytics/
     baseURL: https://management.azure.com
     tags:
+      - Configuration
       - Management
       - Workspaces
-      - Configuration
     properties:
       - type: Documentation
         url: https://learn.microsoft.com/en-us/rest/api/loganalytics/
