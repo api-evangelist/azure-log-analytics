@@ -1,0 +1,321 @@
+openapi: 3.0.3
+info:
+  title: Azure Log Analytics Ingestion API
+  description: >-
+    The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics
+    workspace using REST API calls or client libraries. Send data to supported
+    Azure tables or custom tables using data collection rules (DCR) for
+    transformation and routing.
+  version: '2023-01-01'
+  contact:
+    name: Microsoft Azure Support
+    url: https://azure.microsoft.com/en-us/support/
+  license:
+    name: Microsoft Azure Terms
+    url: https://azure.microsoft.com/en-us/support/legal/
+  x-generated-from: documentation
+  x-last-validated: '2026-04-18'
+servers:
+  - url: https://{endpoint}
+    description: Data collection endpoint or DCR logs ingestion endpoint
+    variables:
+      endpoint:
+        default: my-dce.eastus-1.ingest.monitor.azure.com
+        description: The data collection endpoint URL
+security:
+  - bearerAuth: []
+tags:
+  - name: Ingestion
+    description: Send log data to Log Analytics workspaces
+paths:
+  /dataCollectionRules/{dcrImmutableId}/streams/{streamName}:
+    post:
+      operationId: uploadLogs
+      summary: Azure Log Analytics Upload Logs
+      description: >-
+        Send custom log data to a Log Analytics workspace via a data collection
+        rule. The data must be a JSON array matching the stream schema defined
+        in the DCR. Transformations defined in the DCR are applied before
+        data reaches the target table.
+      tags:
+        - Ingestion
+      parameters:
+        - name: dcrImmutableId
+          in: path
+          required: true
+          description: >-
+            The immutable ID of the data collection rule. Found on the DCR
+            overview page in the Azure portal.
+          schema:
+            type: string
+          example: dcr-000a00a000a00000a000000aa000a0aa
+        - name: streamName
+          in: path
+          required: true
+          description: >-
+            The stream name in the DCR that should handle the data. Use
+            Custom-TableName for custom tables.
+          schema:
+            type: string
+          example: Custom-MyTable
+        - name: api-version
+          in: query
+          required: true
+          description: The API version to use.
+          schema:
+            type: string
+            default: '2023-01-01'
+        - name: Content-Encoding
+          in: header
+          required: false
+          description: Set to gzip for compressed payloads.
+          schema:
+            type: string
+            enum:
+              - gzip
+        - name: x-ms-client-request-id
+          in: header
+          required: false
+          description: String-formatted GUID for request tracking.
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        description: >-
+          JSON array of log entries matching the stream schema defined in the
+          data collection rule. Must be UTF-8 encoded.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogEntryArray'
+            examples:
+              UploadLogsRequestExample:
+                summary: Default uploadLogs request
+                x-microcks-default: true
+                value:
+                  - TimeGenerated: '2025-03-15T14:30:00Z'
+                    Computer: web-server-01
+                    AdditionalContext: Application startup complete
+                  - TimeGenerated: '2025-03-15T14:31:00Z'
+                    Computer: web-server-02
+                    AdditionalContext: Health check passed
+      responses:
+        '204':
+          description: No Content - Data accepted successfully.
+        '400':
+          description: Bad request - malformed payload or schema mismatch.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                UploadLogs400Example:
+                  summary: Default uploadLogs 400 response
+                  x-microcks-default: true
+                  value:
+                    error:
+                      code: InvalidPayload
+                      message: The payload does not match the expected stream schema.
+        '401':
+          description: Unauthorized - invalid or missing Bearer token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions on the DCR.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not found - DCR or stream does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: Payload too large - exceeds maximum size limit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Too many requests - rate limit exceeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '503':
+          description: Service unavailable - temporary server issue.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Microsoft Entra ID OAuth2 Bearer token obtained via client credentials
+        flow. Use scope https://monitor.azure.com/.default for Azure public
+        cloud.
+  schemas:
+    LogEntryArray:
+      type: array
+      description: >-
+        Array of log entry objects. Each object must match the stream schema
+        defined in the data collection rule.
+      items:
+        $ref: '#/components/schemas/LogEntry'
+      minItems: 1
+    LogEntry:
+      type: object
+      description: >-
+        A single log entry. The schema must match the stream declaration in
+        the data collection rule. Custom columns must have the _CF suffix
+        for Azure tables.
+      properties:
+        TimeGenerated:
+          type: string
+          format: date-time
+          description: The timestamp of the log entry.
+          example: '2025-03-15T14:30:00Z'
+        Computer:
+          type: string
+          description: The computer or source generating the log.
+          example: web-server-01
+        AdditionalContext:
+          type: string
+          description: Additional context or message for the log entry.
+          example: Application startup complete
+      additionalProperties: true
+    DataCollectionRule:
+      type: object
+      description: A data collection rule defining stream schema and routing.
+      properties:
+        location:
+          type: string
+          description: The Azure region for the DCR.
+          example: eastus
+        kind:
+          type: string
+          description: The kind of DCR. Use Direct for logs ingestion.
+          enum:
+            - Direct
+          example: Direct
+        properties:
+          type: object
+          properties:
+            streamDeclarations:
+              type: object
+              description: Stream schemas defining the shape of incoming data.
+              additionalProperties:
+                $ref: '#/components/schemas/StreamDeclaration'
+            destinations:
+              type: object
+              properties:
+                logAnalytics:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/LogAnalyticsDestination'
+            dataFlows:
+              type: array
+              items:
+                $ref: '#/components/schemas/DataFlow'
+    StreamDeclaration:
+      type: object
+      description: Schema definition for a data stream.
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/StreamColumn'
+    StreamColumn:
+      type: object
+      description: A column in a stream schema.
+      properties:
+        name:
+          type: string
+          description: The column name.
+          example: TimeGenerated
+        type:
+          type: string
+          description: The column data type.
+          enum:
+            - string
+            - int
+            - long
+            - real
+            - boolean
+            - datetime
+            - dynamic
+          example: datetime
+    LogAnalyticsDestination:
+      type: object
+      description: A Log Analytics workspace destination.
+      properties:
+        workspaceResourceId:
+          type: string
+          description: Resource ID of the Log Analytics workspace.
+          example: /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1
+        name:
+          type: string
+          description: A friendly name for this destination.
+          example: LogAnalyticsDest
+    DataFlow:
+      type: object
+      description: Defines routing from streams to destinations.
+      properties:
+        streams:
+          type: array
+          items:
+            type: string
+          description: List of stream names.
+          example:
+            - Custom-MyTable
+        destinations:
+          type: array
+          items:
+            type: string
+          description: List of destination names.
+          example:
+            - LogAnalyticsDest
+        transformKql:
+          type: string
+          description: KQL transformation query. Use source for passthrough.
+          example: source
+        outputStream:
+          type: string
+          description: The output table name with prefix.
+          example: Custom-MyTable_CL
+    ErrorResponse:
+      type: object
+      description: Error response from the ingestion API.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: Detailed error information.
+      properties:
+        code:
+          type: string
+          description: Error code identifier.
+          example: InvalidPayload
+        message:
+          type: string
+          description: Human-readable error message.
+          example: The payload does not match the expected stream schema.

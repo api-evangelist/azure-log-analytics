@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-schema/management-api-saved-search-schema.json",
+  "title": "SavedSearch",
+  "description": "A saved search (KQL query) in a Log Analytics workspace.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Fully qualified resource ID.",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the resource.",
+      "readOnly": true
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the resource.",
+      "readOnly": true
+    },
+    "etag": {
+      "type": "string",
+      "description": "The ETag of the saved search."
+    },
+    "properties": {
+      "type": "object",
+      "description": "Saved search properties.",
+      "required": ["category", "displayName", "query"],
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "The category of the saved search.",
+          "example": "General Exploration"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Saved search display name.",
+          "example": "All Events"
+        },
+        "query": {
+          "type": "string",
+          "description": "The KQL query expression.",
+          "example": "Event | sort by TimeGenerated desc"
+        },
+        "functionAlias": {
+          "type": "string",
+          "description": "The function alias if query serves as a function."
+        },
+        "functionParameters": {
+          "type": "string",
+          "description": "The optional function parameters."
+        },
+        "version": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The version number of the query language."
+        },
+        "tags": {
+          "type": "array",
+          "description": "The tags attached to the saved search.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

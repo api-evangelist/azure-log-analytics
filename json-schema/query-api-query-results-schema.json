@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-schema/query-api-query-results-schema.json",
+  "title": "QueryResults",
+  "description": "Response containing tabular query results from a KQL query execution.",
+  "type": "object",
+  "properties": {
+    "tables": {
+      "type": "array",
+      "description": "Array of result tables.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the table.",
+            "example": "PrimaryResult"
+          },
+          "columns": {
+            "type": "array",
+            "description": "Schema of the result columns.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The column name."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The data type of the column.",
+                  "enum": ["bool", "datetime", "decimal", "dynamic", "guid", "int", "long", "real", "string", "timespan"]
+                }
+              }
+            }
+          },
+          "rows": {
+            "type": "array",
+            "description": "Array of row data matching the column schema.",
+            "items": {
+              "type": "array",
+              "items": {}
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "description": "Error information for partial errors.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Error code identifier."
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable error message."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/monitoring-rg/providers/microsoft.operationalinsights/workspaces/prod-analytics-ws",
+  "name": "prod-analytics-ws",
+  "type": "Microsoft.OperationalInsights/workspaces",
+  "location": "eastus",
+  "tags": {
+    "environment": "production",
+    "team": "platform-engineering"
+  },
+  "properties": {
+    "customerId": "5b02755b-5bf4-430c-9487-45502a2a7e62",
+    "provisioningState": "Succeeded",
+    "sku": {
+      "name": "PerGB2018"
+    },
+    "retentionInDays": 90,
+    "publicNetworkAccessForIngestion": "Enabled",
+    "publicNetworkAccessForQuery": "Enabled",
+    "workspaceCapping": {
+      "dailyQuotaGb": 50.0,
+      "dataIngestionStatus": "RespectQuota"
+    }
+  }
+}

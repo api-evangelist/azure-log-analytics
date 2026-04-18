@@ -1,0 +1,99 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Azure Log Analytics Ingestion API"
+  description: "Send custom log data to Azure Log Analytics workspaces using data collection rules."
+  tags:
+    - Azure
+    - Log Analytics
+    - Ingestion
+    - Data Collection
+  created: "2026-04-18"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      AZURE_INGESTION_BEARER_TOKEN: AZURE_INGESTION_BEARER_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: log-analytics-ingestion
+      baseUri: https://{endpoint}
+      description: "Azure Log Analytics Ingestion API for sending log data."
+      authentication:
+        type: bearer
+        token: "{{AZURE_INGESTION_BEARER_TOKEN}}"
+      resources:
+        - name: logs
+          path: /dataCollectionRules
+          description: "Send log data via data collection rules."
+          operations:
+            - name: upload-logs
+              method: POST
+              description: "Send custom log data to a Log Analytics workspace."
+              inputParameters:
+                - name: dcrImmutableId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The immutable ID of the data collection rule."
+                - name: streamName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The stream name in the DCR."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data: "{{tools.logEntries}}"
+
+  exposes:
+    - type: rest
+      port: 8102
+      namespace: ingestion-api
+      resources:
+        - path: /v1/ingest/{dcrImmutableId}/{streamName}
+          name: ingest
+          description: "Ingest log data."
+          operations:
+            - method: POST
+              name: upload-logs
+              description: "Upload log entries."
+              call: "log-analytics-ingestion.upload-logs"
+              with:
+                dcrImmutableId: "rest.dcrImmutableId"
+                streamName: "rest.streamName"
+                logEntries: "rest.body"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9102
+      namespace: ingestion-mcp
+      transport: http
+      tools:
+        - name: upload-logs
+          description: "Send custom log data to a Log Analytics workspace via DCR."
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "log-analytics-ingestion.upload-logs"
+          with:
+            dcrImmutableId: "tools.dcrImmutableId"
+            streamName: "tools.streamName"
+            logEntries: "tools.logEntries"
+          outputParameters:
+            - type: object
+              mapping: "$."

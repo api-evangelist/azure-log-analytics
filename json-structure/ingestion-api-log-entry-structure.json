@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-structure/ingestion-api-log-entry-structure.json",
+  "name": "LogEntry",
+  "description": "A single log entry for the Azure Log Analytics Ingestion API.",
+  "type": "object",
+  "properties": {
+    "TimeGenerated": {
+      "type": "datetime",
+      "description": "The timestamp of the log entry."
+    },
+    "Computer": {
+      "type": "string",
+      "description": "The computer or source generating the log."
+    },
+    "AdditionalContext": {
+      "type": "string",
+      "description": "Additional context or message for the log entry."
+    }
+  },
+  "additionalProperties": true
+}

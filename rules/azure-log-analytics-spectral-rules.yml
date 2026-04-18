@@ -1,0 +1,410 @@
+rules:
+
+  # ──────────────────────────────────────────────
+  # INFO / METADATA
+  # ──────────────────────────────────────────────
+
+  info-title-required:
+    description: Info object must have a title.
+    severity: error
+    given: $.info
+    then:
+      field: title
+      function: truthy
+
+  info-title-prefix:
+    description: Info title must start with "Azure Log Analytics".
+    severity: warn
+    given: $.info.title
+    then:
+      function: pattern
+      functionOptions:
+        match: ^Azure Log Analytics
+
+  info-description-required:
+    description: Info object must have a description.
+    severity: error
+    given: $.info
+    then:
+      field: description
+      function: truthy
+
+  info-description-min-length:
+    description: Info description should be at least 50 characters.
+    severity: warn
+    given: $.info.description
+    then:
+      function: length
+      functionOptions:
+        min: 50
+
+  info-version-required:
+    description: Info object must have a version.
+    severity: error
+    given: $.info
+    then:
+      field: version
+      function: truthy
+
+  info-contact-required:
+    description: Info should include contact information.
+    severity: warn
+    given: $.info
+    then:
+      field: contact
+      function: truthy
+
+  info-license-required:
+    description: Info should include license information.
+    severity: info
+    given: $.info
+    then:
+      field: license
+      function: truthy
+
+  # ──────────────────────────────────────────────
+  # OPENAPI VERSION
+  # ──────────────────────────────────────────────
+
+  openapi-version:
+    description: OpenAPI version must be 3.0.x.
+    severity: error
+    given: $.openapi
+    then:
+      function: pattern
+      functionOptions:
+        match: ^3\.0\.\d+$
+
+  # ──────────────────────────────────────────────
+  # SERVERS
+  # ──────────────────────────────────────────────
+
+  servers-defined:
+    description: At least one server must be defined.
+    severity: error
+    given: $
+    then:
+      field: servers
+      function: truthy
+
+  servers-https:
+    description: Server URLs should use HTTPS.
+    severity: warn
+    given: $.servers[*].url
+    then:
+      function: pattern
+      functionOptions:
+        match: ^https://
+
+  servers-description:
+    description: Each server should have a description.
+    severity: info
+    given: $.servers[*]
+    then:
+      field: description
+      function: truthy
+
+  # ──────────────────────────────────────────────
+  # PATHS — NAMING CONVENTIONS
+  # ──────────────────────────────────────────────
+
+  paths-kebab-case:
+    description: Path segments should use kebab-case or camelCase.
+    severity: info
+    given: $.paths
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: ^(/[a-zA-Z0-9{}_-]+)+$
+
+  paths-no-trailing-slash:
+    description: Paths must not have trailing slashes.
+    severity: error
+    given: $.paths
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        notMatch: .+/$
+
+  paths-no-query-strings:
+    description: Paths must not include query strings.
+    severity: error
+    given: $.paths
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        notMatch: \?
+
+  # ──────────────────────────────────────────────
+  # OPERATIONS
+  # ──────────────────────────────────────────────
+
+  operation-summary-required:
+    description: Every operation must have a summary.
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: summary
+      function: truthy
+
+  operation-summary-prefix:
+    description: Operation summaries should start with "Azure Log Analytics".
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete].summary
+    then:
+      function: pattern
+      functionOptions:
+        match: ^Azure Log Analytics
+
+  operation-description-required:
+    description: Every operation must have a description.
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: description
+      function: truthy
+
+  operation-operationid-required:
+    description: Every operation must have an operationId.
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: operationId
+      function: truthy
+
+  operation-operationid-camelcase:
+    description: operationId should use camelCase.
+    severity: warn
+    given: $.paths[*][get,post,put,patch,delete].operationId
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9]*$
+
+  operation-tags-required:
+    description: Every operation must have at least one tag.
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: tags
+      function: truthy
+
+  # ──────────────────────────────────────────────
+  # TAGS
+  # ──────────────────────────────────────────────
+
+  tag-description:
+    description: Global tags should have descriptions.
+    severity: info
+    given: $.tags[*]
+    then:
+      field: description
+      function: truthy
+
+  tag-title-case:
+    description: Tag names should use Title Case.
+    severity: warn
+    given: $.tags[*].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[A-Z][a-zA-Z0-9]*(\s[A-Z][a-zA-Z0-9]*)*$
+
+  # ──────────────────────────────────────────────
+  # PARAMETERS
+  # ──────────────────────────────────────────────
+
+  parameter-description-required:
+    description: Every parameter must have a description.
+    severity: error
+    given: $.paths[*][*].parameters[*]
+    then:
+      field: description
+      function: truthy
+
+  parameter-schema-required:
+    description: Every parameter must have a schema with type.
+    severity: error
+    given: $.paths[*][*].parameters[*]
+    then:
+      field: schema
+      function: truthy
+
+  parameter-camelcase:
+    description: Parameter names should use camelCase.
+    severity: info
+    given: $.paths[*][*].parameters[*].name
+    then:
+      function: pattern
+      functionOptions:
+        match: ^[a-z][a-zA-Z0-9_-]*$
+
+  # ──────────────────────────────────────────────
+  # REQUEST BODIES
+  # ──────────────────────────────────────────────
+
+  request-body-json-content:
+    description: Request bodies should use application/json content type.
+    severity: warn
+    given: $.paths[*][post,put,patch].requestBody.content
+    then:
+      field: application/json
+      function: truthy
+
+  # ──────────────────────────────────────────────
+  # RESPONSES
+  # ──────────────────────────────────────────────
+
+  response-success-required:
+    description: Every operation must define at least one 2xx response.
+    severity: error
+    given: $.paths[*][get,post,put,patch,delete].responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+            - required: ["200"]
+            - required: ["201"]
+            - required: ["202"]
+            - required: ["204"]
+
+  response-description-required:
+    description: Every response must have a description.
+    severity: error
+    given: $.paths[*][*].responses[*]
+    then:
+      field: description
+      function: truthy
+
+  response-error-401:
+    description: Operations with security should include a 401 response.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete].responses
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+            - required: ["401"]
+            - required: ["default"]
+
+  # ──────────────────────────────────────────────
+  # SCHEMAS — PROPERTY NAMING
+  # ──────────────────────────────────────────────
+
+  schema-description-required:
+    description: Top-level schemas should have descriptions.
+    severity: warn
+    given: $.components.schemas[*]
+    then:
+      field: description
+      function: truthy
+
+  schema-type-required:
+    description: Schemas must define a type.
+    severity: error
+    given: $.components.schemas[*]
+    then:
+      field: type
+      function: truthy
+
+  schema-property-camelcase:
+    description: Schema property names should use camelCase or PascalCase.
+    severity: info
+    given: $.components.schemas[*].properties
+    then:
+      field: "@key"
+      function: pattern
+      functionOptions:
+        match: ^[a-zA-Z][a-zA-Z0-9_]*$
+
+  # ──────────────────────────────────────────────
+  # SECURITY
+  # ──────────────────────────────────────────────
+
+  security-defined:
+    description: Global security must be defined.
+    severity: error
+    given: $
+    then:
+      field: security
+      function: truthy
+
+  security-schemes-defined:
+    description: Security schemes must be defined in components.
+    severity: error
+    given: $.components
+    then:
+      field: securitySchemes
+      function: truthy
+
+  security-scheme-description:
+    description: Security schemes should have descriptions.
+    severity: warn
+    given: $.components.securitySchemes[*]
+    then:
+      field: description
+      function: truthy
+
+  # ──────────────────────────────────────────────
+  # HTTP METHOD CONVENTIONS
+  # ──────────────────────────────────────────────
+
+  get-no-request-body:
+    description: GET operations must not have a request body.
+    severity: error
+    given: $.paths[*].get
+    then:
+      field: requestBody
+      function: falsy
+
+  delete-no-request-body:
+    description: DELETE operations should not have a request body.
+    severity: warn
+    given: $.paths[*].delete
+    then:
+      field: requestBody
+      function: falsy
+
+  post-request-body-required:
+    description: POST operations should have a request body.
+    severity: info
+    given: $.paths[*].post
+    then:
+      field: requestBody
+      function: truthy
+
+  # ──────────────────────────────────────────────
+  # GENERAL QUALITY
+  # ──────────────────────────────────────────────
+
+  no-empty-descriptions:
+    description: Descriptions must not be empty strings.
+    severity: error
+    given: $..description
+    then:
+      function: truthy
+
+  examples-encouraged:
+    description: Operations should include examples.
+    severity: info
+    given: $.paths[*][get,post,put,patch].responses.200.content.application/json
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          anyOf:
+            - required: ["example"]
+            - required: ["examples"]
+
+  microcks-operation-extension:
+    description: Operations should include x-microcks-operation extension.
+    severity: info
+    given: $.paths[*][get,post,put,patch,delete]
+    then:
+      field: x-microcks-operation
+      function: truthy

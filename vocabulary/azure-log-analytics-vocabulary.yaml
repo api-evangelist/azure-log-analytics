@@ -1,0 +1,251 @@
+vocabulary: "1.0.0"
+
+info:
+  provider: "Azure Log Analytics"
+  description: >-
+    Unified taxonomy mapping operational API dimensions and capability workflow
+    dimensions for Azure Log Analytics query, management, and ingestion APIs.
+  created: "2026-04-18"
+  modified: "2026-04-18"
+
+operational:
+  apis:
+    - name: Azure Log Analytics Query API
+      namespace: log-analytics-query
+      version: v1
+      baseUrl: https://api.loganalytics.azure.com/v1
+      status: active
+    - name: Azure Log Analytics Management API
+      namespace: log-analytics-management
+      version: "2025-02-01"
+      baseUrl: https://management.azure.com
+      status: active
+    - name: Azure Log Analytics Ingestion API
+      namespace: log-analytics-ingestion
+      version: "2023-01-01"
+      baseUrl: https://monitor.azure.com
+      status: active
+
+  resources:
+    - name: queries
+      apis: [log-analytics-query]
+      actions: [get, post]
+      description: "Execute KQL queries against Log Analytics workspaces."
+    - name: workspaces
+      apis: [log-analytics-management]
+      actions: [list, get, create, update, delete]
+      description: "Log Analytics workspace resources."
+    - name: saved-searches
+      apis: [log-analytics-management]
+      actions: [list, get, create, delete]
+      description: "Saved KQL queries within workspaces."
+    - name: tables
+      apis: [log-analytics-management]
+      actions: [list, get, create, delete]
+      description: "Workspace table definitions."
+    - name: logs
+      apis: [log-analytics-ingestion]
+      actions: [upload]
+      description: "Custom log data ingestion via data collection rules."
+
+  actions:
+    - name: get
+      method: GET
+      pattern: read
+      description: "Retrieve a single resource."
+    - name: list
+      method: GET
+      pattern: read
+      description: "List resources in a collection."
+    - name: post
+      method: POST
+      pattern: query
+      description: "Submit a query or create a resource."
+    - name: create
+      method: PUT
+      pattern: write
+      description: "Create or update a resource."
+    - name: update
+      method: PATCH
+      pattern: write
+      description: "Partially update a resource."
+    - name: delete
+      method: DELETE
+      pattern: destructive
+      description: "Delete a resource."
+    - name: upload
+      method: POST
+      pattern: write
+      description: "Upload log data entries."
+
+  schemas:
+    core:
+      - name: QueryBody
+        description: "KQL query request payload."
+        keyProperties: [query, timespan, workspaces]
+      - name: QueryResults
+        description: "Tabular query result with tables, columns, and rows."
+        keyProperties: [tables]
+      - name: Workspace
+        description: "Log Analytics workspace resource."
+        keyProperties: [id, name, location, properties]
+      - name: SavedSearch
+        description: "Saved KQL query."
+        keyProperties: [id, properties.category, properties.displayName, properties.query]
+      - name: Table
+        description: "Workspace table definition."
+        keyProperties: [name, properties.schema, properties.retentionInDays]
+      - name: LogEntry
+        description: "Custom log data entry."
+        keyProperties: [TimeGenerated, Computer, AdditionalContext]
+
+  parameters:
+    identifiers:
+      - name: workspaceId
+        type: string
+        description: "Log Analytics workspace ID (GUID)."
+      - name: subscriptionId
+        type: string
+        description: "Azure subscription ID."
+      - name: resourceGroupName
+        type: string
+        description: "Azure resource group name."
+      - name: workspaceName
+        type: string
+        description: "Workspace display name."
+      - name: savedSearchId
+        type: string
+        description: "Saved search identifier."
+      - name: dcrImmutableId
+        type: string
+        description: "Data collection rule immutable ID."
+      - name: streamName
+        type: string
+        description: "DCR stream name."
+    filters:
+      - name: query
+        type: string
+        description: "KQL query string."
+      - name: timespan
+        type: string
+        description: "ISO 8601 duration or time interval."
+      - name: api-version
+        type: string
+        description: "Azure API version."
+
+  enums:
+    states:
+      - name: WorkspaceProvisioningState
+        values: [Creating, Succeeded, Failed, Canceled, Deleting, ProvisioningAccount, Updating]
+      - name: DataIngestionStatus
+        values: [RespectQuota, ForceOn, ForceOff, OverQuota, SubscriptionSuspended, ApproachingQuota]
+      - name: WorkspaceFailoverState
+        values: [Inactive, Activating, Active, Deactivating, Failed]
+    types:
+      - name: WorkspaceSkuName
+        values: [Free, Standard, Premium, PerNode, PerGB2018, Standalone, CapacityReservation, LACluster]
+      - name: PublicNetworkAccessType
+        values: [Enabled, Disabled]
+      - name: ColumnType
+        values: [bool, datetime, decimal, dynamic, guid, int, long, real, string, timespan]
+      - name: TablePlan
+        values: [Analytics, Basic]
+
+  authentication:
+    schemes:
+      - name: bearerAuth
+        type: bearer
+        apis: [log-analytics-query, log-analytics-ingestion]
+        description: "Microsoft Entra ID OAuth2 Bearer token."
+      - name: oauth2
+        type: oauth2
+        apis: [log-analytics-management]
+        description: "Azure AD OAuth2 implicit flow for ARM operations."
+      - name: apiKeyAuth
+        type: apikey
+        apis: [log-analytics-query]
+        description: "Demo API key for sample workspace exploration only."
+
+capability:
+  workflows:
+    - name: Log Monitoring and Analysis
+      file: capabilities/log-monitoring-and-analysis.yaml
+      description: >-
+        Unified workflow combining Query, Management, and Ingestion APIs
+        for complete log monitoring and analysis.
+      apis: [log-analytics-query, log-analytics-management, log-analytics-ingestion]
+      tools: 9
+      personas: [DevOps Engineer, SOC Analyst, Platform Administrator]
+      domains: [Monitoring, Analytics, Security]
+
+  personas:
+    - id: devops-engineer
+      name: DevOps Engineer
+      description: "Engineers monitoring infrastructure and application health through log queries."
+      workflows: [Log Monitoring and Analysis]
+    - id: soc-analyst
+      name: SOC Analyst
+      description: "Security analysts investigating incidents and threats through log data."
+      workflows: [Log Monitoring and Analysis]
+    - id: platform-admin
+      name: Platform Administrator
+      description: "Administrators managing workspaces, tables, and data collection configurations."
+      workflows: [Log Monitoring and Analysis]
+
+  domains:
+    - name: Monitoring
+      resources: [queries, workspaces, tables]
+      description: "Infrastructure and application monitoring through log analysis."
+    - name: Analytics
+      resources: [queries, saved-searches]
+      description: "KQL-based data exploration and saved query management."
+    - name: Security
+      resources: [queries, logs]
+      description: "Security event analysis and custom security log ingestion."
+
+  namespaces:
+    consumed:
+      - namespace: log-analytics-query
+        api: Azure Log Analytics Query API
+      - namespace: log-analytics-management
+        api: Azure Log Analytics Management API
+      - namespace: log-analytics-ingestion
+        api: Azure Log Analytics Ingestion API
+    rest:
+      - namespace: log-monitoring-api
+        port: 8080
+        workflow: Log Monitoring and Analysis
+    mcp:
+      - namespace: log-monitoring-mcp
+        port: 9090
+        workflow: Log Monitoring and Analysis
+
+  binds:
+    - name: AZURE_LOG_ANALYTICS_BEARER_TOKEN
+      workflows: [Log Monitoring and Analysis]
+    - name: AZURE_MANAGEMENT_BEARER_TOKEN
+      workflows: [Log Monitoring and Analysis]
+    - name: AZURE_INGESTION_BEARER_TOKEN
+      workflows: [Log Monitoring and Analysis]
+
+crossReference:
+  - resource: queries
+    operations: [getQuery, postQuery]
+    workflows: [Log Monitoring and Analysis]
+    personas: [DevOps Engineer, SOC Analyst]
+  - resource: workspaces
+    operations: [listWorkspaces, getWorkspace, createOrUpdateWorkspace, deleteWorkspace]
+    workflows: [Log Monitoring and Analysis]
+    personas: [Platform Administrator]
+  - resource: saved-searches
+    operations: [listSavedSearches, getSavedSearch, createOrUpdateSavedSearch, deleteSavedSearch]
+    workflows: [Log Monitoring and Analysis]
+    personas: [DevOps Engineer, SOC Analyst]
+  - resource: tables
+    operations: [listTables, getTable, createOrUpdateTable, deleteTable]
+    workflows: [Log Monitoring and Analysis]
+    personas: [Platform Administrator]
+  - resource: logs
+    operations: [uploadLogs]
+    workflows: [Log Monitoring and Analysis]
+    personas: [DevOps Engineer, Platform Administrator]

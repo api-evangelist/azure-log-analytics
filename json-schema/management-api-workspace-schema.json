@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-schema/management-api-workspace-schema.json",
+  "title": "Workspace",
+  "description": "The top level Log Analytics Workspace resource container.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Fully qualified resource ID.",
+      "readOnly": true,
+      "example": "/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the resource.",
+      "readOnly": true,
+      "example": "ws1"
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the resource.",
+      "readOnly": true,
+      "example": "Microsoft.OperationalInsights/workspaces"
+    },
+    "location": {
+      "type": "string",
+      "description": "The geo-location where the resource lives.",
+      "example": "eastus"
+    },
+    "tags": {
+      "type": "object",
+      "description": "Resource tags.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "etag": {
+      "type": "string",
+      "description": "The etag of the workspace."
+    },
+    "properties": {
+      "type": "object",
+      "description": "Workspace properties.",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Read-only ID associated with the workspace.",
+          "readOnly": true
+        },
+        "provisioningState": {
+          "type": "string",
+          "description": "The provisioning state of the workspace.",
+          "enum": ["Creating", "Succeeded", "Failed", "Canceled", "Deleting", "ProvisioningAccount", "Updating"]
+        },
+        "sku": {
+          "type": "object",
+          "description": "The SKU of the workspace.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the SKU.",
+              "enum": ["Free", "Standard", "Premium", "PerNode", "PerGB2018", "Standalone", "CapacityReservation", "LACluster"]
+            },
+            "capacityReservationLevel": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The capacity reservation level in GB."
+            }
+          }
+        },
+        "retentionInDays": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The workspace data retention in days."
+        },
+        "publicNetworkAccessForIngestion": {
+          "type": "string",
+          "description": "Network access type for ingestion.",
+          "enum": ["Enabled", "Disabled"],
+          "default": "Enabled"
+        },
+        "publicNetworkAccessForQuery": {
+          "type": "string",
+          "description": "Network access type for query.",
+          "enum": ["Enabled", "Disabled"],
+          "default": "Enabled"
+        },
+        "workspaceCapping": {
+          "type": "object",
+          "description": "The daily volume cap for ingestion.",
+          "properties": {
+            "dailyQuotaGb": {
+              "type": "number",
+              "format": "double",
+              "description": "The workspace daily quota for ingestion in GB."
+            },
+            "dataIngestionStatus": {
+              "type": "string",
+              "description": "The status of data ingestion.",
+              "enum": ["RespectQuota", "ForceOn", "ForceOff", "OverQuota", "SubscriptionSuspended", "ApproachingQuota"]
+            }
+          }
+        }
+      }
+    }
+  }
+}

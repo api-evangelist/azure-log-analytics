@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-schema/ingestion-api-log-entry-schema.json",
+  "title": "LogEntry",
+  "description": "A single log entry for the Azure Log Analytics Ingestion API. The schema must match the stream declaration in the data collection rule.",
+  "type": "object",
+  "properties": {
+    "TimeGenerated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The timestamp of the log entry.",
+      "example": "2025-03-15T14:30:00Z"
+    },
+    "Computer": {
+      "type": "string",
+      "description": "The computer or source generating the log.",
+      "example": "web-server-01"
+    },
+    "AdditionalContext": {
+      "type": "string",
+      "description": "Additional context or message for the log entry.",
+      "example": "Application startup complete"
+    }
+  },
+  "additionalProperties": true
+}

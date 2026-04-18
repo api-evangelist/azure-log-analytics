@@ -1,0 +1,255 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Azure Log Analytics Log Monitoring and Analysis"
+  description: >-
+    Unified workflow for log monitoring and analysis combining the Query API for
+    KQL-based data exploration, the Management API for workspace and saved search
+    administration, and the Ingestion API for custom log data collection. Used by
+    DevOps engineers, SOC analysts, and platform administrators.
+  tags:
+    - Azure
+    - Log Analytics
+    - Monitoring
+    - Analytics
+    - KQL
+  created: "2026-04-18"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      AZURE_LOG_ANALYTICS_BEARER_TOKEN: AZURE_LOG_ANALYTICS_BEARER_TOKEN
+      AZURE_MANAGEMENT_BEARER_TOKEN: AZURE_MANAGEMENT_BEARER_TOKEN
+      AZURE_INGESTION_BEARER_TOKEN: AZURE_INGESTION_BEARER_TOKEN
+
+capability:
+  consumes:
+    - import: log-analytics-query
+      location: ./shared/query-api.yaml
+    - import: log-analytics-management
+      location: ./shared/management-api.yaml
+    - import: log-analytics-ingestion
+      location: ./shared/ingestion-api.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: log-monitoring-api
+      description: "Unified REST API for Azure Log Analytics monitoring and analysis."
+      resources:
+        - path: /v1/queries
+          name: queries
+          description: "Execute KQL queries against workspaces."
+          operations:
+            - method: POST
+              name: execute-query
+              description: "Execute a KQL query."
+              call: "log-analytics-query.post-query"
+              with:
+                workspaceId: "rest.workspaceId"
+                query: "rest.query"
+                timespan: "rest.timespan"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/workspaces
+          name: workspaces
+          description: "Manage Log Analytics workspaces."
+          operations:
+            - method: GET
+              name: list-workspaces
+              description: "List all workspaces."
+              call: "log-analytics-management.list-workspaces"
+              with:
+                subscriptionId: "rest.subscriptionId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/workspaces/{workspaceName}
+          name: workspace-detail
+          description: "Get workspace details."
+          operations:
+            - method: GET
+              name: get-workspace
+              description: "Get a workspace."
+              call: "log-analytics-management.get-workspace"
+              with:
+                subscriptionId: "rest.subscriptionId"
+                resourceGroupName: "rest.resourceGroupName"
+                workspaceName: "rest.workspaceName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/saved-searches
+          name: saved-searches
+          description: "Manage saved KQL queries."
+          operations:
+            - method: GET
+              name: list-saved-searches
+              description: "List saved searches."
+              call: "log-analytics-management.list-saved-searches"
+              with:
+                subscriptionId: "rest.subscriptionId"
+                resourceGroupName: "rest.resourceGroupName"
+                workspaceName: "rest.workspaceName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/tables
+          name: tables
+          description: "List workspace tables."
+          operations:
+            - method: GET
+              name: list-tables
+              description: "List all tables."
+              call: "log-analytics-management.list-tables"
+              with:
+                subscriptionId: "rest.subscriptionId"
+                resourceGroupName: "rest.resourceGroupName"
+                workspaceName: "rest.workspaceName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/ingest
+          name: ingest
+          description: "Send custom log data."
+          operations:
+            - method: POST
+              name: upload-logs
+              description: "Upload custom log entries."
+              call: "log-analytics-ingestion.upload-logs"
+              with:
+                dcrImmutableId: "rest.dcrImmutableId"
+                streamName: "rest.streamName"
+                logEntries: "rest.body"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: log-monitoring-mcp
+      transport: http
+      description: "MCP server for AI-assisted Azure Log Analytics monitoring and analysis."
+      tools:
+        - name: execute-query
+          description: "Execute a KQL query against a Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-query.post-query"
+          with:
+            workspaceId: "tools.workspaceId"
+            query: "tools.query"
+            timespan: "tools.timespan"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-workspaces
+          description: "List all Log Analytics workspaces in a subscription."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.list-workspaces"
+          with:
+            subscriptionId: "tools.subscriptionId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-workspace
+          description: "Get details of a specific Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.get-workspace"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-workspace
+          description: "Create or update a Log Analytics workspace."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "log-analytics-management.create-or-update-workspace"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+            location: "tools.location"
+            properties: "tools.properties"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-workspace
+          description: "Delete a Log Analytics workspace."
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "log-analytics-management.delete-workspace"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-saved-searches
+          description: "List saved searches in a workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.list-saved-searches"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-saved-search
+          description: "Create or update a saved search in a workspace."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "log-analytics-management.create-or-update-saved-search"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+            savedSearchId: "tools.savedSearchId"
+            properties: "tools.properties"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-tables
+          description: "List all tables in a Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.list-tables"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: upload-logs
+          description: "Send custom log data to a workspace via data collection rule."
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "log-analytics-ingestion.upload-logs"
+          with:
+            dcrImmutableId: "tools.dcrImmutableId"
+            streamName: "tools.streamName"
+            logEntries: "tools.logEntries"
+          outputParameters:
+            - type: object
+              mapping: "$."

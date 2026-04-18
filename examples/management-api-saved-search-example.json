@@ -1,0 +1,18 @@
+{
+  "id": "/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/monitoring-rg/providers/microsoft.operationalinsights/workspaces/prod-analytics-ws/savedSearches/failed-logins",
+  "name": "failed-logins",
+  "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
+  "etag": "W/\"datetime'2025-03-15T14%3A30%3A00Z'\"",
+  "properties": {
+    "category": "Security",
+    "displayName": "Failed Login Attempts Last 24 Hours",
+    "query": "SecurityEvent | where EventID == 4625 | summarize count() by Account, Computer | sort by count_ desc",
+    "version": 2,
+    "tags": [
+      {
+        "name": "group",
+        "value": "security-monitoring"
+      }
+    ]
+  }
+}

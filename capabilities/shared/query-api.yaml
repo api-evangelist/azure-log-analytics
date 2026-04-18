@@ -1,0 +1,126 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Azure Log Analytics Query API"
+  description: "Query logs and data collected in Azure Log Analytics workspaces using Kusto Query Language (KQL)."
+  tags:
+    - Azure
+    - Log Analytics
+    - Query
+    - KQL
+  created: "2026-04-18"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      AZURE_LOG_ANALYTICS_BEARER_TOKEN: AZURE_LOG_ANALYTICS_BEARER_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: log-analytics-query
+      baseUri: https://api.loganalytics.azure.com/v1
+      description: "Azure Log Analytics Query API for executing KQL queries."
+      authentication:
+        type: bearer
+        token: "{{AZURE_LOG_ANALYTICS_BEARER_TOKEN}}"
+      resources:
+        - name: queries
+          path: /workspaces
+          description: "Execute KQL queries against Log Analytics workspaces."
+          operations:
+            - name: get-query
+              method: GET
+              description: "Execute a KQL query using GET method."
+              inputParameters:
+                - name: workspaceId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The ID of the Log Analytics workspace."
+                - name: query
+                  in: query
+                  type: string
+                  required: true
+                  description: "The KQL query to execute."
+                - name: timespan
+                  in: query
+                  type: string
+                  required: false
+                  description: "ISO 8601 duration for the query timespan."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$.tables"
+            - name: post-query
+              method: POST
+              description: "Execute a KQL query using POST method."
+              inputParameters:
+                - name: workspaceId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The ID of the Log Analytics workspace."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$.tables"
+              body:
+                type: json
+                data:
+                  query: "{{tools.query}}"
+                  timespan: "{{tools.timespan}}"
+
+  exposes:
+    - type: rest
+      port: 8100
+      namespace: query-api
+      resources:
+        - path: /v1/workspaces/{workspaceId}/query
+          name: query
+          description: "Execute KQL queries."
+          operations:
+            - method: GET
+              name: get-query
+              description: "Execute a KQL query via GET."
+              call: "log-analytics-query.get-query"
+              with:
+                workspaceId: "rest.workspaceId"
+                query: "rest.query"
+                timespan: "rest.timespan"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+            - method: POST
+              name: post-query
+              description: "Execute a KQL query via POST."
+              call: "log-analytics-query.post-query"
+              with:
+                workspaceId: "rest.workspaceId"
+                query: "rest.query"
+                timespan: "rest.timespan"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9100
+      namespace: query-mcp
+      transport: http
+      tools:
+        - name: query-workspace
+          description: "Execute a KQL query against a Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-query.post-query"
+          with:
+            workspaceId: "tools.workspaceId"
+            query: "tools.query"
+            timespan: "tools.timespan"
+          outputParameters:
+            - type: object
+              mapping: "$."

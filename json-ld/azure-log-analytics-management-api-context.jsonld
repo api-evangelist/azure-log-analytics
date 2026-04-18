@@ -1,0 +1,96 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "azure": "https://learn.microsoft.com/en-us/azure/schema/",
+    "schema": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "Workspace": "azure:Workspace",
+    "WorkspaceSku": "azure:WorkspaceSku",
+    "WorkspaceCapping": "azure:WorkspaceCapping",
+    "SavedSearch": "azure:SavedSearch",
+    "Table": "azure:Table",
+
+    "id": {
+      "@id": "dcterms:identifier",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "azure:type",
+      "@type": "xsd:string"
+    },
+    "location": {
+      "@id": "azure:location",
+      "@type": "xsd:string"
+    },
+    "etag": {
+      "@id": "azure:etag",
+      "@type": "xsd:string"
+    },
+    "customerId": {
+      "@id": "azure:customer_id",
+      "@type": "xsd:string"
+    },
+    "provisioningState": {
+      "@id": "azure:provisioning_state",
+      "@type": "xsd:string"
+    },
+    "retentionInDays": {
+      "@id": "azure:retention_in_days",
+      "@type": "xsd:integer"
+    },
+    "publicNetworkAccessForIngestion": {
+      "@id": "azure:public_network_access_for_ingestion",
+      "@type": "xsd:string"
+    },
+    "publicNetworkAccessForQuery": {
+      "@id": "azure:public_network_access_for_query",
+      "@type": "xsd:string"
+    },
+    "dailyQuotaGb": {
+      "@id": "azure:daily_quota_gb",
+      "@type": "xsd:double"
+    },
+    "dataIngestionStatus": {
+      "@id": "azure:data_ingestion_status",
+      "@type": "xsd:string"
+    },
+    "category": {
+      "@id": "azure:category",
+      "@type": "xsd:string"
+    },
+    "displayName": {
+      "@id": "azure:display_name",
+      "@type": "xsd:string"
+    },
+    "query": {
+      "@id": "azure:query",
+      "@type": "xsd:string"
+    },
+    "functionAlias": {
+      "@id": "azure:function_alias",
+      "@type": "xsd:string"
+    },
+    "version": {
+      "@id": "schema:version",
+      "@type": "xsd:integer"
+    },
+    "createdAt": {
+      "@id": "schema:dateCreated",
+      "@type": "xsd:dateTime"
+    },
+    "lastModifiedAt": {
+      "@id": "schema:dateModified",
+      "@type": "xsd:dateTime"
+    }
+  }
+}

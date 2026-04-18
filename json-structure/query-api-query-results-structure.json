@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-structure/query-api-query-results-structure.json",
+  "name": "QueryResults",
+  "description": "Response containing tabular query results from a KQL query execution.",
+  "type": "object",
+  "properties": {
+    "tables": {
+      "type": "array",
+      "description": "Array of result tables.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the table."
+          },
+          "columns": {
+            "type": "array",
+            "description": "Schema of the result columns.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "The column name."
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The data type of the column."
+                }
+              }
+            }
+          },
+          "rows": {
+            "type": "array",
+            "description": "Array of row data.",
+            "items": {
+              "type": "array"
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "description": "Error information for partial errors.",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

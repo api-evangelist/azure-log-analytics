@@ -1,0 +1,65 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "azure": "https://learn.microsoft.com/en-us/azure/schema/",
+    "schema": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+
+    "QueryBody": "azure:QueryBody",
+    "QueryResults": "azure:QueryResults",
+    "Table": "azure:Table",
+    "Column": "azure:Column",
+    "ErrorResponse": "azure:ErrorResponse",
+    "ErrorDetail": "azure:ErrorDetail",
+
+    "query": {
+      "@id": "azure:query",
+      "@type": "xsd:string"
+    },
+    "timespan": {
+      "@id": "azure:timespan",
+      "@type": "xsd:string"
+    },
+    "workspaces": {
+      "@id": "azure:workspaces",
+      "@container": "@set",
+      "@type": "xsd:string"
+    },
+    "tables": {
+      "@id": "azure:tables",
+      "@container": "@set",
+      "@type": "@id"
+    },
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "columns": {
+      "@id": "azure:columns",
+      "@container": "@set",
+      "@type": "@id"
+    },
+    "rows": {
+      "@id": "azure:rows",
+      "@container": "@set"
+    },
+    "type": {
+      "@id": "azure:type",
+      "@type": "xsd:string"
+    },
+    "code": {
+      "@id": "azure:code",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "azure:message",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "azure:details",
+      "@container": "@set",
+      "@type": "@id"
+    }
+  }
+}

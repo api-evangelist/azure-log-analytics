@@ -1,0 +1,415 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Azure Log Analytics Management API"
+  description: "Manage Log Analytics workspaces, saved searches, data sources, and tables through Azure Resource Manager."
+  tags:
+    - Azure
+    - Log Analytics
+    - Management
+    - Workspaces
+  created: "2026-04-18"
+  modified: "2026-04-18"
+
+binds:
+  - namespace: env
+    keys:
+      AZURE_MANAGEMENT_BEARER_TOKEN: AZURE_MANAGEMENT_BEARER_TOKEN
+
+capability:
+  consumes:
+    - type: http
+      namespace: log-analytics-management
+      baseUri: https://management.azure.com
+      description: "Azure Log Analytics Management API for workspace and resource management."
+      authentication:
+        type: bearer
+        token: "{{AZURE_MANAGEMENT_BEARER_TOKEN}}"
+      resources:
+        - name: workspaces
+          path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces
+          description: "Manage Log Analytics workspaces."
+          operations:
+            - name: list-workspaces
+              method: GET
+              description: "List all workspaces in a subscription."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$.value"
+            - name: get-workspace
+              method: GET
+              description: "Get a specific workspace instance."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+            - name: create-or-update-workspace
+              method: PUT
+              description: "Create or update a workspace."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  location: "{{tools.location}}"
+                  properties: "{{tools.properties}}"
+            - name: delete-workspace
+              method: DELETE
+              description: "Delete a workspace."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: saved-searches
+          path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches
+          description: "Manage saved KQL queries."
+          operations:
+            - name: list-saved-searches
+              method: GET
+              description: "List saved searches for a workspace."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$.value"
+            - name: create-or-update-saved-search
+              method: PUT
+              description: "Create or update a saved search."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: savedSearchId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The saved search ID."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+              body:
+                type: json
+                data:
+                  properties: "{{tools.properties}}"
+            - name: delete-saved-search
+              method: DELETE
+              description: "Delete a saved search."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: savedSearchId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The saved search ID."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$."
+        - name: tables
+          path: /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/tables
+          description: "Manage workspace tables."
+          operations:
+            - name: list-tables
+              method: GET
+              description: "List all tables in a workspace."
+              inputParameters:
+                - name: subscriptionId
+                  in: path
+                  type: string
+                  required: true
+                  description: "The target subscription ID."
+                - name: resourceGroupName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The resource group name."
+                - name: workspaceName
+                  in: path
+                  type: string
+                  required: true
+                  description: "The workspace name."
+                - name: api-version
+                  in: query
+                  type: string
+                  required: true
+                  description: "API version."
+              outputRawFormat: json
+              outputParameters:
+                - name: result
+                  type: object
+                  value: "$.value"
+
+  exposes:
+    - type: rest
+      port: 8101
+      namespace: management-api
+      resources:
+        - path: /v1/workspaces
+          name: workspaces
+          description: "Manage Log Analytics workspaces."
+          operations:
+            - method: GET
+              name: list-workspaces
+              description: "List all workspaces."
+              call: "log-analytics-management.list-workspaces"
+              with:
+                subscriptionId: "rest.subscriptionId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+        - path: /v1/workspaces/{workspaceName}
+          name: workspace
+          description: "Get a specific workspace."
+          operations:
+            - method: GET
+              name: get-workspace
+              description: "Get a workspace."
+              call: "log-analytics-management.get-workspace"
+              with:
+                subscriptionId: "rest.subscriptionId"
+                resourceGroupName: "rest.resourceGroupName"
+                workspaceName: "rest.workspaceName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9101
+      namespace: management-mcp
+      transport: http
+      tools:
+        - name: list-workspaces
+          description: "List all Log Analytics workspaces in a subscription."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.list-workspaces"
+          with:
+            subscriptionId: "tools.subscriptionId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: get-workspace
+          description: "Get details of a specific Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.get-workspace"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-workspace
+          description: "Create or update a Log Analytics workspace."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "log-analytics-management.create-or-update-workspace"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+            location: "tools.location"
+            properties: "tools.properties"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: delete-workspace
+          description: "Delete a Log Analytics workspace."
+          hints:
+            readOnly: false
+            destructive: true
+            idempotent: true
+          call: "log-analytics-management.delete-workspace"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-saved-searches
+          description: "List saved searches in a Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.list-saved-searches"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: create-saved-search
+          description: "Create or update a saved search in a workspace."
+          hints:
+            readOnly: false
+            idempotent: true
+          call: "log-analytics-management.create-or-update-saved-search"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+            savedSearchId: "tools.savedSearchId"
+            properties: "tools.properties"
+          outputParameters:
+            - type: object
+              mapping: "$."
+        - name: list-tables
+          description: "List all tables in a Log Analytics workspace."
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "log-analytics-management.list-tables"
+          with:
+            subscriptionId: "tools.subscriptionId"
+            resourceGroupName: "tools.resourceGroupName"
+            workspaceName: "tools.workspaceName"
+          outputParameters:
+            - type: object
+              mapping: "$."

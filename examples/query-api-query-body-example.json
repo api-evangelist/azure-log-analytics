@@ -1,0 +1,7 @@
+{
+  "query": "AzureActivity | summarize count() by Category | top 10 by count_",
+  "timespan": "P7D",
+  "workspaces": [
+    "a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1"
+  ]
+}

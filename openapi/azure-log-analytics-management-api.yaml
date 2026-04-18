@@ -1,0 +1,1010 @@
+openapi: 3.0.3
+info:
+  title: Azure Log Analytics Management API
+  description: >-
+    REST API for managing Log Analytics workspaces, data sources, saved searches,
+    linked services, storage insights, clusters, and tables through Azure
+    Resource Manager.
+  version: '2025-02-01'
+  contact:
+    name: Microsoft Azure Support
+    url: https://azure.microsoft.com/en-us/support/
+  license:
+    name: Microsoft Azure Terms
+    url: https://azure.microsoft.com/en-us/support/legal/
+  x-generated-from: documentation
+  x-last-validated: '2026-04-18'
+servers:
+  - url: https://management.azure.com
+    description: Azure Resource Manager endpoint
+security:
+  - oauth2: [user_impersonation]
+tags:
+  - name: Workspaces
+    description: Manage Log Analytics workspaces
+  - name: Saved Searches
+    description: Manage saved KQL queries
+  - name: Data Sources
+    description: Manage workspace data sources
+  - name: Linked Services
+    description: Manage linked services
+  - name: Tables
+    description: Manage workspace tables
+  - name: Clusters
+    description: Manage Log Analytics clusters
+  - name: Storage Insights
+    description: Manage storage insight configurations
+paths:
+  /subscriptions/{subscriptionId}/providers/Microsoft.OperationalInsights/workspaces:
+    get:
+      operationId: listWorkspaces
+      summary: Azure Log Analytics List Workspaces
+      description: Gets the workspaces in a subscription.
+      tags:
+        - Workspaces
+      parameters:
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns a list of workspaces.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceListResult'
+              examples:
+                ListWorkspaces200Example:
+                  summary: Default listWorkspaces 200 response
+                  x-microcks-default: true
+                  value:
+                    value:
+                      - id: /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1
+                        name: ws1
+                        type: Microsoft.OperationalInsights/workspaces
+                        location: eastus
+                        properties:
+                          customerId: 5b02755b-5bf4-430c-9487-45502a2a7e62
+                          provisioningState: Succeeded
+                          retentionInDays: 30
+        default:
+          description: Error response describing why the operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces:
+    get:
+      operationId: listWorkspacesByResourceGroup
+      summary: Azure Log Analytics List Workspaces by Resource Group
+      description: Gets workspaces in a resource group.
+      tags:
+        - Workspaces
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns a list of workspaces in the resource group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceListResult'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}:
+    get:
+      operationId: getWorkspace
+      summary: Azure Log Analytics Get Workspace
+      description: Gets a workspace instance.
+      tags:
+        - Workspaces
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns the workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+              examples:
+                GetWorkspace200Example:
+                  summary: Default getWorkspace 200 response
+                  x-microcks-default: true
+                  value:
+                    id: /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1
+                    name: ws1
+                    type: Microsoft.OperationalInsights/workspaces
+                    location: eastus
+                    properties:
+                      customerId: 5b02755b-5bf4-430c-9487-45502a2a7e62
+                      provisioningState: Succeeded
+                      retentionInDays: 30
+                      publicNetworkAccessForQuery: Enabled
+                      publicNetworkAccessForIngestion: Enabled
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: createOrUpdateWorkspace
+      summary: Azure Log Analytics Create or Update Workspace
+      description: Create or update a workspace.
+      tags:
+        - Workspaces
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Workspace'
+            examples:
+              CreateOrUpdateWorkspaceRequestExample:
+                summary: Default createOrUpdateWorkspace request
+                x-microcks-default: true
+                value:
+                  location: eastus
+                  properties:
+                    sku:
+                      name: PerGB2018
+                    retentionInDays: 30
+      responses:
+        '200':
+          description: OK - Workspace updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '201':
+          description: Created - Workspace created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        '202':
+          description: Accepted - Operation is in progress.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    patch:
+      operationId: updateWorkspace
+      summary: Azure Log Analytics Update Workspace
+      description: Updates a workspace.
+      tags:
+        - Workspaces
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkspacePatch'
+      responses:
+        '200':
+          description: OK - Workspace updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Workspace'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteWorkspace
+      summary: Azure Log Analytics Delete Workspace
+      description: >-
+        Deletes a workspace resource. To recover the workspace, create it again
+        with the same name, subscription, resource group, and location.
+      tags:
+        - Workspaces
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: force
+          in: query
+          required: false
+          description: Deletes the workspace without the recovery option.
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK - Workspace deleted.
+        '202':
+          description: Accepted - Deletion in progress.
+        '204':
+          description: No Content - Workspace does not exist.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches:
+    get:
+      operationId: listSavedSearches
+      summary: Azure Log Analytics List Saved Searches
+      description: Gets the saved searches for a given Log Analytics workspace.
+      tags:
+        - Saved Searches
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns list of saved searches.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedSearchesListResult'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchId}:
+    get:
+      operationId: getSavedSearch
+      summary: Azure Log Analytics Get Saved Search
+      description: Gets the specified saved search for a given workspace.
+      tags:
+        - Saved Searches
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: savedSearchId
+          in: path
+          required: true
+          description: The ID of the saved search.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - Returns the saved search.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedSearch'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: createOrUpdateSavedSearch
+      summary: Azure Log Analytics Create or Update Saved Search
+      description: Creates or updates a saved search for a given workspace.
+      tags:
+        - Saved Searches
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: savedSearchId
+          in: path
+          required: true
+          description: The ID of the saved search.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedSearch'
+      responses:
+        '200':
+          description: OK - Saved search updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedSearch'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteSavedSearch
+      summary: Azure Log Analytics Delete Saved Search
+      description: Deletes the specified saved search in a given workspace.
+      tags:
+        - Saved Searches
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: savedSearchId
+          in: path
+          required: true
+          description: The ID of the saved search.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - Saved search deleted.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/tables:
+    get:
+      operationId: listTables
+      summary: Azure Log Analytics List Tables
+      description: Gets all the tables for the specified Log Analytics workspace.
+      tags:
+        - Tables
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns the list of tables.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TablesListResult'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/tables/{tableName}:
+    get:
+      operationId: getTable
+      summary: Azure Log Analytics Get Table
+      description: Gets a Log Analytics workspace table.
+      tags:
+        - Tables
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: tableName
+          in: path
+          required: true
+          description: The name of the table.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - Returns the table.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: createOrUpdateTable
+      summary: Azure Log Analytics Create or Update Table
+      description: Update or create a Log Analytics workspace table.
+      tags:
+        - Tables
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: tableName
+          in: path
+          required: true
+          description: The name of the table.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Table'
+      responses:
+        '200':
+          description: OK - Table updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+        '202':
+          description: Accepted - Operation in progress.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteTable
+      summary: Azure Log Analytics Delete Table
+      description: Delete a Log Analytics workspace table.
+      tags:
+        - Tables
+      parameters:
+        - $ref: '#/components/parameters/ResourceGroupNameParameter'
+        - $ref: '#/components/parameters/SubscriptionIdParameter'
+        - $ref: '#/components/parameters/WorkspaceNameParameter'
+        - $ref: '#/components/parameters/ApiVersionParameter'
+        - name: tableName
+          in: path
+          required: true
+          description: The name of the table.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK - Table deleted.
+        '202':
+          description: Accepted - Deletion in progress.
+        '204':
+          description: No Content - Table does not exist.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: Azure Active Directory OAuth2 implicit flow.
+      flows:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+          scopes:
+            user_impersonation: Impersonate your user account
+  parameters:
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
+    WorkspaceNameParameter:
+      name: workspaceName
+      in: path
+      required: true
+      description: The name of the workspace.
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 63
+        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
+  schemas:
+    Workspace:
+      type: object
+      description: The top level Workspace resource container.
+      properties:
+        id:
+          type: string
+          description: Fully qualified resource ID.
+          readOnly: true
+          example: /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1
+        name:
+          type: string
+          description: The name of the resource.
+          readOnly: true
+          example: ws1
+        type:
+          type: string
+          description: The type of the resource.
+          readOnly: true
+          example: Microsoft.OperationalInsights/workspaces
+        location:
+          type: string
+          description: The geo-location where the resource lives.
+          example: eastus
+        tags:
+          type: object
+          description: Resource tags.
+          additionalProperties:
+            type: string
+        etag:
+          type: string
+          description: The etag of the workspace.
+        properties:
+          $ref: '#/components/schemas/WorkspaceProperties'
+        identity:
+          $ref: '#/components/schemas/Identity'
+        systemData:
+          $ref: '#/components/schemas/SystemData'
+    WorkspaceProperties:
+      type: object
+      description: Workspace properties.
+      properties:
+        customerId:
+          type: string
+          description: Read-only ID associated with the workspace.
+          readOnly: true
+          example: 5b02755b-5bf4-430c-9487-45502a2a7e62
+        provisioningState:
+          type: string
+          description: The provisioning state of the workspace.
+          enum:
+            - Creating
+            - Succeeded
+            - Failed
+            - Canceled
+            - Deleting
+            - ProvisioningAccount
+            - Updating
+          example: Succeeded
+        sku:
+          $ref: '#/components/schemas/WorkspaceSku'
+        retentionInDays:
+          type: integer
+          format: int32
+          description: The workspace data retention in days.
+          example: 30
+        publicNetworkAccessForIngestion:
+          type: string
+          description: Network access type for ingestion.
+          enum:
+            - Enabled
+            - Disabled
+          default: Enabled
+          example: Enabled
+        publicNetworkAccessForQuery:
+          type: string
+          description: Network access type for query.
+          enum:
+            - Enabled
+            - Disabled
+          default: Enabled
+          example: Enabled
+        createdDate:
+          type: string
+          format: date-time
+          description: Workspace creation date.
+          readOnly: true
+        modifiedDate:
+          type: string
+          format: date-time
+          description: Workspace modification date.
+          readOnly: true
+        defaultDataCollectionRuleResourceId:
+          type: string
+          description: Resource ID of the default Data Collection Rule.
+        forceCmkForQuery:
+          type: boolean
+          description: Whether customer managed storage is mandatory for query management.
+        workspaceCapping:
+          $ref: '#/components/schemas/WorkspaceCapping'
+        features:
+          $ref: '#/components/schemas/WorkspaceFeatures'
+    WorkspaceSku:
+      type: object
+      description: The SKU of the workspace.
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the SKU.
+          enum:
+            - Free
+            - Standard
+            - Premium
+            - PerNode
+            - PerGB2018
+            - Standalone
+            - CapacityReservation
+            - LACluster
+          example: PerGB2018
+        capacityReservationLevel:
+          type: integer
+          format: int32
+          description: The capacity reservation level in GB.
+          enum: [100, 200, 300, 400, 500, 1000, 2000, 5000, 10000, 25000, 50000]
+        lastSkuUpdate:
+          type: string
+          format: date-time
+          description: The last time the SKU was updated.
+          readOnly: true
+    WorkspaceCapping:
+      type: object
+      description: The daily volume cap for ingestion.
+      properties:
+        dailyQuotaGb:
+          type: number
+          format: double
+          description: The workspace daily quota for ingestion in GB.
+          example: 10.0
+        dataIngestionStatus:
+          type: string
+          description: The status of data ingestion.
+          enum:
+            - RespectQuota
+            - ForceOn
+            - ForceOff
+            - OverQuota
+            - SubscriptionSuspended
+            - ApproachingQuota
+          readOnly: true
+        quotaNextResetTime:
+          type: string
+          description: The time when the quota will be reset.
+          readOnly: true
+    WorkspaceFeatures:
+      type: object
+      description: Workspace features configuration.
+      properties:
+        enableDataExport:
+          type: boolean
+          description: Flag indicating if data should be exported.
+        enableLogAccessUsingOnlyResourcePermissions:
+          type: boolean
+          description: Permission mode flag.
+        immediatePurgeDataOn30Days:
+          type: boolean
+          description: Remove data after 30 days flag.
+        disableLocalAuth:
+          type: boolean
+          description: Disable non-AAD based authentication.
+        clusterResourceId:
+          type: string
+          description: Dedicated LA cluster resource ID.
+    WorkspacePatch:
+      type: object
+      description: Workspace patch payload for updates.
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        properties:
+          $ref: '#/components/schemas/WorkspaceProperties'
+        identity:
+          $ref: '#/components/schemas/Identity'
+    WorkspaceListResult:
+      type: object
+      description: List of workspaces result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
+    Identity:
+      type: object
+      description: The identity of the resource.
+      properties:
+        principalId:
+          type: string
+          description: The principal ID of resource identity.
+          readOnly: true
+        tenantId:
+          type: string
+          description: The tenant ID of resource.
+          readOnly: true
+        type:
+          type: string
+          description: Type of managed service identity.
+          enum:
+            - SystemAssigned
+            - UserAssigned
+            - None
+    SystemData:
+      type: object
+      description: Metadata pertaining to creation and last modification.
+      properties:
+        createdBy:
+          type: string
+          description: The identity that created the resource.
+        createdByType:
+          type: string
+          enum: [User, Application, ManagedIdentity, Key]
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of resource creation (UTC).
+        lastModifiedBy:
+          type: string
+          description: The identity that last modified the resource.
+        lastModifiedByType:
+          type: string
+          enum: [User, Application, ManagedIdentity, Key]
+        lastModifiedAt:
+          type: string
+          format: date-time
+          description: Timestamp of resource last modification (UTC).
+    SavedSearch:
+      type: object
+      description: A saved search in a Log Analytics workspace.
+      properties:
+        id:
+          type: string
+          description: Fully qualified resource ID.
+          readOnly: true
+        name:
+          type: string
+          description: The name of the resource.
+          readOnly: true
+        type:
+          type: string
+          description: The type of the resource.
+          readOnly: true
+        etag:
+          type: string
+          description: The ETag of the saved search.
+        properties:
+          $ref: '#/components/schemas/SavedSearchProperties'
+    SavedSearchProperties:
+      type: object
+      description: Properties of a saved search.
+      required:
+        - category
+        - displayName
+        - query
+      properties:
+        category:
+          type: string
+          description: The category of the saved search.
+          example: General Exploration
+        displayName:
+          type: string
+          description: Saved search display name.
+          example: All Events
+        query:
+          type: string
+          description: The KQL query expression.
+          example: Event | sort by TimeGenerated desc
+        functionAlias:
+          type: string
+          description: The function alias if query serves as a function.
+        functionParameters:
+          type: string
+          description: The optional function parameters.
+        version:
+          type: integer
+          format: int64
+          description: The version number of the query language.
+        tags:
+          type: array
+          description: The tags attached to the saved search.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+    SavedSearchesListResult:
+      type: object
+      description: The saved search list result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SavedSearch'
+    Table:
+      type: object
+      description: Workspace table definition.
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+          readOnly: true
+        properties:
+          $ref: '#/components/schemas/TableProperties'
+    TableProperties:
+      type: object
+      description: Table properties.
+      properties:
+        retentionInDays:
+          type: integer
+          format: int32
+          description: The table retention in days.
+        totalRetentionInDays:
+          type: integer
+          format: int32
+          description: The table total retention in days.
+        archiveRetentionInDays:
+          type: integer
+          format: int32
+          description: The table archive retention in days.
+          readOnly: true
+        plan:
+          type: string
+          description: The table plan.
+          enum:
+            - Analytics
+            - Basic
+        schema:
+          $ref: '#/components/schemas/TableSchema'
+        provisioningState:
+          type: string
+          readOnly: true
+          enum:
+            - Succeeded
+            - InProgress
+            - Deleting
+            - Updating
+    TableSchema:
+      type: object
+      description: Schema of a workspace table.
+      properties:
+        name:
+          type: string
+          description: Table name.
+        columns:
+          type: array
+          description: A list of table custom columns.
+          items:
+            $ref: '#/components/schemas/TableColumn'
+    TableColumn:
+      type: object
+      description: Table column definition.
+      properties:
+        name:
+          type: string
+          description: Column name.
+        type:
+          type: string
+          description: Column data type.
+          enum:
+            - string
+            - int
+            - long
+            - real
+            - boolean
+            - dateTime
+            - guid
+            - dynamic
+        description:
+          type: string
+          description: Column description.
+    TablesListResult:
+      type: object
+      description: List of workspace tables result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+    ErrorResponse:
+      type: object
+      description: Error response.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
+    ErrorAdditionalInfo:
+      type: object
+      description: Error additional info.
+      properties:
+        type:
+          type: string
+        info:
+          type: object

@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-structure/management-api-workspace-structure.json",
+  "name": "Workspace",
+  "description": "The top level Log Analytics Workspace resource container.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Fully qualified resource ID."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the resource."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the resource."
+    },
+    "location": {
+      "type": "string",
+      "description": "The geo-location where the resource lives."
+    },
+    "tags": {
+      "type": "object",
+      "description": "Resource tags.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "etag": {
+      "type": "string",
+      "description": "The etag of the workspace."
+    },
+    "properties": {
+      "type": "object",
+      "description": "Workspace properties.",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Read-only ID associated with the workspace."
+        },
+        "provisioningState": {
+          "type": "string",
+          "description": "The provisioning state of the workspace."
+        },
+        "sku": {
+          "type": "object",
+          "description": "The SKU of the workspace.",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the SKU."
+            },
+            "capacityReservationLevel": {
+              "type": "int32",
+              "description": "The capacity reservation level in GB."
+            }
+          }
+        },
+        "retentionInDays": {
+          "type": "int32",
+          "description": "The workspace data retention in days."
+        },
+        "publicNetworkAccessForIngestion": {
+          "type": "string",
+          "description": "Network access type for ingestion."
+        },
+        "publicNetworkAccessForQuery": {
+          "type": "string",
+          "description": "Network access type for query."
+        },
+        "workspaceCapping": {
+          "type": "object",
+          "description": "The daily volume cap for ingestion.",
+          "properties": {
+            "dailyQuotaGb": {
+              "type": "double",
+              "description": "The workspace daily quota for ingestion in GB."
+            },
+            "dataIngestionStatus": {
+              "type": "string",
+              "description": "The status of data ingestion."
+            }
+          }
+        }
+      }
+    }
+  }
+}

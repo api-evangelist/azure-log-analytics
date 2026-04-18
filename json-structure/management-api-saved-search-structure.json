@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-structure.org/meta/core/v0/#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/json-structure/management-api-saved-search-structure.json",
+  "name": "SavedSearch",
+  "description": "A saved search (KQL query) in a Log Analytics workspace.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Fully qualified resource ID."
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the resource."
+    },
+    "type": {
+      "type": "string",
+      "description": "The type of the resource."
+    },
+    "etag": {
+      "type": "string",
+      "description": "The ETag of the saved search."
+    },
+    "properties": {
+      "type": "object",
+      "description": "Saved search properties.",
+      "required": ["category", "displayName", "query"],
+      "properties": {
+        "category": {
+          "type": "string",
+          "description": "The category of the saved search."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Saved search display name."
+        },
+        "query": {
+          "type": "string",
+          "description": "The KQL query expression."
+        },
+        "functionAlias": {
+          "type": "string",
+          "description": "The function alias if query serves as a function."
+        },
+        "functionParameters": {
+          "type": "string",
+          "description": "The optional function parameters."
+        },
+        "version": {
+          "type": "int64",
+          "description": "The version number of the query language."
+        }
+      }
+    }
+  }
+}
