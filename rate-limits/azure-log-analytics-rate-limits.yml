@@ -4,96 +4,131 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: Azure Log Analytics
 providerId: azure-log-analytics
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: true
 tags:
-  - Analytics
-  - Azure
-  - Cloud
-  - Logging
-  - Monitoring
+  - Observability
+  - Logs
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the Azure Log Analytics API surface. Captures
-  per-tier quotas, burst behavior, response signaling, and recovery semantics. Defaults are scaffold values
-  to be replaced with published provider limits.
+description: Azure Log Analytics enforces ingestion rate limits per Data Collection Rule and per workspace,
+  query rate limits per user, and a soft per-workspace ingestion-volume rate (default ~500 MB/min compressed,
+  approximately 6 GB/min uncompressed). Throttled queries return HTTP 429 with Retry-After. Data Collector
+  API has separate per-post and per-field size limits.
+sources:
+  - https://learn.microsoft.com/en-us/azure/azure-monitor/fundamentals/service-limits
 headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
   retryAfter: Retry-After
-  policy: RateLimit-Policy
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
+  - name: Logs Ingestion API - data per minute per DCR
+    scope: dataCollectionRule
+    metric: GB_per_minute
+    limit: 2
     timeFrame: minute
-    applies:
-      - Azure Log Analytics Query API
-      - Azure Log Analytics Management API
-      - Azure Log Analytics Ingestion API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
-    timeFrame: month
-    applies:
-      - Azure Log Analytics Query API
-      - Azure Log Analytics Management API
-      - Azure Log Analytics Ingestion API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
+    notes: System may auto-scale gradual increases; abrupt spikes throttled.
+  - name: Logs Ingestion API - requests per minute per DCR
+    scope: dataCollectionRule
+    metric: requests_per_minute
+    limit: 12000
+    timeFrame: minute
+  - name: Logs Ingestion API - max API call size
+    scope: request
+    metric: MB
+    limit: 1
+    notes: Compressed and uncompressed.
+  - name: Logs Ingestion API - max field value
+    scope: field
+    metric: KB
+    limit: 64
+    notes: Truncated above 64 KB.
+  - name: Workspace ingestion volume rate (soft)
+    scope: workspace
+    metric: MB_per_minute
+    limit: 500
+    timeFrame: minute
+    notes: ~6 GB/min uncompressed. 4 retries over 12 hours then drop. Raise via support.
+  - name: Concurrent Analytics queries per user
+    scope: user
+    metric: concurrent_queries
+    limit: 5
+  - name: Concurrent Basic / Auxiliary queries per user
+    scope: user
+    metric: concurrent_queries
+    limit: 2
+  - name: Time in concurrency queue
+    scope: user
+    metric: minutes
+    limit: 3
+    timeFrame: minute
+    notes: Queries queued > 3 minutes are terminated with 429.
+  - name: Total queries in concurrency queue
+    scope: user
+    metric: queries
+    limit: 200
+    notes: Beyond this, additional queries return 429.
+  - name: Query rate per user
+    scope: user
+    metric: queries_per_30s
+    limit: 200
+    timeFrame: second
+  - name: Activity log API query rate
+    scope: user
+    metric: queries_per_30s
+    limit: 50
+    timeFrame: second
+  - name: Query API - max records returned
+    scope: query
+    metric: records
+    limit: 500000
+  - name: Query API - max data returned
+    scope: query
+    metric: MB
+    limit: 100
+  - name: Query API - max running time
+    scope: query
+    metric: minutes
+    limit: 10
+    timeFrame: minute
+  - name: Query API - request rate
+    scope: user/clientIP
+    metric: requests_per_30s
+    limit: 200
+    timeFrame: second
+  - name: Data Collector API - max single post
+    scope: request
+    metric: MB
+    limit: 30
+  - name: Alerts API - Get Summary
+    scope: subscription
+    metric: requests_per_minute
+    limit: 50
+    timeFrame: minute
+  - name: Alerts API - Get All
+    scope: subscription
     metric: requests_per_minute
     limit: 100
-    burst: 200
     timeFrame: minute
-    applies:
-      - Azure Log Analytics Query API
-      - Azure Log Analytics Management API
-      - Azure Log Analytics Ingestion API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 100000
-    timeFrame: month
-    applies:
-      - Azure Log Analytics Query API
-      - Azure Log Analytics Management API
-      - Azure Log Analytics Ingestion API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
+  - name: Alerts API - Other
+    scope: subscription
     metric: requests_per_minute
     limit: 1000
-    burst: 5000
     timeFrame: minute
-    applies:
-      - Azure Log Analytics Query API
-      - Azure Log Analytics Management API
-      - Azure Log Analytics Ingestion API
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
+  - name: Backoff with Retry-After
+    description: Throttled requests return 429 with Retry-After. Honor it; do not retry tighter.
+  - name: Daily ingestion cap
+    description: Customers can configure a per-workspace daily cap; ingest stops when cap is reached
+      and resumes the next UTC day.
+  - name: Volume-rate raise via support
+    description: The 500 MB/min compressed soft limit can be raised by contacting Azure support before
+      planned spikes.
+  - name: Optimize KQL
+    description: Use efficient KQL (project early, filter early, summarize). Heavy queries count against
+      concurrency.
+  - name: Field truncation
+    description: Field values > 32 KB (Data Collector) or > 64 KB (Logs Ingestion) are truncated, not
+      rejected.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

@@ -1,148 +1,108 @@
 specification: FinOps Framework
 specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Azure Log Analytics
+providerId: azure-log-analytics
+created: '2026-05-04'
+modified: '2026-05-05'
+reconciled: true
+tags:
+  - Observability
+  - Logs
+  - Monitoring
+  - FinOps
+  - FOCUS
+description: 'FOCUS-aligned FinOps for Azure Log Analytics: per-GB ingest is the dominant meter, with
+  daily-commit tiers, table-tier optimization (Analytics vs Basic vs Auxiliary), retention beyond 31
+  days, and search/restore from archive as additional billable lines. Ingest tier and table choice are
+  the primary cost levers.'
+sources:
+  - https://azure.microsoft.com/en-us/pricing/details/monitor/
+  - https://learn.microsoft.com/en-us/azure/azure-monitor/logs/cost-logs
 alignedWith:
   framework: FinOps Foundation Framework
   frameworkUrl: https://www.finops.org/framework/
   dataSpec: FOCUS
   dataSpecVersion: '1.3'
   dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
-provider: Azure Log Analytics
-providerId: azure-log-analytics
-publisherName: Azure Log Analytics
-serviceCategory: API
-created: '2026-05-04'
-modified: '2026-05-04'
-tags:
-  - Analytics
-  - Azure
-  - Cloud
-  - Logging
-  - Monitoring
-  - FinOps
-  - Cost Management
-  - FOCUS
-description: FinOps framework definition for the Azure Log Analytics API surface. Provides a FOCUS-aligned
-  mapping for cost allocation, usage measurement, and unit-economics reporting across the provider's APIs.
-principles:
-  - name: Visibility
-    description: Make API consumption costs visible to engineering, product, and finance teams in near
-      real-time.
-  - name: Allocation
-    description: Tag every chargeable API call with the consuming team, environment, application, and
-      feature so cost can be allocated.
-  - name: Optimization
-    description: Continuously evaluate request patterns, caching, batching, and tier selection to reduce
-      cost per useful unit of work.
-  - name: Accountability
-    description: Establish budget owners and chargeback or showback flows for each consuming team.
-domains:
-  - name: Understand Usage and Cost
-    capabilities:
-      - Data Ingestion
-      - Allocation
-      - Reporting and Analytics
-      - Anomaly Management
-  - name: Quantify Business Value
-    capabilities:
-      - Planning and Estimating
-      - Forecasting
-      - Budgeting
-      - Benchmarking
-      - Unit Economics
-  - name: Optimize Usage and Cost
-    capabilities:
-      - Architecting for Cloud
-      - Rate Optimization
-      - Workload Optimization
-      - Cloud Sustainability
-      - Licensing and SaaS
-  - name: Manage the FinOps Practice
-    capabilities:
-      - FinOps Practice Operations
-      - FinOps Education and Enablement
-      - Invoicing and Chargeback
-      - Onboarding Workloads
-      - Intersecting Disciplines
+publisherName: Microsoft Corporation
+serviceCategory: Observability
 billingModel:
-  pricingCategory: Usage-Based
+  pricingCategory: Pay-As-You-Go + Committed Use
   billingFrequency: Monthly
   billingCurrency: USD
   chargeCategories:
     - Usage
     - Purchase
     - Tax
-    - Credit
     - Adjustment
-  chargeFrequency: Recurring
 focusColumns:
-  ServiceName: Azure Log Analytics
-  ServiceCategory: Developer Tools / API
-  ProviderName: Azure Log Analytics
-  PublisherName: Azure Log Analytics
-  InvoiceIssuerName: Azure Log Analytics
-  PricingCategory: Usage-Based
-  PricingUnit: request
+  ServiceName: Azure Monitor / Log Analytics
+  ServiceCategory: Observability
+  ProviderName: Microsoft
+  PublisherName: Microsoft Corporation
+  InvoiceIssuerName: Microsoft Corporation
+  PricingCategory: Pay-As-You-Go
   BillingCurrency: USD
   ChargeCategory: Usage
 meters:
-  - name: api_requests
-    description: Count of billable API requests
-    unit: request
-    aggregation: sum
-    dimensions:
-      - api
-      - endpoint
-      - tier
-      - region
-      - consumer
-  - name: data_egress
-    description: Bytes returned over the network in API responses
+  - name: analytics_logs_ingest
+    description: Standard Analytics-tier table ingest
     unit: GB
     aggregation: sum
     dimensions:
-      - api
+      - workspace
       - region
-      - consumer
-  - name: compute_seconds
-    description: Server-side compute consumed by the request, where applicable
-    unit: second
+      - table
+  - name: basic_logs_ingest
+    description: Basic-tier ingest (cheaper, query-restricted)
+    unit: GB
     aggregation: sum
     dimensions:
-      - api
-      - endpoint
-      - tier
-apis:
-  - name: Azure Log Analytics Query API
-    baseURL: https://api.loganalytics.azure.com/v1
-    tags:
-      - Analytics
-      - Logs
-      - Query
-    serviceName: Azure Log Analytics Query API
-    serviceCategory: API
-  - name: Azure Log Analytics Management API
-    baseURL: https://management.azure.com
-    tags:
-      - Configuration
-      - Management
-      - Workspaces
-    serviceName: Azure Log Analytics Management API
-    serviceCategory: API
-  - name: Azure Log Analytics Ingestion API
-    baseURL: https://monitor.azure.com
-    tags:
-      - Data Collection
-      - Ingestion
-      - Logs
-    serviceName: Azure Log Analytics Ingestion API
-    serviceCategory: API
-unitEconomics:
-  - name: Cost per 1K Requests
-    metric: billed_cost / (api_requests / 1000)
-    target: TBD
-  - name: Cost per Active Consumer
-    metric: billed_cost / active_consumers
-    target: TBD
+      - workspace
+      - table
+  - name: auxiliary_logs_ingest
+    description: Auxiliary-tier ingest (cheapest, archival-only)
+    unit: GB
+    aggregation: sum
+    dimensions:
+      - workspace
+      - table
+  - name: interactive_retention
+    description: Per-GB-month for retention beyond the included 31 days
+    unit: GB-month
+    aggregation: avg
+    dimensions:
+      - workspace
+      - table
+  - name: long_term_archive
+    description: Long-term archive storage up to 12 years
+    unit: GB-month
+    aggregation: avg
+    dimensions:
+      - workspace
+      - table
+  - name: search_scan
+    description: Per-GB scanned by Basic/Auxiliary search and archive restore
+    unit: GB
+    aggregation: sum
+    dimensions:
+      - workspace
+      - table
+principles:
+  - name: Visibility
+    description: Use the Usage and Estimated Costs blade in the workspace and Azure Cost Management
+      to see ingest by table and Solutions; build Workbooks for ingest trend by source.
+  - name: Allocation
+    description: Use one workspace per business unit / environment for clean attribution; tag workspaces;
+      use Resource Context RBAC and table-level access for chargeback.
+  - name: Optimization
+    description: Move high-volume / low-query tables to Basic or Auxiliary; configure table-level retention;
+      drop noisy fields with ingestion-time transforms; use daily caps; commit to a tier matching steady-state
+      ingest; review verbose diagnostic settings (especially AzureDiagnostics) for waste.
+  - name: Accountability
+    description: Set workspace daily cap alerts; assign workspace owners; review monthly per-table ingest
+      growth; investigate sudden spikes for misconfigured logging.
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
