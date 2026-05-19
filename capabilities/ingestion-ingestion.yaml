@@ -1,0 +1,113 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Azure Log Analytics Ingestion API — Ingestion
+  description: 'Azure Log Analytics Ingestion API — Ingestion. 1 operations. Lead operation: Azure Log Analytics Upload Logs.
+    Self-contained Naftiko capability covering one Azure Log Analytics business surface.'
+  tags:
+  - Azure Log Analytics
+  - Ingestion
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AZURE_LOG_ANALYTICS_API_KEY: AZURE_LOG_ANALYTICS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: ingestion-ingestion
+    baseUri: https://{endpoint}
+    description: Azure Log Analytics Ingestion API — Ingestion business capability. Self-contained, no shared references.
+    resources:
+    - name: dataCollectionRules-dcrImmutableId-streams-streamName
+      path: /dataCollectionRules/{dcrImmutableId}/streams/{streamName}
+      operations:
+      - name: uploadlogs
+        method: POST
+        description: Azure Log Analytics Upload Logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: dcrImmutableId
+          in: path
+          type: string
+          description: The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal.
+          required: true
+        - name: streamName
+          in: path
+          type: string
+          description: The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables.
+          required: true
+        - name: api-version
+          in: query
+          type: string
+          description: The API version to use.
+          required: true
+        - name: Content-Encoding
+          in: header
+          type: string
+          description: Set to gzip for compressed payloads.
+        - name: x-ms-client-request-id
+          in: header
+          type: string
+          description: String-formatted GUID for request tracking.
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.AZURE_LOG_ANALYTICS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: ingestion-ingestion-rest
+    port: 8080
+    description: REST adapter for Azure Log Analytics Ingestion API — Ingestion. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/datacollectionrules/{dcrimmutableid}/streams/{streamname}
+      name: datacollectionrules-dcrimmutableid-streams-streamname
+      description: REST surface for dataCollectionRules-dcrImmutableId-streams-streamName.
+      operations:
+      - method: POST
+        name: uploadlogs
+        description: Azure Log Analytics Upload Logs
+        call: ingestion-ingestion.uploadlogs
+        with:
+          dcrImmutableId: rest.dcrImmutableId
+          streamName: rest.streamName
+          api-version: rest.api-version
+          Content-Encoding: rest.Content-Encoding
+          x-ms-client-request-id: rest.x-ms-client-request-id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: ingestion-ingestion-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Azure Log Analytics Ingestion API — Ingestion. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: azure-log-analytics-upload-logs
+      description: Azure Log Analytics Upload Logs
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: ingestion-ingestion.uploadlogs
+      with:
+        dcrImmutableId: tools.dcrImmutableId
+        streamName: tools.streamName
+        api-version: tools.api-version
+        Content-Encoding: tools.Content-Encoding
+        x-ms-client-request-id: tools.x-ms-client-request-id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,136 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Azure Log Analytics Query API — Query
+  description: 'Azure Log Analytics Query API — Query. 2 operations. Lead operation: Azure Log Analytics Get Query. Self-contained
+    Naftiko capability covering one Azure Log Analytics business surface.'
+  tags:
+  - Azure Log Analytics
+  - Query
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    AZURE_LOG_ANALYTICS_API_KEY: AZURE_LOG_ANALYTICS_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: query-query
+    baseUri: https://api.loganalytics.azure.com/v1
+    description: Azure Log Analytics Query API — Query business capability. Self-contained, no shared references.
+    resources:
+    - name: workspaces-workspaceId-query
+      path: /workspaces/{workspaceId}/query
+      operations:
+      - name: getquery
+        method: GET
+        description: Azure Log Analytics Get Query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: workspaceId
+          in: path
+          type: string
+          description: The ID of the Log Analytics workspace.
+          required: true
+        - name: query
+          in: query
+          type: string
+          description: The Analytics query using Kusto Query Language (KQL).
+          required: true
+        - name: timespan
+          in: query
+          type: string
+          description: ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified
+            in the query expression.
+      - name: postquery
+        method: POST
+        description: Azure Log Analytics Post Query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: workspaceId
+          in: path
+          type: string
+          description: The ID of the Log Analytics workspace.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.AZURE_LOG_ANALYTICS_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: query-query-rest
+    port: 8080
+    description: REST adapter for Azure Log Analytics Query API — Query. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/workspaces/{workspaceid}/query
+      name: workspaces-workspaceid-query
+      description: REST surface for workspaces-workspaceId-query.
+      operations:
+      - method: GET
+        name: getquery
+        description: Azure Log Analytics Get Query
+        call: query-query.getquery
+        with:
+          workspaceId: rest.workspaceId
+          query: rest.query
+          timespan: rest.timespan
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: postquery
+        description: Azure Log Analytics Post Query
+        call: query-query.postquery
+        with:
+          workspaceId: rest.workspaceId
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: query-query-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Azure Log Analytics Query API — Query. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: azure-log-analytics-get-query
+      description: Azure Log Analytics Get Query
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: query-query.getquery
+      with:
+        workspaceId: tools.workspaceId
+        query: tools.query
+        timespan: tools.timespan
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: azure-log-analytics-post-query
+      description: Azure Log Analytics Post Query
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: query-query.postquery
+      with:
+        workspaceId: tools.workspaceId
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
