@@ -2,13 +2,13 @@
   "repo": "azure-log-analytics",
   "feeds": [
     {
-      "source": "https://azure.microsoft.com/en-us/blog/tag/azure-log-analytics/",
-      "feed_url": "",
+      "source": "https://azure.microsoft.com/en-us/support/",
+      "feed_url": "https://azure.microsoft.com/en-us/support/",
       "title": "",
       "saved": 0,
-      "error": "no_feed"
+      "method": "none"
     }
   ],
   "post_count": 10,
-  "fetched": "2026-05-17T20:48:52Z"
+  "fetched": "2026-06-01T23:35:02Z"
 }
