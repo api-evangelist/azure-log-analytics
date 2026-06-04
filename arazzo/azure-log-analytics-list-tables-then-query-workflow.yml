@@ -1,0 +1,131 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Inspect Table Schema then Query
+  summary: List a workspace's tables, inspect one table's schema, then query that table.
+  description: >-
+    A schema-aware querying pattern. Before running a KQL query the workflow
+    enumerates the tables in a Log Analytics workspace and reads the schema of
+    the chosen table so the caller knows the available columns. It then executes
+    a KQL query that targets that table. Every step spells out its request inline
+    so the flow can be read and executed without opening the underlying OpenAPI
+    descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: list-tables-then-query
+  summary: Enumerate workspace tables, read one table's schema, then query it.
+  description: >-
+    Lists the tables in a workspace, reads the management definition of the
+    chosen table to expose its column schema, retention, and plan, and then runs
+    a KQL query against that table on the query endpoint.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - tableName
+    - workspaceId
+    - query
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      tableName:
+        type: string
+        description: The name of the table to inspect and query (e.g. AzureActivity).
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      query:
+        type: string
+        description: The KQL query to run against the table.
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the query window (e.g. P1D).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: listTables
+    description: >-
+      List every table in the workspace so the target table can be confirmed
+      before inspecting its schema.
+    operationId: listTables
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/value
+  - stepId: getTable
+    description: >-
+      Read the management definition of the chosen table to expose its column
+      schema, plan, and retention settings.
+    operationId: getTable
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: tableName
+      in: path
+      value: $inputs.tableName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      schema: $response.body#/properties/schema
+      plan: $response.body#/properties/plan
+  - stepId: runQuery
+    description: >-
+      Execute the KQL query against the workspace, targeting the inspected
+      table, and return the tabular results.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.query
+        timespan: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+  outputs:
+    schema: $steps.getTable.outputs.schema
+    tables: $steps.runQuery.outputs.tables

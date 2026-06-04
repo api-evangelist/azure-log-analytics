@@ -1,0 +1,127 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Browse Saved Searches and Run One
+  summary: List a workspace's saved searches, fetch one's KQL, then execute it.
+  description: >-
+    A discovery-then-execute pattern over the saved-search library of a Log
+    Analytics workspace. The workflow lists every saved search on the workspace,
+    reads the full definition of the chosen one to obtain its stored KQL, and
+    then runs that query against the workspace. It supports building catalogs of
+    runnable, curated queries. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: list-saved-searches-and-run
+  summary: Enumerate saved searches, fetch one's stored KQL, and execute it.
+  description: >-
+    Lists the saved searches on a workspace, reads the chosen saved search to
+    obtain its stored KQL query, and submits that query to the Log Analytics
+    query endpoint for the workspace.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - savedSearchId
+    - workspaceId
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      savedSearchId:
+        type: string
+        description: The ID of the saved search to fetch and run.
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the query window (e.g. P1D).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: listSavedSearches
+    description: >-
+      List every saved search on the workspace so the target search can be
+      confirmed before fetching its full definition.
+    operationId: listSavedSearches
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      savedSearches: $response.body#/value
+  - stepId: getSavedSearch
+    description: >-
+      Read the chosen saved search to obtain its stored KQL query and category.
+    operationId: getSavedSearch
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: savedSearchId
+      in: path
+      value: $inputs.savedSearchId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      query: $response.body#/properties/query
+      category: $response.body#/properties/category
+  - stepId: runSavedQuery
+    description: >-
+      Execute the saved search's stored KQL query against the workspace and
+      return the tabular results.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $steps.getSavedSearch.outputs.query
+        timespan: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+  outputs:
+    category: $steps.getSavedSearch.outputs.category
+    tables: $steps.runSavedQuery.outputs.tables

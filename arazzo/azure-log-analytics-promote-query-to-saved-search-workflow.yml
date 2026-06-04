@@ -1,0 +1,124 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Validate then Save a KQL Query
+  summary: Run a KQL query to validate it, then persist it as a saved search.
+  description: >-
+    Promotes an ad hoc KQL query into a reusable saved search, but only after
+    confirming the query is valid by executing it against the workspace. The
+    workflow runs the query on the query endpoint, and on success stores the same
+    query text as a named saved search through the management API so it can be
+    rerun later. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+workflows:
+- workflowId: promote-query-to-saved-search
+  summary: Validate a KQL query by running it, then persist it as a saved search.
+  description: >-
+    Executes a KQL query against the workspace to confirm it returns results,
+    then creates or updates a saved search holding the same query so it becomes a
+    curated, reusable search on the workspace.
+  inputs:
+    type: object
+    required:
+    - workspaceId
+    - query
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - savedSearchId
+    - category
+    - displayName
+    properties:
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      query:
+        type: string
+        description: The KQL query to validate and persist.
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration used when validating the query (e.g. P1D).
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      savedSearchId:
+        type: string
+        description: The ID to assign the new or updated saved search.
+      category:
+        type: string
+        description: The category to file the saved search under (e.g. General Exploration).
+      displayName:
+        type: string
+        description: The display name for the saved search.
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: validateQuery
+    description: >-
+      Execute the KQL query against the workspace to confirm it parses and
+      returns tabular results before it is persisted.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.query
+        timespan: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+  - stepId: saveSearch
+    description: >-
+      Persist the validated query as a saved search on the workspace so it can
+      be rerun and shared later.
+    operationId: createOrUpdateSavedSearch
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: savedSearchId
+      in: path
+      value: $inputs.savedSearchId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    requestBody:
+      contentType: application/json
+      payload:
+        properties:
+          category: $inputs.category
+          displayName: $inputs.displayName
+          query: $inputs.query
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      savedSearchName: $response.body#/name
+      savedQuery: $response.body#/properties/query
+  outputs:
+    savedSearchName: $steps.saveSearch.outputs.savedSearchName
+    validationTables: $steps.validateQuery.outputs.tables

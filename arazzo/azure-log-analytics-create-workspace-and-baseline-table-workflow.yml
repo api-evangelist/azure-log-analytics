@@ -1,0 +1,160 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Create Workspace and Baseline Custom Table
+  summary: Create a workspace, add a baseline custom table, then read the table back.
+  description: >-
+    A greenfield setup pattern that stands up a new Log Analytics workspace and
+    seeds it with a first custom table. The workflow creates or updates the
+    workspace with an SKU and retention policy, creates a baseline custom table
+    with a column schema on that workspace, and reads the table back to confirm
+    its provisioning state. Every step spells out its request inline so the flow
+    can be read and executed without opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+workflows:
+- workflowId: create-workspace-and-baseline-table
+  summary: Provision a workspace, add a baseline custom table, then confirm the table.
+  description: >-
+    Creates or updates a Log Analytics workspace with an SKU and retention,
+    creates a baseline custom table on that workspace, and reads the table back
+    to confirm its schema and provisioning state.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - location
+    - tableName
+    - tableColumns
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group to provision the workspace in.
+      workspaceName:
+        type: string
+        description: The name for the new Log Analytics workspace.
+      location:
+        type: string
+        description: The Azure region for the workspace (e.g. eastus).
+      skuName:
+        type: string
+        description: The workspace pricing SKU name.
+        default: PerGB2018
+      retentionInDays:
+        type: integer
+        description: The workspace data retention in days.
+        default: 30
+      tableName:
+        type: string
+        description: The name of the baseline custom table to create.
+      tableColumns:
+        type: array
+        description: The column definitions for the baseline table schema.
+        items:
+          type: object
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: createWorkspace
+    description: >-
+      Create or update the Log Analytics workspace with the supplied SKU and
+      retention policy in the target region.
+    operationId: createOrUpdateWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    requestBody:
+      contentType: application/json
+      payload:
+        location: $inputs.location
+        properties:
+          sku:
+            name: $inputs.skuName
+          retentionInDays: $inputs.retentionInDays
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      workspaceName: $response.body#/name
+      customerId: $response.body#/properties/customerId
+  - stepId: createBaselineTable
+    description: >-
+      Create the baseline custom table on the new workspace using the supplied
+      column schema.
+    operationId: createOrUpdateTable
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: tableName
+      in: path
+      value: $inputs.tableName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    requestBody:
+      contentType: application/json
+      payload:
+        properties:
+          schema:
+            name: $inputs.tableName
+            columns: $inputs.tableColumns
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tableName: $response.body#/name
+  - stepId: confirmTable
+    description: >-
+      Read the baseline table back to confirm its schema and provisioning
+      state after creation.
+    operationId: getTable
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: tableName
+      in: path
+      value: $inputs.tableName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      schema: $response.body#/properties/schema
+      provisioningState: $response.body#/properties/provisioningState
+  outputs:
+    customerId: $steps.createWorkspace.outputs.customerId
+    tableName: $steps.createBaselineTable.outputs.tableName
+    tableSchema: $steps.confirmTable.outputs.schema
+    provisioningState: $steps.confirmTable.outputs.provisioningState

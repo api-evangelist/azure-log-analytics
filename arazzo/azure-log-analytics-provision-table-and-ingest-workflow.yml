@@ -1,0 +1,162 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Provision Custom Table then Ingest and Verify
+  summary: Create a custom table, upload logs through a DCR, then query the table to verify.
+  description: >-
+    An end-to-end onboarding pattern for a new custom log stream. The workflow
+    creates (or updates) a custom table on the workspace with the desired column
+    schema, sends a batch of log entries through a data collection rule to the
+    ingestion endpoint, and finally runs a KQL query against the new table to
+    confirm the data landed. Every step spells out its request inline so the flow
+    can be read and executed without opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: ingestionApi
+  url: ../openapi/azure-log-analytics-ingestion-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: provision-table-and-ingest
+  summary: Create a custom table, ingest logs via a DCR, then query to verify ingestion.
+  description: >-
+    Creates or updates a custom table with a column schema, uploads a batch of
+    log entries through a data collection rule stream, and runs a KQL query
+    against the new table to confirm the ingested data is queryable.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - tableName
+    - tableColumns
+    - dcrImmutableId
+    - streamName
+    - logEntries
+    - workspaceId
+    - verifyQuery
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      tableName:
+        type: string
+        description: The name of the custom table to create (e.g. MyTable_CL).
+      tableColumns:
+        type: array
+        description: The column definitions for the custom table schema.
+        items:
+          type: object
+      dcrImmutableId:
+        type: string
+        description: The immutable ID of the data collection rule used for ingestion.
+      streamName:
+        type: string
+        description: The DCR stream name that handles the data (e.g. Custom-MyTable).
+      logEntries:
+        type: array
+        description: The batch of log entry objects to upload.
+        items:
+          type: object
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      verifyQuery:
+        type: string
+        description: The KQL query used to verify the ingested rows are present.
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the verification query (e.g. PT1H).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+      ingestionApiVersion:
+        type: string
+        description: The ingestion API version to use.
+        default: '2023-01-01'
+  steps:
+  - stepId: createTable
+    description: >-
+      Create or update the custom table on the workspace with the supplied
+      column schema so it is ready to receive ingested data.
+    operationId: createOrUpdateTable
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: tableName
+      in: path
+      value: $inputs.tableName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    requestBody:
+      contentType: application/json
+      payload:
+        properties:
+          schema:
+            name: $inputs.tableName
+            columns: $inputs.tableColumns
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tableName: $response.body#/name
+  - stepId: uploadLogs
+    description: >-
+      Send the batch of log entries through the data collection rule stream to
+      the ingestion endpoint. A 204 indicates the data was accepted.
+    operationId: uploadLogs
+    parameters:
+    - name: dcrImmutableId
+      in: path
+      value: $inputs.dcrImmutableId
+    - name: streamName
+      in: path
+      value: $inputs.streamName
+    - name: api-version
+      in: query
+      value: $inputs.ingestionApiVersion
+    requestBody:
+      contentType: application/json
+      payload: $inputs.logEntries
+    successCriteria:
+    - condition: $statusCode == 204
+  - stepId: verifyIngestion
+    description: >-
+      Run the verification KQL query against the new table to confirm the
+      ingested rows are queryable.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.verifyQuery
+        timespan: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+  outputs:
+    tableName: $steps.createTable.outputs.tableName
+    verificationTables: $steps.verifyIngestion.outputs.tables

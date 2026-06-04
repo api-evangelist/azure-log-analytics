@@ -1,0 +1,96 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Cross-Workspace Query
+  summary: Discover subscription workspaces, then run one KQL query spanning several of them.
+  description: >-
+    Azure Monitor lets a single KQL query span multiple Log Analytics workspaces.
+    This workflow first lists the workspaces in a subscription so the caller can
+    confirm the participating workspaces exist, then executes one query against a
+    primary workspace while supplying additional workspace IDs in the request
+    body so the results are aggregated across all of them. Every step spells out
+    its request inline so the flow can be read and executed without opening the
+    underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: cross-workspace-query
+  summary: List subscription workspaces, then run a KQL query spanning multiple of them.
+  description: >-
+    Lists the Log Analytics workspaces in a subscription, then submits a single
+    KQL query to a primary workspace with a list of additional workspace IDs so
+    the query is evaluated across every supplied workspace.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - workspaceId
+    - additionalWorkspaces
+    - query
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      workspaceId:
+        type: string
+        description: The primary workspace GUID the query is issued against.
+      additionalWorkspaces:
+        type: array
+        description: Additional workspace IDs to include in the cross-workspace query.
+        items:
+          type: string
+      query:
+        type: string
+        description: The KQL query to evaluate across all participating workspaces.
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the query window (e.g. P1D).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: listWorkspaces
+    description: >-
+      List the workspaces in the subscription so the participating workspaces
+      can be confirmed before the cross-workspace query is issued.
+    operationId: listWorkspaces
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      workspaces: $response.body#/value
+  - stepId: runCrossWorkspaceQuery
+    description: >-
+      Execute the KQL query against the primary workspace while supplying the
+      additional workspace IDs so the query spans all of them.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.query
+        timespan: $inputs.timespan
+        workspaces: $inputs.additionalWorkspaces
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+      primaryRows: $response.body#/tables/0/rows
+  outputs:
+    workspaces: $steps.listWorkspaces.outputs.workspaces
+    tables: $steps.runCrossWorkspaceQuery.outputs.tables

@@ -1,0 +1,105 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Query Workspace by Name (GET)
+  summary: Confirm a workspace exists, then run a KQL query via the GET query endpoint.
+  description: >-
+    A lightweight read-only pattern that verifies a Log Analytics workspace by
+    its management name before issuing a query. The KQL query is passed on the
+    URL using the GET form of the query endpoint, which is convenient for simple
+    ad hoc lookups and dashboards. Every step spells out its request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: query-workspace-by-name
+  summary: Resolve a workspace by name, then run a KQL query with the GET endpoint.
+  description: >-
+    Reads the management record for a named workspace to confirm it exists and
+    obtain its customer (workspace) ID, then executes a KQL query against that
+    workspace using the GET query endpoint with the query supplied as a URL
+    parameter.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - workspaceId
+    - query
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      query:
+        type: string
+        description: The KQL query to execute (passed as a URL query parameter).
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the query window (e.g. PT1H).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: getWorkspace
+    description: >-
+      Read the management record for the named workspace to confirm it exists
+      and capture its customer (workspace) ID.
+    operationId: getWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      customerId: $response.body#/properties/customerId
+      provisioningState: $response.body#/properties/provisioningState
+  - stepId: runQuery
+    description: >-
+      Execute the KQL query against the resolved workspace using the GET query
+      endpoint, returning the tabular results.
+    operationId: getQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    - name: query
+      in: query
+      value: $inputs.query
+    - name: timespan
+      in: query
+      value: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+      columns: $response.body#/tables/0/columns
+  outputs:
+    customerId: $steps.getWorkspace.outputs.customerId
+    tables: $steps.runQuery.outputs.tables

@@ -1,0 +1,119 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Discover and Query Workspace
+  summary: Find a workspace in a subscription, confirm it, then run a KQL query against it.
+  description: >-
+    A foundational Azure Monitor Logs pattern that starts from a subscription,
+    discovers the available Log Analytics workspaces, resolves a chosen
+    workspace to read its customer (workspace) ID, and then executes a Kusto
+    Query Language (KQL) query against that workspace using the dedicated query
+    endpoint. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: discover-and-query-workspace
+  summary: List subscription workspaces, resolve one, and run a KQL query against it.
+  description: >-
+    Lists every Log Analytics workspace in a subscription, reads the management
+    record for the chosen workspace to obtain its customer (workspace) ID, and
+    submits a KQL query to the Log Analytics query endpoint for that workspace.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - workspaceId
+    - query
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      query:
+        type: string
+        description: The KQL query to execute (e.g. AzureActivity | summarize count() by Category).
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the query window (e.g. P1D).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: listWorkspaces
+    description: >-
+      List all Log Analytics workspaces in the subscription to confirm the
+      target workspace is present before resolving it.
+    operationId: listWorkspaces
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      workspaces: $response.body#/value
+  - stepId: getWorkspace
+    description: >-
+      Read the management record for the chosen workspace to obtain its
+      customer (workspace) ID and provisioning state.
+    operationId: getWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      customerId: $response.body#/properties/customerId
+      provisioningState: $response.body#/properties/provisioningState
+  - stepId: runQuery
+    description: >-
+      Execute the KQL query against the resolved workspace using the Log
+      Analytics query endpoint and return the tabular results.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.query
+        timespan: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+      primaryRows: $response.body#/tables/0/rows
+  outputs:
+    customerId: $steps.getWorkspace.outputs.customerId
+    tables: $steps.runQuery.outputs.tables

@@ -1,0 +1,105 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Run a Saved Search
+  summary: Fetch a saved search's KQL definition, then execute it against the workspace.
+  description: >-
+    Saved searches store reusable KQL expressions on a workspace. This workflow
+    reads a single saved search to obtain its stored query text and then runs
+    that exact query against the workspace's query endpoint, returning the
+    results. It lets automation execute curated, version-controlled queries
+    without hard-coding the KQL. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+- name: queryApi
+  url: ../openapi/azure-log-analytics-query-api.yaml
+  type: openapi
+workflows:
+- workflowId: saved-search-to-query
+  summary: Read a saved search and execute its stored KQL against the workspace.
+  description: >-
+    Fetches a saved search to obtain its stored KQL query and display name, then
+    submits that query to the Log Analytics query endpoint for the workspace.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - savedSearchId
+    - workspaceId
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      savedSearchId:
+        type: string
+        description: The ID of the saved search to run.
+      workspaceId:
+        type: string
+        description: The customer (workspace) GUID used by the query endpoint.
+      timespan:
+        type: string
+        description: Optional ISO 8601 duration limiting the query window (e.g. P1D).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: getSavedSearch
+    description: >-
+      Read the saved search to obtain its stored KQL query text and display
+      name before executing it.
+    operationId: getSavedSearch
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: savedSearchId
+      in: path
+      value: $inputs.savedSearchId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      query: $response.body#/properties/query
+      displayName: $response.body#/properties/displayName
+  - stepId: runSavedQuery
+    description: >-
+      Execute the saved search's stored KQL query against the workspace and
+      return the tabular results.
+    operationId: postQuery
+    parameters:
+    - name: workspaceId
+      in: path
+      value: $inputs.workspaceId
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $steps.getSavedSearch.outputs.query
+        timespan: $inputs.timespan
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/tables
+  outputs:
+    displayName: $steps.getSavedSearch.outputs.displayName
+    tables: $steps.runSavedQuery.outputs.tables

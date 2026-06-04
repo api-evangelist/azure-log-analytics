@@ -1,0 +1,120 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Update Workspace Retention and Verify
+  summary: Read a workspace's current retention, patch it, then read it back to confirm.
+  description: >-
+    A controlled change pattern for adjusting how long a Log Analytics workspace
+    keeps its data. The workflow reads the current workspace to capture its
+    existing retention, applies a patch that sets a new retention value, and then
+    reads the workspace again to confirm the change took effect. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+workflows:
+- workflowId: update-workspace-retention
+  summary: Capture current retention, patch the workspace, then verify the new value.
+  description: >-
+    Reads the workspace to record its current retention, patches the workspace
+    with a new retention setting, and reads the workspace back to confirm the
+    updated retention.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - retentionInDays
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      retentionInDays:
+        type: integer
+        description: The new data retention value in days to apply to the workspace.
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: readCurrentWorkspace
+    description: >-
+      Read the workspace to capture its current retention setting before the
+      patch is applied.
+    operationId: getWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      previousRetention: $response.body#/properties/retentionInDays
+  - stepId: patchWorkspace
+    description: >-
+      Apply a patch that sets the new retention value on the workspace.
+    operationId: updateWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    requestBody:
+      contentType: application/json
+      payload:
+        properties:
+          retentionInDays: $inputs.retentionInDays
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      patchedRetention: $response.body#/properties/retentionInDays
+  - stepId: verifyWorkspace
+    description: >-
+      Read the workspace again to confirm the new retention value is in effect.
+    operationId: getWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      currentRetention: $response.body#/properties/retentionInDays
+  outputs:
+    previousRetention: $steps.readCurrentWorkspace.outputs.previousRetention
+    currentRetention: $steps.verifyWorkspace.outputs.currentRetention

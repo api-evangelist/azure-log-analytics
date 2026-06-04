@@ -1,0 +1,113 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Workspace Inventory Report
+  summary: Resolve a workspace, then list its tables and its saved searches together.
+  description: >-
+    A reporting pattern that assembles a single inventory snapshot for a Log
+    Analytics workspace. The workflow reads the workspace record, lists every
+    table defined on it, and lists every saved search stored on it, so a caller
+    can build a consolidated catalog of what the workspace contains. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+workflows:
+- workflowId: workspace-inventory-report
+  summary: Resolve a workspace and collect its tables and saved searches into a report.
+  description: >-
+    Reads the workspace to confirm it and capture its identifiers, lists all
+    tables on the workspace, and lists all saved searches on the workspace,
+    returning each collection as part of a single inventory output.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: getWorkspace
+    description: >-
+      Read the workspace record to confirm it exists and capture its customer
+      ID and provisioning state for the report header.
+    operationId: getWorkspace
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      customerId: $response.body#/properties/customerId
+      provisioningState: $response.body#/properties/provisioningState
+  - stepId: listTables
+    description: >-
+      List every table defined on the workspace for the inventory report.
+    operationId: listTables
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      tables: $response.body#/value
+  - stepId: listSavedSearches
+    description: >-
+      List every saved search stored on the workspace for the inventory report.
+    operationId: listSavedSearches
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      savedSearches: $response.body#/value
+  outputs:
+    customerId: $steps.getWorkspace.outputs.customerId
+    tables: $steps.listTables.outputs.tables
+    savedSearches: $steps.listSavedSearches.outputs.savedSearches

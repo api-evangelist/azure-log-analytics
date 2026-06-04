@@ -1,0 +1,142 @@
+arazzo: 1.0.1
+info:
+  title: Azure Log Analytics Audit and Clean Up a Saved Search
+  summary: List saved searches, inspect one, then delete it if it is uncategorized.
+  description: >-
+    A governance pattern for keeping a workspace's saved-search library tidy. The
+    workflow lists all saved searches, reads the chosen one to inspect its
+    category, and then branches: if the saved search has been parked in the
+    review category it is deleted, otherwise the workflow ends and leaves it in
+    place. Every step spells out its request inline so the flow can be read and
+    executed without opening the underlying OpenAPI descriptions.
+  version: 1.0.0
+sourceDescriptions:
+- name: managementApi
+  url: ../openapi/azure-log-analytics-management-api.yaml
+  type: openapi
+workflows:
+- workflowId: audit-and-cleanup-saved-search
+  summary: List and inspect a saved search, then conditionally delete it.
+  description: >-
+    Lists the saved searches on a workspace, reads the chosen saved search to
+    inspect its category, and branches on that category to either delete the
+    saved search or leave it in place.
+  inputs:
+    type: object
+    required:
+    - subscriptionId
+    - resourceGroupName
+    - workspaceName
+    - savedSearchId
+    - retireCategory
+    properties:
+      subscriptionId:
+        type: string
+        description: The ID of the target Azure subscription.
+      resourceGroupName:
+        type: string
+        description: The resource group that contains the workspace.
+      workspaceName:
+        type: string
+        description: The management name of the Log Analytics workspace.
+      savedSearchId:
+        type: string
+        description: The ID of the saved search to audit.
+      retireCategory:
+        type: string
+        description: The category that marks a saved search for deletion (e.g. Retired).
+      managementApiVersion:
+        type: string
+        description: The management API version to use.
+        default: '2025-02-01'
+  steps:
+  - stepId: listSavedSearches
+    description: >-
+      List every saved search on the workspace to provide an audit inventory
+      before inspecting the target search.
+    operationId: listSavedSearches
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      savedSearches: $response.body#/value
+  - stepId: inspectSavedSearch
+    description: >-
+      Read the target saved search to inspect its category and decide whether
+      it should be retired.
+    operationId: getSavedSearch
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: savedSearchId
+      in: path
+      value: $inputs.savedSearchId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      category: $response.body#/properties/category
+      displayName: $response.body#/properties/displayName
+    onSuccess:
+    - name: searchRetired
+      type: goto
+      stepId: deleteSavedSearch
+      criteria:
+      - context: $response.body
+        condition: $.properties.category == $inputs.retireCategory
+        type: jsonpath
+    - name: searchKept
+      type: end
+      criteria:
+      - context: $response.body
+        condition: $.properties.category != $inputs.retireCategory
+        type: jsonpath
+  - stepId: deleteSavedSearch
+    description: >-
+      Delete the saved search because its category marks it for retirement.
+    operationId: deleteSavedSearch
+    parameters:
+    - name: subscriptionId
+      in: path
+      value: $inputs.subscriptionId
+    - name: resourceGroupName
+      in: path
+      value: $inputs.resourceGroupName
+    - name: workspaceName
+      in: path
+      value: $inputs.workspaceName
+    - name: savedSearchId
+      in: path
+      value: $inputs.savedSearchId
+    - name: api-version
+      in: query
+      value: $inputs.managementApiVersion
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      deletedStatus: $statusCode
+  outputs:
+    auditedSearches: $steps.listSavedSearches.outputs.savedSearches
+    category: $steps.inspectSavedSearch.outputs.category
+    deletedStatus: $steps.deleteSavedSearch.outputs.deletedStatus
