@@ -1,0 +1,661 @@
+{
+  "info": {
+    "_postman_id": "6a871223-84d4-46a5-98a7-4c2e0fc2c201",
+    "name": "Azure Log Analytics Query API",
+    "description": "The Log Analytics Query API is a REST API that enables querying the full set of data collected by Azure Monitor Logs using Kusto Query Language (KQL). Use this API to retrieve data, build visualizations, and extend Log Analytics capabilities programmatically.\n\nContact Support:\n Name: Microsoft Azure Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T15:05:46.000Z",
+    "updatedAt": "2026-06-05T15:05:46.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-6a871223-84d4-46a5-98a7-4c2e0fc2c201"
+  },
+  "item": [
+    {
+      "name": "workspaces",
+      "item": [
+        {
+          "name": "{workspaceId}",
+          "item": [
+            {
+              "name": "query",
+              "item": [
+                {
+                  "name": "Azure Log Analytics Get Query",
+                  "id": "318c635b-7957-4e94-b853-baefba263b0d",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId/query?query=<string>&timespan=<string>",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId",
+                        "query"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) The Analytics query using Kusto Query Language (KQL).",
+                          "key": "query",
+                          "value": "<string>"
+                        },
+                        {
+                          "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression.",
+                          "key": "timespan",
+                          "value": "<string>"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "fab5d1e5-015e-4ad6-b12f-f3635692f199",
+                          "key": "workspaceId",
+                          "value": "<uuid>",
+                          "description": "(Required) The ID of the Log Analytics workspace."
+                        }
+                      ]
+                    },
+                    "description": "Execute a KQL query against a Log Analytics workspace using GET method. The query is passed as a URL-encoded query parameter."
+                  },
+                  "response": [
+                    {
+                      "id": "67b9d9b8-c812-44b0-a8bc-b57a9f852e18",
+                      "name": "Successful query execution returning tabular results.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query?query=<string>&timespan=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The Analytics query using Kusto Query Language (KQL).",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression.",
+                              "key": "timespan",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"tables\": [\n    {\n      \"name\": \"<string>\",\n      \"columns\": [\n        {\n          \"name\": \"<string>\",\n          \"type\": \"decimal\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"type\": \"dynamic\"\n        }\n      ],\n      \"rows\": [\n        [],\n        []\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"columns\": [\n        {\n          \"name\": \"<string>\",\n          \"type\": \"string\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"type\": \"int\"\n        }\n      ],\n      \"rows\": [\n        [],\n        []\n      ]\n    }\n  ],\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-67b9d9b8-c812-44b0-a8bc-b57a9f852e18"
+                    },
+                    {
+                      "id": "18e87dda-e476-4b3a-8a7f-ab7043068088",
+                      "name": "Bad request due to malformed query or parameters.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query?query=<string>&timespan=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The Analytics query using Kusto Query Language (KQL).",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression.",
+                              "key": "timespan",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-18e87dda-e476-4b3a-8a7f-ab7043068088"
+                    },
+                    {
+                      "id": "a2abf8b0-bcba-47b4-ba50-225006c1fcc2",
+                      "name": "Unauthorized - invalid or missing authentication token.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query?query=<string>&timespan=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The Analytics query using Kusto Query Language (KQL).",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression.",
+                              "key": "timespan",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-a2abf8b0-bcba-47b4-ba50-225006c1fcc2"
+                    },
+                    {
+                      "id": "a873bed6-4e13-4619-8dc4-aebafcbd3493",
+                      "name": "Forbidden - insufficient permissions to access the workspace.",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query?query=<string>&timespan=<string>",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The Analytics query using Kusto Query Language (KQL).",
+                              "key": "query",
+                              "value": "<string>"
+                            },
+                            {
+                              "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression.",
+                              "key": "timespan",
+                              "value": "<string>"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-a873bed6-4e13-4619-8dc4-aebafcbd3493"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T15:05:46.000Z",
+                  "updatedAt": "2026-06-05T15:05:46.000Z",
+                  "uid": "35240-318c635b-7957-4e94-b853-baefba263b0d"
+                },
+                {
+                  "name": "Azure Log Analytics Post Query",
+                  "id": "f08d52d3-acf9-40b0-86e1-c51ff4adc988",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\n  \"query\": \"<string>\",\n  \"timespan\": \"<string>\",\n  \"workspaces\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                      "options": {
+                        "raw": {
+                          "headerFamily": "json",
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{baseUrl}}/workspaces/:workspaceId/query",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "workspaces",
+                        ":workspaceId",
+                        "query"
+                      ],
+                      "variable": [
+                        {
+                          "id": "7a9df32d-7b7c-4097-906e-21eb2923f5fc",
+                          "key": "workspaceId",
+                          "value": "<uuid>",
+                          "description": "(Required) The ID of the Log Analytics workspace."
+                        }
+                      ]
+                    },
+                    "description": "Execute a KQL query against a Log Analytics workspace using POST method. The query and optional timespan are passed in the JSON request body."
+                  },
+                  "response": [
+                    {
+                      "id": "d4af947e-3ff6-4801-9d8a-ae0f58340fb3",
+                      "name": "Successful query execution returning tabular results.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"query\": \"<string>\",\n  \"timespan\": \"<string>\",\n  \"workspaces\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"tables\": [\n    {\n      \"name\": \"<string>\",\n      \"columns\": [\n        {\n          \"name\": \"<string>\",\n          \"type\": \"decimal\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"type\": \"dynamic\"\n        }\n      ],\n      \"rows\": [\n        [],\n        []\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"columns\": [\n        {\n          \"name\": \"<string>\",\n          \"type\": \"string\"\n        },\n        {\n          \"name\": \"<string>\",\n          \"type\": \"int\"\n        }\n      ],\n      \"rows\": [\n        [],\n        []\n      ]\n    }\n  ],\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-d4af947e-3ff6-4801-9d8a-ae0f58340fb3"
+                    },
+                    {
+                      "id": "d42509a9-ebcb-4b94-ba39-55a06770dd11",
+                      "name": "Bad request due to malformed query or parameters.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"query\": \"<string>\",\n  \"timespan\": \"<string>\",\n  \"workspaces\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Bad Request",
+                      "code": 400,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-d42509a9-ebcb-4b94-ba39-55a06770dd11"
+                    },
+                    {
+                      "id": "b106fbfd-f4da-404a-81ec-6b93b51e4db0",
+                      "name": "Unauthorized - invalid or missing authentication token.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"query\": \"<string>\",\n  \"timespan\": \"<string>\",\n  \"workspaces\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-b106fbfd-f4da-404a-81ec-6b93b51e4db0"
+                    },
+                    {
+                      "id": "28acd33d-6f57-4a46-92cb-cfec4b4c29a3",
+                      "name": "Forbidden - insufficient permissions to access the workspace.",
+                      "originalRequest": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: bearer",
+                            "key": "Authorization",
+                            "value": "Bearer <token>"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "{\n  \"query\": \"<string>\",\n  \"timespan\": \"<string>\",\n  \"workspaces\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/workspaces/:workspaceId/query",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "workspaces",
+                            ":workspaceId",
+                            "query"
+                          ],
+                          "variable": [
+                            {
+                              "key": "workspaceId"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Forbidden",
+                      "code": 403,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+                      "createdAt": "2026-06-05T15:05:46.000Z",
+                      "updatedAt": "2026-06-05T15:05:46.000Z",
+                      "uid": "35240-28acd33d-6f57-4a46-92cb-cfec4b4c29a3"
+                    }
+                  ],
+                  "createdAt": "2026-06-05T15:05:46.000Z",
+                  "updatedAt": "2026-06-05T15:05:46.000Z",
+                  "uid": "35240-f08d52d3-acf9-40b0-86e1-c51ff4adc988"
+                }
+              ],
+              "id": "331fae12-ff16-41e7-9f83-5dbc357c2e97",
+              "createdAt": "2026-06-05T15:05:46.000Z",
+              "updatedAt": "2026-06-05T15:05:46.000Z",
+              "uid": "35240-331fae12-ff16-41e7-9f83-5dbc357c2e97"
+            }
+          ],
+          "id": "965cfcff-f8ca-412d-aad4-7dd0608fc544",
+          "createdAt": "2026-06-05T15:05:46.000Z",
+          "updatedAt": "2026-06-05T15:05:46.000Z",
+          "uid": "35240-965cfcff-f8ca-412d-aad4-7dd0608fc544"
+        }
+      ],
+      "id": "7ba98bfb-6371-4ac8-920c-7007ac2a7833",
+      "createdAt": "2026-06-05T15:05:46.000Z",
+      "updatedAt": "2026-06-05T15:05:46.000Z",
+      "uid": "35240-7ba98bfb-6371-4ac8-920c-7007ac2a7833"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.loganalytics.azure.com/v1"
+    }
+  ]
+}

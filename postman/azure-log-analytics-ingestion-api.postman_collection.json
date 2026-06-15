@@ -1,0 +1,896 @@
+{
+  "info": {
+    "_postman_id": "f8acea46-216d-4fa7-807f-f2a2b581eeb1",
+    "name": "Azure Log Analytics Ingestion API",
+    "description": "The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.\n\nContact Support:\n Name: Microsoft Azure Support",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-06-05T15:05:48.000Z",
+    "updatedAt": "2026-06-05T15:05:48.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-f8acea46-216d-4fa7-807f-f2a2b581eeb1"
+  },
+  "item": [
+    {
+      "name": "dataCollectionRules",
+      "item": [
+        {
+          "name": "{dcrImmutableId}",
+          "item": [
+            {
+              "name": "streams",
+              "item": [
+                {
+                  "name": "{streamName}",
+                  "item": [
+                    {
+                      "name": "Azure Log Analytics Upload Logs",
+                      "id": "5f534440-4b5d-44c1-a620-08e1f09895db",
+                      "protocolProfileBehavior": {
+                        "disableBodyPruning": true
+                      },
+                      "request": {
+                        "method": "POST",
+                        "header": [
+                          {
+                            "description": "Set to gzip for compressed payloads.",
+                            "key": "Content-Encoding",
+                            "value": "gzip"
+                          },
+                          {
+                            "description": "String-formatted GUID for request tracking.",
+                            "key": "x-ms-client-request-id",
+                            "value": "<uuid>"
+                          },
+                          {
+                            "key": "Content-Type",
+                            "value": "application/json"
+                          },
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          }
+                        ],
+                        "body": {
+                          "mode": "raw",
+                          "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                          "options": {
+                            "raw": {
+                              "headerFamily": "json",
+                              "language": "json"
+                            }
+                          }
+                        },
+                        "url": {
+                          "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "dataCollectionRules",
+                            ":dcrImmutableId",
+                            "streams",
+                            ":streamName"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) The API version to use.",
+                              "key": "api-version",
+                              "value": "2023-01-01"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "id": "ae990197-cb52-43d1-8966-2aaa398588b6",
+                              "key": "dcrImmutableId",
+                              "value": "<string>",
+                              "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                            },
+                            {
+                              "id": "16f27d1f-f796-49b0-a894-651a028a1785",
+                              "key": "streamName",
+                              "value": "<string>",
+                              "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                            }
+                          ]
+                        },
+                        "description": "Send custom log data to a Log Analytics workspace via a data collection rule. The data must be a JSON array matching the stream schema defined in the DCR. Transformations defined in the DCR are applied before data reaches the target table."
+                      },
+                      "response": [
+                        {
+                          "id": "c31fd399-0ea0-4070-bcdb-29c78ff16e30",
+                          "name": "No Content - Data accepted successfully.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "No Content",
+                          "code": 204,
+                          "_postman_previewlanguage": "text",
+                          "header": [],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": null,
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-c31fd399-0ea0-4070-bcdb-29c78ff16e30"
+                        },
+                        {
+                          "id": "40fdf3ea-f0d1-4d81-ae1f-e91f31394487",
+                          "name": "Bad request - malformed payload or schema mismatch.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Bad Request",
+                          "code": 400,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-40fdf3ea-f0d1-4d81-ae1f-e91f31394487"
+                        },
+                        {
+                          "id": "215ac6c9-0e22-44cc-9a82-3a57e2772cb9",
+                          "name": "Unauthorized - invalid or missing Bearer token.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Unauthorized",
+                          "code": 401,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-215ac6c9-0e22-44cc-9a82-3a57e2772cb9"
+                        },
+                        {
+                          "id": "d6f6cf72-b655-4437-9d1f-c0d65e1a0204",
+                          "name": "Forbidden - insufficient permissions on the DCR.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Forbidden",
+                          "code": 403,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-d6f6cf72-b655-4437-9d1f-c0d65e1a0204"
+                        },
+                        {
+                          "id": "3d3c165a-553a-4546-9066-50e5ac16c9d5",
+                          "name": "Not found - DCR or stream does not exist.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Not Found",
+                          "code": 404,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-3d3c165a-553a-4546-9066-50e5ac16c9d5"
+                        },
+                        {
+                          "id": "af553ae9-651c-4a3c-9956-d67e43604de4",
+                          "name": "Payload too large - exceeds maximum size limit.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Request Entity Too Large",
+                          "code": 413,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-af553ae9-651c-4a3c-9956-d67e43604de4"
+                        },
+                        {
+                          "id": "e70ddaf5-82ea-4cd4-9a98-a6e874a863c8",
+                          "name": "Too many requests - rate limit exceeded.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Too Many Requests",
+                          "code": 429,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-e70ddaf5-82ea-4cd4-9a98-a6e874a863c8"
+                        },
+                        {
+                          "id": "923384d2-1fc7-45a5-b048-9e39e777e48b",
+                          "name": "Internal server error.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Internal Server Error",
+                          "code": 500,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-923384d2-1fc7-45a5-b048-9e39e777e48b"
+                        },
+                        {
+                          "id": "6b979416-c308-437b-a506-11bf9c09e156",
+                          "name": "Service unavailable - temporary server issue.",
+                          "originalRequest": {
+                            "method": "POST",
+                            "header": [
+                              {
+                                "description": "Set to gzip for compressed payloads.",
+                                "key": "Content-Encoding",
+                                "value": "gzip"
+                              },
+                              {
+                                "description": "String-formatted GUID for request tracking.",
+                                "key": "x-ms-client-request-id",
+                                "value": "<uuid>"
+                              },
+                              {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                              },
+                              {
+                                "key": "Accept",
+                                "value": "application/json"
+                              },
+                              {
+                                "description": "Added as a part of security scheme: bearer",
+                                "key": "Authorization",
+                                "value": "Bearer <token>"
+                              }
+                            ],
+                            "body": {
+                              "mode": "raw",
+                              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+                              "options": {
+                                "raw": {
+                                  "headerFamily": "json",
+                                  "language": "json"
+                                }
+                              }
+                            },
+                            "url": {
+                              "raw": "{{baseUrl}}/dataCollectionRules/:dcrImmutableId/streams/:streamName?api-version=2023-01-01",
+                              "host": [
+                                "{{baseUrl}}"
+                              ],
+                              "path": [
+                                "dataCollectionRules",
+                                ":dcrImmutableId",
+                                "streams",
+                                ":streamName"
+                              ],
+                              "query": [
+                                {
+                                  "description": "(Required) The API version to use.",
+                                  "key": "api-version",
+                                  "value": "2023-01-01"
+                                }
+                              ],
+                              "variable": [
+                                {
+                                  "key": "dcrImmutableId"
+                                },
+                                {
+                                  "key": "streamName"
+                                }
+                              ]
+                            }
+                          },
+                          "status": "Service Unavailable",
+                          "code": 503,
+                          "_postman_previewlanguage": "json",
+                          "header": [
+                            {
+                              "key": "Content-Type",
+                              "value": "application/json"
+                            }
+                          ],
+                          "cookie": [],
+                          "responseTime": null,
+                          "body": "{\n  \"error\": {\n    \"code\": \"<string>\",\n    \"message\": \"<string>\"\n  }\n}",
+                          "createdAt": "2026-06-05T15:05:49.000Z",
+                          "updatedAt": "2026-06-05T15:05:49.000Z",
+                          "uid": "35240-6b979416-c308-437b-a506-11bf9c09e156"
+                        }
+                      ],
+                      "createdAt": "2026-06-05T15:05:49.000Z",
+                      "updatedAt": "2026-06-05T15:05:49.000Z",
+                      "uid": "35240-5f534440-4b5d-44c1-a620-08e1f09895db"
+                    }
+                  ],
+                  "id": "3e9a3226-2726-4ec1-b87c-0b4d6a2f7445",
+                  "createdAt": "2026-06-05T15:05:49.000Z",
+                  "updatedAt": "2026-06-05T15:05:49.000Z",
+                  "uid": "35240-3e9a3226-2726-4ec1-b87c-0b4d6a2f7445"
+                }
+              ],
+              "id": "d3437f1e-0562-46ff-b1b5-333e6292c843",
+              "createdAt": "2026-06-05T15:05:49.000Z",
+              "updatedAt": "2026-06-05T15:05:49.000Z",
+              "uid": "35240-d3437f1e-0562-46ff-b1b5-333e6292c843"
+            }
+          ],
+          "id": "2e62dc19-6311-41f0-86ad-ba4a41058190",
+          "createdAt": "2026-06-05T15:05:49.000Z",
+          "updatedAt": "2026-06-05T15:05:49.000Z",
+          "uid": "35240-2e62dc19-6311-41f0-86ad-ba4a41058190"
+        }
+      ],
+      "id": "30fb10fc-2478-4a85-bbbd-7dc87313dfca",
+      "createdAt": "2026-06-05T15:05:49.000Z",
+      "updatedAt": "2026-06-05T15:05:49.000Z",
+      "uid": "35240-30fb10fc-2478-4a85-bbbd-7dc87313dfca"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "endpoint",
+      "value": "my-dce.eastus-1.ingest.monitor.azure.com"
+    },
+    {
+      "key": "baseUrl",
+      "value": "https://{{endpoint}}"
+    }
+  ]
+}
