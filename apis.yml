@@ -34,7 +34,7 @@ apis:
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/request-format
   - type: Authentication
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/api/access-api
-  - type: Quickstart
+  - type: GettingStarted
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-tutorial
   - type: JSONSchema
     url: json-schema/query-api-query-body-schema.json
@@ -42,11 +42,11 @@ apis:
     url: json-schema/query-api-query-results-schema.json
   - type: JSONLD
     url: json-ld/azure-log-analytics-query-api-context.jsonld
-  - type: Example
+  - type: Examples
     url: examples/query-api-query-body-example.json
-  - type: Example
+  - type: Examples
     url: examples/query-api-query-results-example.json
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/query-query.yaml
 - aid: azure-log-analytics:azure-log-analytics-management-api
   name: Azure Log Analytics Management API
@@ -71,15 +71,15 @@ apis:
     url: json-schema/management-api-saved-search-schema.json
   - type: JSONLD
     url: json-ld/azure-log-analytics-management-api-context.jsonld
-  - type: Example
+  - type: Examples
     url: examples/management-api-workspace-example.json
-  - type: Example
+  - type: Examples
     url: examples/management-api-saved-search-example.json
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/management-saved-searches.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/management-tables.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/management-workspaces.yaml
 - aid: azure-log-analytics:azure-log-analytics-ingestion-api
   name: Azure Log Analytics Ingestion API
@@ -96,7 +96,7 @@ apis:
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview
   - type: OpenAPI
     url: openapi/azure-log-analytics-ingestion-api.yaml
-  - type: Quickstart
+  - type: GettingStarted
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/tutorial-logs-ingestion-code
   - type: Authentication
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview#configuration
@@ -104,164 +104,161 @@ apis:
     url: json-schema/ingestion-api-log-entry-schema.json
   - type: JSONLD
     url: json-ld/azure-log-analytics-ingestion-api-context.jsonld
-  - type: Example
+  - type: Examples
     url: examples/ingestion-api-log-entry-example.json
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/ingestion-ingestion.yaml
 common:
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/azure-log-analytics/overview
-- type: ArazzoWorkflows
-  url: arazzo/
-  workflows:
-  - url: arazzo/azure-log-analytics-audit-and-cleanup-saved-search-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-audit-and-cleanup-saved-search-workflow.yml
     name: Azure Log Analytics Audit and Clean Up a Saved Search
-    summary: List saved searches, inspect one, then delete it if it is uncategorized.
-  - url: arazzo/azure-log-analytics-create-workspace-and-baseline-table-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-create-workspace-and-baseline-table-workflow.yml
     name: Azure Log Analytics Create Workspace and Baseline Custom Table
-    summary: Create a workspace, add a baseline custom table, then read the table back.
-  - url: arazzo/azure-log-analytics-cross-workspace-query-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-cross-workspace-query-workflow.yml
     name: Azure Log Analytics Cross-Workspace Query
-    summary: Discover subscription workspaces, then run one KQL query spanning several of them.
-  - url: arazzo/azure-log-analytics-discover-and-query-workspace-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-discover-and-query-workspace-workflow.yml
     name: Azure Log Analytics Discover and Query Workspace
-    summary: Find a workspace in a subscription, confirm it, then run a KQL query against it.
-  - url: arazzo/azure-log-analytics-ingest-and-verify-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-ingest-and-verify-workflow.yml
     name: Azure Log Analytics Ingest Logs and Verify
-    summary: Confirm a target table exists, upload logs via a DCR, then query to verify.
-  - url: arazzo/azure-log-analytics-list-saved-searches-and-run-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-list-saved-searches-and-run-workflow.yml
     name: Azure Log Analytics Browse Saved Searches and Run One
-    summary: List a workspace's saved searches, fetch one's KQL, then execute it.
-  - url: arazzo/azure-log-analytics-list-tables-then-query-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-list-tables-then-query-workflow.yml
     name: Azure Log Analytics Inspect Table Schema then Query
-    summary: List a workspace's tables, inspect one table's schema, then query that table.
-  - url: arazzo/azure-log-analytics-promote-query-to-saved-search-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-promote-query-to-saved-search-workflow.yml
     name: Azure Log Analytics Validate then Save a KQL Query
-    summary: Run a KQL query to validate it, then persist it as a saved search.
-  - url: arazzo/azure-log-analytics-provision-table-and-ingest-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-provision-table-and-ingest-workflow.yml
     name: Azure Log Analytics Provision Custom Table then Ingest and Verify
-    summary: Create a custom table, upload logs through a DCR, then query the table to verify.
-  - url: arazzo/azure-log-analytics-query-workspace-by-name-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-query-workspace-by-name-workflow.yml
     name: Azure Log Analytics Query Workspace by Name (GET)
-    summary: Confirm a workspace exists, then run a KQL query via the GET query endpoint.
-  - url: arazzo/azure-log-analytics-resolve-workspace-and-run-kql-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-resolve-workspace-and-run-kql-workflow.yml
     name: Azure Log Analytics Resolve Workspace by Resource Group and Run KQL
-    summary: Narrow workspaces to a resource group, resolve one, then run a KQL query.
-  - url: arazzo/azure-log-analytics-saved-search-to-query-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-saved-search-to-query-workflow.yml
     name: Azure Log Analytics Run a Saved Search
-    summary: Fetch a saved search's KQL definition, then execute it against the workspace.
-  - url: arazzo/azure-log-analytics-update-workspace-retention-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-update-workspace-retention-workflow.yml
     name: Azure Log Analytics Update Workspace Retention and Verify
-    summary: Read a workspace's current retention, patch it, then read it back to confirm.
-  - url: arazzo/azure-log-analytics-workspace-inventory-report-workflow.yml
+  - type: Arazzo
+    url: arazzo/azure-log-analytics-workspace-inventory-report-workflow.yml
     name: Azure Log Analytics Workspace Inventory Report
-    summary: Resolve a workspace, then list its tables and its saved searches together.
-- type: Portal
-  url: https://portal.azure.com/
-- type: Documentation
-  url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview
-- type: GettingStarted
-  url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-tutorial
-- type: Pricing
-  url: https://azure.microsoft.com/en-us/pricing/details/monitor/
-- type: StatusPage
-  url: https://status.azure.com/
-- type: Support
-  url: https://azure.microsoft.com/en-us/support/
-- type: Blog
-  url: https://azure.microsoft.com/en-us/blog/tag/azure-log-analytics/
-- type: TermsOfService
-  url: https://azure.microsoft.com/en-us/support/legal/
-- type: PrivacyPolicy
-  url: https://privacy.microsoft.com/en-us/privacystatement
-- type: GitHubOrganization
-  url: https://github.com/Azure
-- type: GitHubRepository
-  url: https://github.com/Azure/azure-rest-api-specs
-- type: CLI
-  url: https://learn.microsoft.com/en-us/cli/azure/monitor/log-analytics
-- type: SDK
-  url: https://pypi.org/project/azure-monitor-query/
-  title: Python SDK
-- type: SDK
-  url: https://www.npmjs.com/package/@azure/monitor-query
-  title: JavaScript SDK
-- type: SDK
-  url: https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/monitor/query/azlogs
-  title: Go SDK
-- type: SDK
-  url: https://learn.microsoft.com/en-us/dotnet/api/overview/azure/Monitor.Query-readme
-  title: .NET SDK
-- type: SDK
-  url: https://learn.microsoft.com/en-us/java/api/overview/azure/monitor-query-readme
-  title: Java SDK
-- type: RateLimits
-  url: https://learn.microsoft.com/en-us/azure/azure-monitor/service-limits#query-api
-- type: SpectralRules
-  url: rules/azure-log-analytics-spectral-rules.yml
-- type: Vocabulary
-  url: vocabulary/azure-log-analytics-vocabulary.yaml
-- type: Features
-  data:
-  - name: Kusto Query Language
-    description: Full KQL query language support for complex log analytics and data exploration across cloud and on-premises
-      resources.
-  - name: Custom Log Ingestion
-    description: Send custom log data from any source using the Logs Ingestion API with data collection rules and transformations.
-  - name: Workspace Management
-    description: Create, configure, and manage Log Analytics workspaces including data sources, retention policies, and access
-      control.
-  - name: Saved Searches
-    description: Save and reuse KQL queries across workspace sessions for consistent monitoring and reporting.
-  - name: Data Collection Rules
-    description: Define data collection pipelines with transformations that shape incoming data before it reaches the workspace.
-  - name: Cross-Workspace Queries
-    description: Query data across multiple Log Analytics workspaces in a single query for centralized analysis.
-  - name: Simple Mode Queries
-    description: Point-and-click spreadsheet-like query experience for users who do not need full KQL knowledge.
-  - name: Alert Rule Integration
-    description: Create alert rules directly from log queries to enable proactive monitoring and automated responses.
-  - name: Workspace Failover
-    description: Activate and deactivate failover for workspace disaster recovery and high availability.
-  - name: Data Export
-    description: Export query results to Excel, CSV, Power BI, and Grafana dashboards for external analysis.
-- type: UseCases
-  data:
-  - name: Infrastructure Monitoring
-    description: Collect and analyze logs from virtual machines, containers, and network resources to monitor infrastructure
-      health.
-  - name: Security Investigation
-    description: Query security events and audit logs to investigate incidents and detect threats across Azure resources.
-  - name: Application Performance Monitoring
-    description: Analyze application logs and telemetry to identify performance bottlenecks and errors.
-  - name: Compliance Auditing
-    description: Collect and retain audit logs to meet regulatory compliance requirements and generate compliance reports.
-  - name: Custom Data Integration
-    description: Ingest custom log data from third-party systems and on-premises resources using the Logs Ingestion API.
-  - name: Cost Optimization
-    description: Analyze resource usage patterns and log data to identify cost-saving opportunities across Azure deployments.
-- type: Integrations
-  data:
-  - name: Azure Monitor
-    description: Core integration with Azure Monitor for unified observability across metrics, logs, and traces.
-  - name: Microsoft Sentinel
-    description: Feed log data into Microsoft Sentinel for SIEM and SOAR capabilities.
-  - name: Azure Data Explorer
-    description: Built on Azure Data Explorer engine, supports the same KQL query language for advanced analytics.
-  - name: Power BI
-    description: Export and visualize log query results in Power BI dashboards for business intelligence reporting.
-  - name: Grafana
-    description: Connect Azure Monitor Logs as a data source in managed Grafana dashboards for visualization.
-  - name: Azure Workbooks
-    description: Create interactive visual reports using log query results within Azure Workbooks.
-  - name: Azure Automation
-    description: Trigger automation runbooks based on log query results and alert rules.
-  - name: Azure Logic Apps
-    description: Integrate log analytics alerts with Logic Apps workflows for automated incident response.
-  - name: Application Insights
-    description: Combine application telemetry from Application Insights with infrastructure logs for full-stack observability.
-  - name: Azure Resource Manager
-    description: Manage Log Analytics resources programmatically through Azure Resource Manager REST APIs.
+  - type: Portal
+    url: https://portal.azure.com/
+  - type: Documentation
+    url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview
+  - type: GettingStarted
+    url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-tutorial
+  - type: Pricing
+    url: https://azure.microsoft.com/en-us/pricing/details/monitor/
+  - type: StatusPage
+    url: https://status.azure.com/
+  - type: Support
+    url: https://azure.microsoft.com/en-us/support/
+  - type: Blog
+    url: https://azure.microsoft.com/en-us/blog/tag/azure-log-analytics/
+  - type: TermsOfService
+    url: https://azure.microsoft.com/en-us/support/legal/
+  - type: PrivacyPolicy
+    url: https://privacy.microsoft.com/en-us/privacystatement
+  - type: GitHubOrganization
+    url: https://github.com/Azure
+  - type: GitHubRepository
+    url: https://github.com/Azure/azure-rest-api-specs
+  - type: CLI
+    url: https://learn.microsoft.com/en-us/cli/azure/monitor/log-analytics
+  - type: SDKs
+    url: https://pypi.org/project/azure-monitor-query/
+    title: Python SDK
+  - type: SDKs
+    url: https://www.npmjs.com/package/@azure/monitor-query
+    title: JavaScript SDK
+  - type: SDKs
+    url: https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/monitor/query/azlogs
+    title: Go SDK
+  - type: SDKs
+    url: https://learn.microsoft.com/en-us/dotnet/api/overview/azure/Monitor.Query-readme
+    title: .NET SDK
+  - type: SDKs
+    url: https://learn.microsoft.com/en-us/java/api/overview/azure/monitor-query-readme
+    title: Java SDK
+  - type: RateLimits
+    url: https://learn.microsoft.com/en-us/azure/azure-monitor/service-limits#query-api
+  - type: SpectralRules
+    url: rules/azure-log-analytics-spectral-rules.yml
+  - type: Vocabulary
+    url: vocabulary/azure-log-analytics-vocabulary.yaml
+  - type: Features
+    data:
+    - name: Kusto Query Language
+      description: Full KQL query language support for complex log analytics and data exploration across cloud and on-premises
+        resources.
+    - name: Custom Log Ingestion
+      description: Send custom log data from any source using the Logs Ingestion API with data collection rules and transformations.
+    - name: Workspace Management
+      description: Create, configure, and manage Log Analytics workspaces including data sources, retention policies, and access
+        control.
+    - name: Saved Searches
+      description: Save and reuse KQL queries across workspace sessions for consistent monitoring and reporting.
+    - name: Data Collection Rules
+      description: Define data collection pipelines with transformations that shape incoming data before it reaches the workspace.
+    - name: Cross-Workspace Queries
+      description: Query data across multiple Log Analytics workspaces in a single query for centralized analysis.
+    - name: Simple Mode Queries
+      description: Point-and-click spreadsheet-like query experience for users who do not need full KQL knowledge.
+    - name: Alert Rule Integration
+      description: Create alert rules directly from log queries to enable proactive monitoring and automated responses.
+    - name: Workspace Failover
+      description: Activate and deactivate failover for workspace disaster recovery and high availability.
+    - name: Data Export
+      description: Export query results to Excel, CSV, Power BI, and Grafana dashboards for external analysis.
+  - type: UseCases
+    data:
+    - name: Infrastructure Monitoring
+      description: Collect and analyze logs from virtual machines, containers, and network resources to monitor infrastructure
+        health.
+    - name: Security Investigation
+      description: Query security events and audit logs to investigate incidents and detect threats across Azure resources.
+    - name: Application Performance Monitoring
+      description: Analyze application logs and telemetry to identify performance bottlenecks and errors.
+    - name: Compliance Auditing
+      description: Collect and retain audit logs to meet regulatory compliance requirements and generate compliance reports.
+    - name: Custom Data Integration
+      description: Ingest custom log data from third-party systems and on-premises resources using the Logs Ingestion API.
+    - name: Cost Optimization
+      description: Analyze resource usage patterns and log data to identify cost-saving opportunities across Azure deployments.
+  - type: Integrations
+    data:
+    - name: Azure Monitor
+      description: Core integration with Azure Monitor for unified observability across metrics, logs, and traces.
+    - name: Microsoft Sentinel
+      description: Feed log data into Microsoft Sentinel for SIEM and SOAR capabilities.
+    - name: Azure Data Explorer
+      description: Built on Azure Data Explorer engine, supports the same KQL query language for advanced analytics.
+    - name: Power BI
+      description: Export and visualize log query results in Power BI dashboards for business intelligence reporting.
+    - name: Grafana
+      description: Connect Azure Monitor Logs as a data source in managed Grafana dashboards for visualization.
+    - name: Azure Workbooks
+      description: Create interactive visual reports using log query results within Azure Workbooks.
+    - name: Azure Automation
+      description: Trigger automation runbooks based on log query results and alert rules.
+    - name: Azure Logic Apps
+      description: Integrate log analytics alerts with Logic Apps workflows for automated incident response.
+    - name: Application Insights
+      description: Combine application telemetry from Application Insights with infrastructure logs for full-stack observability.
+    - name: Azure Resource Manager
+      description: Manage Log Analytics resources programmatically through Azure Resource Manager REST APIs.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
