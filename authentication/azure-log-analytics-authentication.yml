@@ -1,0 +1,40 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/azure-log-analytics-ingestion-api.yaml, openapi/azure-log-analytics-management-api.yaml,
+  openapi/azure-log-analytics-query-api.yaml
+summary:
+  types:
+  - apiKey
+  - http
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - implicit
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Microsoft Entra ID OAuth2 Bearer token obtained via client credentials flow.
+    Use scope https://monitor.azure.com/.default for Azure public cloud.
+  sources:
+  - openapi/azure-log-analytics-ingestion-api.yaml
+  - openapi/azure-log-analytics-query-api.yaml
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: implicit
+    authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+    scopes: 1
+  description: Azure Active Directory OAuth2 implicit flow.
+  sources:
+  - openapi/azure-log-analytics-management-api.yaml
+- name: apiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-Api-Key
+  description: API key authentication for the demo workspace only. Use DEMO_KEY with workspace
+    ID DEMO_WORKSPACE for sample data exploration.
+  sources:
+  - openapi/azure-log-analytics-query-api.yaml
