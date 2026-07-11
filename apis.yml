@@ -109,6 +109,8 @@ apis:
   - type: X-NaftikoCapability
     url: capabilities/ingestion-ingestion.yaml
 common:
+  - type: OAuthScopes
+    url: scopes/azure-log-analytics-scopes.yml
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/azure-log-analytics/overview
   - type: Arazzo

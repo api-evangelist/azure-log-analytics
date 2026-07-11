@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/azure-log-analytics-management-api.yaml
+schemes:
+- name: oauth2
+  source: openapi/azure-log-analytics-management-api.yaml
+  flows:
+  - flow: implicit
+    authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+  description: Azure Active Directory OAuth2 implicit flow.
+scopes:
+- scope: user_impersonation
+  description: Impersonate your user account
+  flows:
+  - implicit
+  sources:
+  - openapi/azure-log-analytics-management-api.yaml
