@@ -109,6 +109,8 @@ apis:
   - type: X-NaftikoCapability
     url: capabilities/ingestion-ingestion.yaml
 common:
+  - type: AgenticAccess
+    url: agentic-access/azure-log-analytics-agentic-access.yml
   - type: DomainSecurity
     url: security/azure-log-analytics-domain-security.yml
   - type: Authentication
