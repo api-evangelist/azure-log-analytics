@@ -1,12 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Azure Log Analytics Query API
-  description: >-
-    The Log Analytics Query API is a REST API that enables querying the full set
-    of data collected by Azure Monitor Logs using Kusto Query Language (KQL).
-    Use this API to retrieve data, build visualizations, and extend Log Analytics
-    capabilities programmatically.
-  version: v1
+  title: Azure Log Analytics Ingestion Query API
+  description: The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.
+  version: '2023-01-01'
   contact:
     name: Microsoft Azure Support
     url: https://azure.microsoft.com/en-us/support/
@@ -16,49 +12,48 @@ info:
   x-generated-from: documentation
   x-last-validated: '2026-04-18'
 servers:
-  - url: https://api.loganalytics.azure.com/v1
-    description: Azure Log Analytics Query API endpoint
+- url: https://{endpoint}
+  description: Data collection endpoint or DCR logs ingestion endpoint
+  variables:
+    endpoint:
+      default: my-dce.eastus-1.ingest.monitor.azure.com
+      description: The data collection endpoint URL
 security:
-  - bearerAuth: []
-  - apiKeyAuth: []
+- bearerAuth: []
 tags:
-  - name: Query
-    description: Execute KQL queries against Log Analytics workspaces
+- name: Query
+  description: Execute KQL queries against Log Analytics workspaces
 paths:
   /workspaces/{workspaceId}/query:
     get:
       operationId: getQuery
       summary: Azure Log Analytics Get Query
-      description: >-
-        Execute a KQL query against a Log Analytics workspace using GET method.
-        The query is passed as a URL-encoded query parameter.
+      description: Execute a KQL query against a Log Analytics workspace using GET method. The query is passed as a URL-encoded query parameter.
       tags:
-        - Query
+      - Query
       parameters:
-        - name: workspaceId
-          in: path
-          required: true
-          description: The ID of the Log Analytics workspace.
-          schema:
-            type: string
-            format: uuid
-          example: a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1
-        - name: query
-          in: query
-          required: true
-          description: The Analytics query using Kusto Query Language (KQL).
-          schema:
-            type: string
-          example: AzureActivity | summarize count() by Category
-        - name: timespan
-          in: query
-          required: false
-          description: >-
-            ISO 8601 duration or time interval over which to query data.
-            Applied in addition to any timespan specified in the query expression.
-          schema:
-            type: string
-          example: P1D
+      - name: workspaceId
+        in: path
+        required: true
+        description: The ID of the Log Analytics workspace.
+        schema:
+          type: string
+          format: uuid
+        example: a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1
+      - name: query
+        in: query
+        required: true
+        description: The Analytics query using Kusto Query Language (KQL).
+        schema:
+          type: string
+        example: AzureActivity | summarize count() by Category
+      - name: timespan
+        in: query
+        required: false
+        description: ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression.
+        schema:
+          type: string
+        example: P1D
       responses:
         '200':
           description: Successful query execution returning tabular results.
@@ -72,17 +67,17 @@ paths:
                   x-microcks-default: true
                   value:
                     tables:
-                      - name: PrimaryResult
-                        columns:
-                          - name: Category
-                            type: string
-                          - name: count_
-                            type: long
-                        rows:
-                          - - Administrative
-                            - 20839
-                          - - Recommendation
-                            - 122
+                    - name: PrimaryResult
+                      columns:
+                      - name: Category
+                        type: string
+                      - name: count_
+                        type: long
+                      rows:
+                      - - Administrative
+                        - 20839
+                      - - Recommendation
+                        - 122
         '400':
           description: Bad request due to malformed query or parameters.
           content:
@@ -107,20 +102,18 @@ paths:
     post:
       operationId: postQuery
       summary: Azure Log Analytics Post Query
-      description: >-
-        Execute a KQL query against a Log Analytics workspace using POST method.
-        The query and optional timespan are passed in the JSON request body.
+      description: Execute a KQL query against a Log Analytics workspace using POST method. The query and optional timespan are passed in the JSON request body.
       tags:
-        - Query
+      - Query
       parameters:
-        - name: workspaceId
-          in: path
-          required: true
-          description: The ID of the Log Analytics workspace.
-          schema:
-            type: string
-            format: uuid
-          example: a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1
+      - name: workspaceId
+        in: path
+        required: true
+        description: The ID of the Log Analytics workspace.
+        schema:
+          type: string
+          format: uuid
+        example: a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1
       requestBody:
         required: true
         content:
@@ -147,17 +140,17 @@ paths:
                   x-microcks-default: true
                   value:
                     tables:
-                      - name: PrimaryResult
-                        columns:
-                          - name: Category
-                            type: string
-                          - name: count_
-                            type: long
-                        rows:
-                          - - Administrative
-                            - 20839
-                          - - Alert
-                            - 64
+                    - name: PrimaryResult
+                      columns:
+                      - name: Category
+                        type: string
+                      - name: count_
+                        type: long
+                      rows:
+                      - - Administrative
+                        - 20839
+                      - - Alert
+                        - 64
         '400':
           description: Bad request due to malformed query or parameters.
           content:
@@ -180,47 +173,30 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: >-
-        Microsoft Entra ID OAuth2 Bearer token. Obtain via client credentials,
-        authorization code, or implicit OAuth2 flow using resource
-        https://api.loganalytics.azure.com.
-    apiKeyAuth:
-      type: apiKey
-      in: header
-      name: X-Api-Key
-      description: >-
-        API key authentication for the demo workspace only. Use DEMO_KEY
-        with workspace ID DEMO_WORKSPACE for sample data exploration.
   schemas:
-    QueryBody:
+    Column:
       type: object
-      description: Request body for executing a KQL query.
-      required:
-        - query
+      description: A column definition in the query result.
       properties:
-        query:
+        name:
           type: string
-          description: The KQL query to execute against the workspace.
-          example: AzureActivity | summarize count() by Category
-        timespan:
+          description: The column name.
+          example: Category
+        type:
           type: string
-          description: >-
-            ISO 8601 duration or time interval. Applied in addition to any
-            timespan specified in the query expression.
-          example: P1D
-        workspaces:
-          type: array
-          description: List of additional workspace IDs for cross-workspace queries.
-          items:
-            type: string
-          example:
-            - workspace-id-1
-            - workspace-id-2
+          description: The data type of the column.
+          enum:
+          - bool
+          - datetime
+          - decimal
+          - dynamic
+          - guid
+          - int
+          - long
+          - real
+          - string
+          - timespan
+          example: string
     QueryResults:
       type: object
       description: Response containing tabular query results.
@@ -251,35 +227,28 @@ components:
           items:
             type: array
             items: {}
-    Column:
+    QueryBody:
       type: object
-      description: A column definition in the query result.
+      description: Request body for executing a KQL query.
+      required:
+      - query
       properties:
-        name:
+        query:
           type: string
-          description: The column name.
-          example: Category
-        type:
+          description: The KQL query to execute against the workspace.
+          example: AzureActivity | summarize count() by Category
+        timespan:
           type: string
-          description: The data type of the column.
-          enum:
-            - bool
-            - datetime
-            - decimal
-            - dynamic
-            - guid
-            - int
-            - long
-            - real
-            - string
-            - timespan
-          example: string
-    ErrorResponse:
-      type: object
-      description: Error response from the API.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+          description: ISO 8601 duration or time interval. Applied in addition to any timespan specified in the query expression.
+          example: P1D
+        workspaces:
+          type: array
+          description: List of additional workspace IDs for cross-workspace queries.
+          items:
+            type: string
+          example:
+          - workspace-id-1
+          - workspace-id-2
     ErrorDetail:
       type: object
       description: Detailed error information.
@@ -297,3 +266,15 @@ components:
           description: Additional error details.
           items:
             $ref: '#/components/schemas/ErrorDetail'
+    ErrorResponse:
+      type: object
+      description: Error response from the API.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Microsoft Entra ID OAuth2 Bearer token obtained via client credentials flow. Use scope https://monitor.azure.com/.default for Azure public cloud.

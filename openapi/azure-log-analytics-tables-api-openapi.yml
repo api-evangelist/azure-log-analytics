@@ -1,0 +1,332 @@
+openapi: 3.0.3
+info:
+  title: Azure Log Analytics Ingestion Tables API
+  description: The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.
+  version: '2023-01-01'
+  contact:
+    name: Microsoft Azure Support
+    url: https://azure.microsoft.com/en-us/support/
+  license:
+    name: Microsoft Azure Terms
+    url: https://azure.microsoft.com/en-us/support/legal/
+  x-generated-from: documentation
+  x-last-validated: '2026-04-18'
+servers:
+- url: https://{endpoint}
+  description: Data collection endpoint or DCR logs ingestion endpoint
+  variables:
+    endpoint:
+      default: my-dce.eastus-1.ingest.monitor.azure.com
+      description: The data collection endpoint URL
+security:
+- bearerAuth: []
+tags:
+- name: Tables
+  description: Manage workspace tables
+paths:
+  ? /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/tables
+  : get:
+      operationId: listTables
+      summary: Azure Log Analytics List Tables
+      description: Gets all the tables for the specified Log Analytics workspace.
+      tags:
+      - Tables
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns the list of tables.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TablesListResult'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  ? /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/tables/{tableName}
+  : get:
+      operationId: getTable
+      summary: Azure Log Analytics Get Table
+      description: Gets a Log Analytics workspace table.
+      tags:
+      - Tables
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      - name: tableName
+        in: path
+        required: true
+        description: The name of the table.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK - Returns the table.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: createOrUpdateTable
+      summary: Azure Log Analytics Create or Update Table
+      description: Update or create a Log Analytics workspace table.
+      tags:
+      - Tables
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      - name: tableName
+        in: path
+        required: true
+        description: The name of the table.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Table'
+      responses:
+        '200':
+          description: OK - Table updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Table'
+        '202':
+          description: Accepted - Operation in progress.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteTable
+      summary: Azure Log Analytics Delete Table
+      description: Delete a Log Analytics workspace table.
+      tags:
+      - Tables
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      - name: tableName
+        in: path
+        required: true
+        description: The name of the table.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK - Table deleted.
+        '202':
+          description: Accepted - Deletion in progress.
+        '204':
+          description: No Content - Table does not exist.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  schemas:
+    TablesListResult:
+      type: object
+      description: List of workspace tables result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+    TableSchema:
+      type: object
+      description: Schema of a workspace table.
+      properties:
+        name:
+          type: string
+          description: Table name.
+        columns:
+          type: array
+          description: A list of table custom columns.
+          items:
+            $ref: '#/components/schemas/TableColumn'
+    TableColumn:
+      type: object
+      description: Table column definition.
+      properties:
+        name:
+          type: string
+          description: Column name.
+        type:
+          type: string
+          description: Column data type.
+          enum:
+          - string
+          - int
+          - long
+          - real
+          - boolean
+          - dateTime
+          - guid
+          - dynamic
+        description:
+          type: string
+          description: Column description.
+    TableProperties:
+      type: object
+      description: Table properties.
+      properties:
+        retentionInDays:
+          type: integer
+          format: int32
+          description: The table retention in days.
+        totalRetentionInDays:
+          type: integer
+          format: int32
+          description: The table total retention in days.
+        archiveRetentionInDays:
+          type: integer
+          format: int32
+          description: The table archive retention in days.
+          readOnly: true
+        plan:
+          type: string
+          description: The table plan.
+          enum:
+          - Analytics
+          - Basic
+        schema:
+          $ref: '#/components/schemas/TableSchema'
+        provisioningState:
+          type: string
+          readOnly: true
+          enum:
+          - Succeeded
+          - InProgress
+          - Deleting
+          - Updating
+    Table:
+      type: object
+      description: Workspace table definition.
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+          readOnly: true
+        properties:
+          $ref: '#/components/schemas/TableProperties'
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
+    ErrorResponse:
+      type: object
+      description: Error response.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorAdditionalInfo:
+      type: object
+      description: Error additional info.
+      properties:
+        type:
+          type: string
+        info:
+          type: object
+  parameters:
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
+    WorkspaceNameParameter:
+      name: workspaceName
+      in: path
+      required: true
+      description: The name of the workspace.
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 63
+        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Microsoft Entra ID OAuth2 Bearer token obtained via client credentials flow. Use scope https://monitor.azure.com/.default for Azure public cloud.

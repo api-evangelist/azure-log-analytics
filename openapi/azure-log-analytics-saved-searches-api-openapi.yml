@@ -1,0 +1,306 @@
+openapi: 3.0.3
+info:
+  title: Azure Log Analytics Ingestion Saved Searches API
+  description: The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.
+  version: '2023-01-01'
+  contact:
+    name: Microsoft Azure Support
+    url: https://azure.microsoft.com/en-us/support/
+  license:
+    name: Microsoft Azure Terms
+    url: https://azure.microsoft.com/en-us/support/legal/
+  x-generated-from: documentation
+  x-last-validated: '2026-04-18'
+servers:
+- url: https://{endpoint}
+  description: Data collection endpoint or DCR logs ingestion endpoint
+  variables:
+    endpoint:
+      default: my-dce.eastus-1.ingest.monitor.azure.com
+      description: The data collection endpoint URL
+security:
+- bearerAuth: []
+tags:
+- name: Saved Searches
+  description: Manage saved KQL queries
+paths:
+  ? /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches
+  : get:
+      operationId: listSavedSearches
+      summary: Azure Log Analytics List Saved Searches
+      description: Gets the saved searches for a given Log Analytics workspace.
+      tags:
+      - Saved Searches
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      responses:
+        '200':
+          description: OK - Returns list of saved searches.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedSearchesListResult'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+  ? /subscriptions/{subscriptionId}/resourcegroups/{resourceGroupName}/providers/Microsoft.OperationalInsights/workspaces/{workspaceName}/savedSearches/{savedSearchId}
+  : get:
+      operationId: getSavedSearch
+      summary: Azure Log Analytics Get Saved Search
+      description: Gets the specified saved search for a given workspace.
+      tags:
+      - Saved Searches
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      - name: savedSearchId
+        in: path
+        required: true
+        description: The ID of the saved search.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK - Returns the saved search.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedSearch'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    put:
+      operationId: createOrUpdateSavedSearch
+      summary: Azure Log Analytics Create or Update Saved Search
+      description: Creates or updates a saved search for a given workspace.
+      tags:
+      - Saved Searches
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      - name: savedSearchId
+        in: path
+        required: true
+        description: The ID of the saved search.
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SavedSearch'
+      responses:
+        '200':
+          description: OK - Saved search updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavedSearch'
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    delete:
+      operationId: deleteSavedSearch
+      summary: Azure Log Analytics Delete Saved Search
+      description: Deletes the specified saved search in a given workspace.
+      tags:
+      - Saved Searches
+      parameters:
+      - $ref: '#/components/parameters/ResourceGroupNameParameter'
+      - $ref: '#/components/parameters/SubscriptionIdParameter'
+      - $ref: '#/components/parameters/WorkspaceNameParameter'
+      - $ref: '#/components/parameters/ApiVersionParameter'
+      - name: savedSearchId
+        in: path
+        required: true
+        description: The ID of the saved search.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK - Saved search deleted.
+        default:
+          description: Error response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  parameters:
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
+    WorkspaceNameParameter:
+      name: workspaceName
+      in: path
+      required: true
+      description: The name of the workspace.
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 63
+        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
+  schemas:
+    SavedSearchProperties:
+      type: object
+      description: Properties of a saved search.
+      required:
+      - category
+      - displayName
+      - query
+      properties:
+        category:
+          type: string
+          description: The category of the saved search.
+          example: General Exploration
+        displayName:
+          type: string
+          description: Saved search display name.
+          example: All Events
+        query:
+          type: string
+          description: The KQL query expression.
+          example: Event | sort by TimeGenerated desc
+        functionAlias:
+          type: string
+          description: The function alias if query serves as a function.
+        functionParameters:
+          type: string
+          description: The optional function parameters.
+        version:
+          type: integer
+          format: int64
+          description: The version number of the query language.
+        tags:
+          type: array
+          description: The tags attached to the saved search.
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+    SavedSearch:
+      type: object
+      description: A saved search in a Log Analytics workspace.
+      properties:
+        id:
+          type: string
+          description: Fully qualified resource ID.
+          readOnly: true
+        name:
+          type: string
+          description: The name of the resource.
+          readOnly: true
+        type:
+          type: string
+          description: The type of the resource.
+          readOnly: true
+        etag:
+          type: string
+          description: The ETag of the saved search.
+        properties:
+          $ref: '#/components/schemas/SavedSearchProperties'
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
+    ErrorResponse:
+      type: object
+      description: Error response.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorAdditionalInfo:
+      type: object
+      description: Error additional info.
+      properties:
+        type:
+          type: string
+        info:
+          type: object
+    SavedSearchesListResult:
+      type: object
+      description: The saved search list result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SavedSearch'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Microsoft Entra ID OAuth2 Bearer token obtained via client credentials flow. Use scope https://monitor.azure.com/.default for Azure public cloud.
