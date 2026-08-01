@@ -1,0 +1,22 @@
+{
+  "provider": "azure-log-analytics",
+  "sources": [
+    "azure-log-analytics-ingestion-api-openapi.yml",
+    "azure-log-analytics-query-api-openapi.yml",
+    "azure-log-analytics-saved-searches-api-openapi.yml",
+    "azure-log-analytics-tables-api-openapi.yml",
+    "azure-log-analytics-workspaces-api-openapi.yml"
+  ],
+  "outputs": [
+    "azure-log-analytics-ingestion-api-openapi.yml",
+    "azure-log-analytics-query-api-openapi.yml",
+    "azure-log-analytics-saved-searches-api-openapi.yml",
+    "azure-log-analytics-tables-api-openapi.yml",
+    "azure-log-analytics-workspaces-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

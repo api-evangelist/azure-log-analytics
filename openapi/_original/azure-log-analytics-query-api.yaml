@@ -1,0 +1,299 @@
+openapi: 3.0.3
+info:
+  title: Azure Log Analytics Query API
+  description: >-
+    The Log Analytics Query API is a REST API that enables querying the full set
+    of data collected by Azure Monitor Logs using Kusto Query Language (KQL).
+    Use this API to retrieve data, build visualizations, and extend Log Analytics
+    capabilities programmatically.
+  version: v1
+  contact:
+    name: Microsoft Azure Support
+    url: https://azure.microsoft.com/en-us/support/
+  license:
+    name: Microsoft Azure Terms
+    url: https://azure.microsoft.com/en-us/support/legal/
+  x-generated-from: documentation
+  x-last-validated: '2026-04-18'
+servers:
+  - url: https://api.loganalytics.azure.com/v1
+    description: Azure Log Analytics Query API endpoint
+security:
+  - bearerAuth: []
+  - apiKeyAuth: []
+tags:
+  - name: Query
+    description: Execute KQL queries against Log Analytics workspaces
+paths:
+  /workspaces/{workspaceId}/query:
+    get:
+      operationId: getQuery
+      summary: Azure Log Analytics Get Query
+      description: >-
+        Execute a KQL query against a Log Analytics workspace using GET method.
+        The query is passed as a URL-encoded query parameter.
+      tags:
+        - Query
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          description: The ID of the Log Analytics workspace.
+          schema:
+            type: string
+            format: uuid
+          example: a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1
+        - name: query
+          in: query
+          required: true
+          description: The Analytics query using Kusto Query Language (KQL).
+          schema:
+            type: string
+          example: AzureActivity | summarize count() by Category
+        - name: timespan
+          in: query
+          required: false
+          description: >-
+            ISO 8601 duration or time interval over which to query data.
+            Applied in addition to any timespan specified in the query expression.
+          schema:
+            type: string
+          example: P1D
+      responses:
+        '200':
+          description: Successful query execution returning tabular results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResults'
+              examples:
+                GetQuery200Example:
+                  summary: Default getQuery 200 response
+                  x-microcks-default: true
+                  value:
+                    tables:
+                      - name: PrimaryResult
+                        columns:
+                          - name: Category
+                            type: string
+                          - name: count_
+                            type: long
+                        rows:
+                          - - Administrative
+                            - 20839
+                          - - Recommendation
+                            - 122
+        '400':
+          description: Bad request due to malformed query or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions to access the workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+    post:
+      operationId: postQuery
+      summary: Azure Log Analytics Post Query
+      description: >-
+        Execute a KQL query against a Log Analytics workspace using POST method.
+        The query and optional timespan are passed in the JSON request body.
+      tags:
+        - Query
+      parameters:
+        - name: workspaceId
+          in: path
+          required: true
+          description: The ID of the Log Analytics workspace.
+          schema:
+            type: string
+            format: uuid
+          example: a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryBody'
+            examples:
+              PostQueryRequestExample:
+                summary: Default postQuery request
+                x-microcks-default: true
+                value:
+                  query: AzureActivity | summarize count() by Category
+                  timespan: P1D
+      responses:
+        '200':
+          description: Successful query execution returning tabular results.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResults'
+              examples:
+                PostQuery200Example:
+                  summary: Default postQuery 200 response
+                  x-microcks-default: true
+                  value:
+                    tables:
+                      - name: PrimaryResult
+                        columns:
+                          - name: Category
+                            type: string
+                          - name: count_
+                            type: long
+                        rows:
+                          - - Administrative
+                            - 20839
+                          - - Alert
+                            - 64
+        '400':
+          description: Bad request due to malformed query or parameters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing authentication token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions to access the workspace.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-microcks-operation:
+        delay: 0
+        dispatcher: FALLBACK
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        Microsoft Entra ID OAuth2 Bearer token. Obtain via client credentials,
+        authorization code, or implicit OAuth2 flow using resource
+        https://api.loganalytics.azure.com.
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+      description: >-
+        API key authentication for the demo workspace only. Use DEMO_KEY
+        with workspace ID DEMO_WORKSPACE for sample data exploration.
+  schemas:
+    QueryBody:
+      type: object
+      description: Request body for executing a KQL query.
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The KQL query to execute against the workspace.
+          example: AzureActivity | summarize count() by Category
+        timespan:
+          type: string
+          description: >-
+            ISO 8601 duration or time interval. Applied in addition to any
+            timespan specified in the query expression.
+          example: P1D
+        workspaces:
+          type: array
+          description: List of additional workspace IDs for cross-workspace queries.
+          items:
+            type: string
+          example:
+            - workspace-id-1
+            - workspace-id-2
+    QueryResults:
+      type: object
+      description: Response containing tabular query results.
+      properties:
+        tables:
+          type: array
+          description: Array of result tables.
+          items:
+            $ref: '#/components/schemas/Table'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    Table:
+      type: object
+      description: A single result table from a query.
+      properties:
+        name:
+          type: string
+          description: The name of the table (e.g., PrimaryResult).
+          example: PrimaryResult
+        columns:
+          type: array
+          description: Schema of the result columns.
+          items:
+            $ref: '#/components/schemas/Column'
+        rows:
+          type: array
+          description: Array of row data matching the column schema.
+          items:
+            type: array
+            items: {}
+    Column:
+      type: object
+      description: A column definition in the query result.
+      properties:
+        name:
+          type: string
+          description: The column name.
+          example: Category
+        type:
+          type: string
+          description: The data type of the column.
+          enum:
+            - bool
+            - datetime
+            - decimal
+            - dynamic
+            - guid
+            - int
+            - long
+            - real
+            - string
+            - timespan
+          example: string
+    ErrorResponse:
+      type: object
+      description: Error response from the API.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: Detailed error information.
+      properties:
+        code:
+          type: string
+          description: Error code identifier.
+          example: BadArgumentError
+        message:
+          type: string
+          description: Human-readable error message.
+          example: The request had some invalid properties
+        details:
+          type: array
+          description: Additional error details.
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
