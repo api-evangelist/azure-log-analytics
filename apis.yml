@@ -56,8 +56,6 @@ apis:
     url: examples/query-api-query-body-example.json
   - type: Examples
     url: examples/query-api-query-results-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/query-query.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/rest/api/loganalytics/
   - type: APIReference
@@ -72,12 +70,6 @@ apis:
     url: examples/management-api-workspace-example.json
   - type: Examples
     url: examples/management-api-saved-search-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/management-saved-searches.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-tables.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-workspaces.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview
   - type: GettingStarted
@@ -91,8 +83,6 @@ apis:
     url: json-ld/azure-log-analytics-ingestion-api-context.jsonld
   - type: Examples
     url: examples/ingestion-api-log-entry-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/ingestion-ingestion.yaml
 - aid: azure-log-analytics:azure-log-analytics-query-api
   name: Azure Log Analytics Query API
   description: Execute KQL queries against Log Analytics workspaces
@@ -121,8 +111,6 @@ apis:
     url: examples/query-api-query-body-example.json
   - type: Examples
     url: examples/query-api-query-results-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/query-query.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/rest/api/loganalytics/
   - type: APIReference
@@ -137,12 +125,6 @@ apis:
     url: examples/management-api-workspace-example.json
   - type: Examples
     url: examples/management-api-saved-search-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/management-saved-searches.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-tables.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-workspaces.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview
   - type: GettingStarted
@@ -156,8 +138,6 @@ apis:
     url: json-ld/azure-log-analytics-ingestion-api-context.jsonld
   - type: Examples
     url: examples/ingestion-api-log-entry-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/ingestion-ingestion.yaml
 - aid: azure-log-analytics:azure-log-analytics-saved-searches-api
   name: Azure Log Analytics Saved Searches API
   description: Manage saved KQL queries
@@ -186,8 +166,6 @@ apis:
     url: examples/query-api-query-body-example.json
   - type: Examples
     url: examples/query-api-query-results-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/query-query.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/rest/api/loganalytics/
   - type: APIReference
@@ -202,12 +180,6 @@ apis:
     url: examples/management-api-workspace-example.json
   - type: Examples
     url: examples/management-api-saved-search-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/management-saved-searches.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-tables.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-workspaces.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview
   - type: GettingStarted
@@ -221,8 +193,6 @@ apis:
     url: json-ld/azure-log-analytics-ingestion-api-context.jsonld
   - type: Examples
     url: examples/ingestion-api-log-entry-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/ingestion-ingestion.yaml
 - aid: azure-log-analytics:azure-log-analytics-tables-api
   name: Azure Log Analytics Tables API
   description: Manage workspace tables
@@ -251,8 +221,6 @@ apis:
     url: examples/query-api-query-body-example.json
   - type: Examples
     url: examples/query-api-query-results-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/query-query.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/rest/api/loganalytics/
   - type: APIReference
@@ -267,12 +235,6 @@ apis:
     url: examples/management-api-workspace-example.json
   - type: Examples
     url: examples/management-api-saved-search-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/management-saved-searches.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-tables.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-workspaces.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview
   - type: GettingStarted
@@ -286,8 +248,6 @@ apis:
     url: json-ld/azure-log-analytics-ingestion-api-context.jsonld
   - type: Examples
     url: examples/ingestion-api-log-entry-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/ingestion-ingestion.yaml
 - aid: azure-log-analytics:azure-log-analytics-workspaces-api
   name: Azure Log Analytics Workspaces API
   description: Manage Log Analytics workspaces
@@ -316,8 +276,6 @@ apis:
     url: examples/query-api-query-body-example.json
   - type: Examples
     url: examples/query-api-query-results-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/query-query.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/rest/api/loganalytics/
   - type: APIReference
@@ -332,12 +290,6 @@ apis:
     url: examples/management-api-workspace-example.json
   - type: Examples
     url: examples/management-api-saved-search-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/management-saved-searches.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-tables.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/management-workspaces.yaml
   - type: Documentation
     url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/logs-ingestion-api-overview
   - type: GettingStarted
@@ -351,9 +303,20 @@ apis:
     url: json-ld/azure-log-analytics-ingestion-api-context.jsonld
   - type: Examples
     url: examples/ingestion-api-log-entry-example.json
-  - type: X-NaftikoCapability
-    url: capabilities/ingestion-ingestion.yaml
 common:
+  - type: IssueTracker
+    url: https://github.com/Azure/azure-rest-api-specs/issues
+  - type: Releases
+    url: https://github.com/Azure/azure-rest-api-specs/releases
+  - type: SecurityPolicy
+    url: https://github.com/Azure/azure-rest-api-specs/blob/main/SECURITY.md
+  - type: CodeOfConduct
+    url: https://github.com/Azure/.github/blob/main/CODE_OF_CONDUCT.md
+  - type: ContributionGuide
+    url: https://github.com/Azure/azure-rest-api-specs/blob/main/.github/CONTRIBUTING.md
+  - type: License
+    name: MIT
+    url: https://github.com/Azure/azure-rest-api-specs/blob/main/LICENSE
   - type: AgenticAccess
     url: agentic-access/azure-log-analytics-agentic-access.yml
   - type: DomainSecurity
