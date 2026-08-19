@@ -1,0 +1,1845 @@
+{
+  "item": [
+    {
+      "id": "2ce6d69f-62bc-47cb-a8bd-a7ff881ecf43",
+      "name": "Workspaces",
+      "description": {
+        "content": "Manage Log Analytics workspaces",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7c530d2e-f7cf-41d4-8049-393032418e51",
+          "name": "Azure Log Analytics List Workspaces",
+          "request": {
+            "name": "Azure Log Analytics List Workspaces",
+            "description": {
+              "content": "Gets the workspaces in a subscription.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "subscriptions",
+                ":subscriptionId",
+                "providers",
+                "Microsoft.OperationalInsights",
+                "workspaces"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2025-02-01",
+                  "description": "(Required) The API version to use for this operation."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subscriptionId",
+                  "description": "(Required) The ID of the target subscription."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0454a84a-c7ed-4956-8a2c-4f81d8c1002f",
+              "name": "OK - Returns a list of workspaces.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"value\": [\n    {\n      \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n      \"name\": \"ws1\",\n      \"type\": \"Microsoft.OperationalInsights/workspaces\",\n      \"location\": \"eastus\",\n      \"properties\": {\n        \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n        \"provisioningState\": \"Succeeded\",\n        \"retentionInDays\": 30\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93a5413b-870a-472a-95a2-ba92b1e446bf",
+              "name": "Error response describing why the operation failed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ResourceNotFound\",\n    \"message\": \"The specified resource was not found.\",\n    \"target\": \"string\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ],\n    \"additionalInfo\": [\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      },\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "045acd4e-4837-4c5b-a49c-a16b3c7eb42d",
+          "name": "Azure Log Analytics List Workspaces by Resource Group",
+          "request": {
+            "name": "Azure Log Analytics List Workspaces by Resource Group",
+            "description": {
+              "content": "Gets workspaces in a resource group.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "subscriptions",
+                ":subscriptionId",
+                "resourcegroups",
+                ":resourceGroupName",
+                "providers",
+                "Microsoft.OperationalInsights",
+                "workspaces"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2025-02-01",
+                  "description": "(Required) The API version to use for this operation."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resourceGroupName",
+                  "description": "(Required) The name of the resource group. The name is case insensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subscriptionId",
+                  "description": "(Required) The ID of the target subscription."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "56be5c73-a31d-4a24-a357-45ff6edc0f6a",
+              "name": "OK - Returns a list of workspaces in the resource group.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"value\": [\n    {\n      \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n      \"name\": \"ws1\",\n      \"type\": \"Microsoft.OperationalInsights/workspaces\",\n      \"location\": \"eastus\",\n      \"tags\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\"\n      },\n      \"etag\": \"string\",\n      \"properties\": {\n        \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n        \"provisioningState\": \"Succeeded\",\n        \"sku\": {\n          \"name\": \"PerGB2018\",\n          \"capacityReservationLevel\": 2000,\n          \"lastSkuUpdate\": \"1994-01-03T17:37:37.259Z\"\n        },\n        \"retentionInDays\": 30,\n        \"publicNetworkAccessForIngestion\": \"Enabled\",\n        \"publicNetworkAccessForQuery\": \"Enabled\",\n        \"createdDate\": \"1952-02-17T22:06:39.969Z\",\n        \"modifiedDate\": \"1967-11-15T15:54:00.835Z\",\n        \"defaultDataCollectionRuleResourceId\": \"string\",\n        \"forceCmkForQuery\": false,\n        \"workspaceCapping\": {\n          \"dailyQuotaGb\": 10,\n          \"dataIngestionStatus\": \"RespectQuota\",\n          \"quotaNextResetTime\": \"string\"\n        },\n        \"features\": {\n          \"enableDataExport\": true,\n          \"enableLogAccessUsingOnlyResourcePermissions\": false,\n          \"immediatePurgeDataOn30Days\": false,\n          \"disableLocalAuth\": false,\n          \"clusterResourceId\": \"string\"\n        }\n      },\n      \"identity\": {\n        \"principalId\": \"string\",\n        \"tenantId\": \"string\",\n        \"type\": \"UserAssigned\"\n      },\n      \"systemData\": {\n        \"createdBy\": \"string\",\n        \"createdByType\": \"Application\",\n        \"createdAt\": \"1965-01-07T06:06:53.311Z\",\n        \"lastModifiedBy\": \"string\",\n        \"lastModifiedByType\": \"User\",\n        \"lastModifiedAt\": \"1984-11-02T08:43:40.498Z\"\n      }\n    },\n    {\n      \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n      \"name\": \"ws1\",\n      \"type\": \"Microsoft.OperationalInsights/workspaces\",\n      \"location\": \"eastus\",\n      \"tags\": {\n        \"key_0\": \"string\"\n      },\n      \"etag\": \"string\",\n      \"properties\": {\n        \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n        \"provisioningState\": \"Succeeded\",\n        \"sku\": {\n          \"name\": \"PerGB2018\",\n          \"capacityReservationLevel\": 5000,\n          \"lastSkuUpdate\": \"2004-03-13T11:21:28.585Z\"\n        },\n        \"retentionInDays\": 30,\n        \"publicNetworkAccessForIngestion\": \"Enabled\",\n        \"publicNetworkAccessForQuery\": \"Enabled\",\n        \"createdDate\": \"2014-06-15T12:53:56.525Z\",\n        \"modifiedDate\": \"1964-05-04T13:00:12.518Z\",\n        \"defaultDataCollectionRuleResourceId\": \"string\",\n        \"forceCmkForQuery\": false,\n        \"workspaceCapping\": {\n          \"dailyQuotaGb\": 10,\n          \"dataIngestionStatus\": \"SubscriptionSuspended\",\n          \"quotaNextResetTime\": \"string\"\n        },\n        \"features\": {\n          \"enableDataExport\": true,\n          \"enableLogAccessUsingOnlyResourcePermissions\": false,\n          \"immediatePurgeDataOn30Days\": false,\n          \"disableLocalAuth\": true,\n          \"clusterResourceId\": \"string\"\n        }\n      },\n      \"identity\": {\n        \"principalId\": \"string\",\n        \"tenantId\": \"string\",\n        \"type\": \"None\"\n      },\n      \"systemData\": {\n        \"createdBy\": \"string\",\n        \"createdByType\": \"Application\",\n        \"createdAt\": \"1956-06-29T12:46:31.930Z\",\n        \"lastModifiedBy\": \"string\",\n        \"lastModifiedByType\": \"User\",\n        \"lastModifiedAt\": \"1969-01-09T13:10:50.425Z\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef463c49-4707-429f-a76d-43337d6c45d7",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ResourceNotFound\",\n    \"message\": \"The specified resource was not found.\",\n    \"target\": \"string\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ],\n    \"additionalInfo\": [\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      },\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b8e2b27-cf48-474c-b366-2c78dc2cb03d",
+          "name": "Azure Log Analytics Get Workspace",
+          "request": {
+            "name": "Azure Log Analytics Get Workspace",
+            "description": {
+              "content": "Gets a workspace instance.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "subscriptions",
+                ":subscriptionId",
+                "resourcegroups",
+                ":resourceGroupName",
+                "providers",
+                "Microsoft.OperationalInsights",
+                "workspaces",
+                ":workspaceName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2025-02-01",
+                  "description": "(Required) The API version to use for this operation."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resourceGroupName",
+                  "description": "(Required) The name of the resource group. The name is case insensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subscriptionId",
+                  "description": "(Required) The ID of the target subscription."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "workspaceName",
+                  "description": "(Required) The name of the workspace."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4f524b66-a898-4024-b32a-d65c29f77942",
+              "name": "OK - Returns the workspace.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n  \"name\": \"ws1\",\n  \"type\": \"Microsoft.OperationalInsights/workspaces\",\n  \"location\": \"eastus\",\n  \"properties\": {\n    \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n    \"provisioningState\": \"Succeeded\",\n    \"retentionInDays\": 30,\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"publicNetworkAccessForIngestion\": \"Enabled\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38a7c59e-c909-4b5c-9f8b-7853dce28591",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ResourceNotFound\",\n    \"message\": \"The specified resource was not found.\",\n    \"target\": \"string\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ],\n    \"additionalInfo\": [\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      },\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18a4bc4f-7859-415c-8410-ac34edd13a8a",
+          "name": "Azure Log Analytics Create or Update Workspace",
+          "request": {
+            "name": "Azure Log Analytics Create or Update Workspace",
+            "description": {
+              "content": "Create or update a workspace.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "subscriptions",
+                ":subscriptionId",
+                "resourcegroups",
+                ":resourceGroupName",
+                "providers",
+                "Microsoft.OperationalInsights",
+                "workspaces",
+                ":workspaceName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2025-02-01",
+                  "description": "(Required) The API version to use for this operation."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resourceGroupName",
+                  "description": "(Required) The name of the resource group. The name is case insensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subscriptionId",
+                  "description": "(Required) The ID of the target subscription."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "workspaceName",
+                  "description": "(Required) The name of the workspace."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"location\": \"<string>\",\n  \"tags\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  },\n  \"etag\": \"<string>\",\n  \"properties\": {\n    \"provisioningState\": \"<string>\",\n    \"sku\": {\n      \"name\": \"<string>\",\n      \"capacityReservationLevel\": \"<integer>\"\n    },\n    \"retentionInDays\": \"<integer>\",\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": \"<double>\"\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"type\": \"<string>\"\n  },\n  \"systemData\": {\n    \"createdBy\": \"<string>\",\n    \"createdByType\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"lastModifiedBy\": \"<string>\",\n    \"lastModifiedByType\": \"<string>\",\n    \"lastModifiedAt\": \"<dateTime>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "86be1975-6a00-4430-a8b3-419374d0aabc",
+              "name": "OK - Workspace updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"location\": \"eastus\",\n  \"properties\": {\n    \"sku\": {\n      \"name\": \"PerGB2018\"\n    },\n    \"retentionInDays\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n  \"name\": \"ws1\",\n  \"type\": \"Microsoft.OperationalInsights/workspaces\",\n  \"location\": \"eastus\",\n  \"tags\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"etag\": \"<string>\",\n  \"properties\": {\n    \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n    \"provisioningState\": \"Succeeded\",\n    \"sku\": {\n      \"name\": \"PerGB2018\",\n      \"capacityReservationLevel\": \"<integer>\",\n      \"lastSkuUpdate\": \"2006-03-22T14:49:34.186Z\"\n    },\n    \"retentionInDays\": 30,\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"createdDate\": \"1959-04-28T23:17:29.476Z\",\n    \"modifiedDate\": \"1985-08-04T21:50:32.621Z\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": 10,\n      \"dataIngestionStatus\": \"OverQuota\",\n      \"quotaNextResetTime\": \"string\"\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"principalId\": \"string\",\n    \"tenantId\": \"string\",\n    \"type\": \"<string>\"\n  },\n  \"systemData\": {\n    \"createdBy\": \"<string>\",\n    \"createdByType\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"lastModifiedBy\": \"<string>\",\n    \"lastModifiedByType\": \"<string>\",\n    \"lastModifiedAt\": \"<dateTime>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c616d6f4-7ca5-4661-a419-60135c076a37",
+              "name": "Created - Workspace created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"location\": \"eastus\",\n  \"properties\": {\n    \"sku\": {\n      \"name\": \"PerGB2018\"\n    },\n    \"retentionInDays\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n  \"name\": \"ws1\",\n  \"type\": \"Microsoft.OperationalInsights/workspaces\",\n  \"location\": \"eastus\",\n  \"tags\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"etag\": \"<string>\",\n  \"properties\": {\n    \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n    \"provisioningState\": \"Succeeded\",\n    \"sku\": {\n      \"name\": \"PerGB2018\",\n      \"capacityReservationLevel\": \"<integer>\",\n      \"lastSkuUpdate\": \"2006-03-22T14:49:34.186Z\"\n    },\n    \"retentionInDays\": 30,\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"createdDate\": \"1959-04-28T23:17:29.476Z\",\n    \"modifiedDate\": \"1985-08-04T21:50:32.621Z\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": 10,\n      \"dataIngestionStatus\": \"OverQuota\",\n      \"quotaNextResetTime\": \"string\"\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"principalId\": \"string\",\n    \"tenantId\": \"string\",\n    \"type\": \"<string>\"\n  },\n  \"systemData\": {\n    \"createdBy\": \"<string>\",\n    \"createdByType\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"lastModifiedBy\": \"<string>\",\n    \"lastModifiedByType\": \"<string>\",\n    \"lastModifiedAt\": \"<dateTime>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "04b5f66a-7426-44c5-82c7-04a7ec0cd9e9",
+              "name": "Accepted - Operation is in progress.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"location\": \"eastus\",\n  \"properties\": {\n    \"sku\": {\n      \"name\": \"PerGB2018\"\n    },\n    \"retentionInDays\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "235b8c60-4b4d-42f3-8ec7-e34732344d20",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"location\": \"eastus\",\n  \"properties\": {\n    \"sku\": {\n      \"name\": \"PerGB2018\"\n    },\n    \"retentionInDays\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ResourceNotFound\",\n    \"message\": \"The specified resource was not found.\",\n    \"target\": \"string\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ],\n    \"additionalInfo\": [\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      },\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2441ed24-0151-45ea-8cf8-b2c0e62805b8",
+          "name": "Azure Log Analytics Update Workspace",
+          "request": {
+            "name": "Azure Log Analytics Update Workspace",
+            "description": {
+              "content": "Updates a workspace.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "subscriptions",
+                ":subscriptionId",
+                "resourcegroups",
+                ":resourceGroupName",
+                "providers",
+                "Microsoft.OperationalInsights",
+                "workspaces",
+                ":workspaceName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2025-02-01",
+                  "description": "(Required) The API version to use for this operation."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resourceGroupName",
+                  "description": "(Required) The name of the resource group. The name is case insensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subscriptionId",
+                  "description": "(Required) The ID of the target subscription."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "workspaceName",
+                  "description": "(Required) The name of the workspace."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tags\": {\n    \"key_0\": \"<string>\"\n  },\n  \"properties\": {\n    \"provisioningState\": \"<string>\",\n    \"sku\": {\n      \"name\": \"<string>\",\n      \"capacityReservationLevel\": \"<integer>\"\n    },\n    \"retentionInDays\": \"<integer>\",\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": \"<double>\"\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"type\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4f49977e-30a9-439d-8afa-be7f1ce986a0",
+              "name": "OK - Workspace updated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tags\": {\n    \"key_0\": \"<string>\"\n  },\n  \"properties\": {\n    \"provisioningState\": \"Succeeded\",\n    \"sku\": {\n      \"name\": \"PerGB2018\",\n      \"capacityReservationLevel\": \"<integer>\"\n    },\n    \"retentionInDays\": 30,\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": 10\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"/subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1\",\n  \"name\": \"ws1\",\n  \"type\": \"Microsoft.OperationalInsights/workspaces\",\n  \"location\": \"eastus\",\n  \"tags\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\",\n    \"key_2\": \"<string>\"\n  },\n  \"etag\": \"<string>\",\n  \"properties\": {\n    \"customerId\": \"5b02755b-5bf4-430c-9487-45502a2a7e62\",\n    \"provisioningState\": \"Succeeded\",\n    \"sku\": {\n      \"name\": \"PerGB2018\",\n      \"capacityReservationLevel\": \"<integer>\",\n      \"lastSkuUpdate\": \"2006-03-22T14:49:34.186Z\"\n    },\n    \"retentionInDays\": 30,\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"createdDate\": \"1959-04-28T23:17:29.476Z\",\n    \"modifiedDate\": \"1985-08-04T21:50:32.621Z\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": 10,\n      \"dataIngestionStatus\": \"OverQuota\",\n      \"quotaNextResetTime\": \"string\"\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"principalId\": \"string\",\n    \"tenantId\": \"string\",\n    \"type\": \"<string>\"\n  },\n  \"systemData\": {\n    \"createdBy\": \"<string>\",\n    \"createdByType\": \"<string>\",\n    \"createdAt\": \"<dateTime>\",\n    \"lastModifiedBy\": \"<string>\",\n    \"lastModifiedByType\": \"<string>\",\n    \"lastModifiedAt\": \"<dateTime>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "453bbd60-664a-437c-b6ac-621d74a280ca",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"tags\": {\n    \"key_0\": \"<string>\"\n  },\n  \"properties\": {\n    \"provisioningState\": \"Succeeded\",\n    \"sku\": {\n      \"name\": \"PerGB2018\",\n      \"capacityReservationLevel\": \"<integer>\"\n    },\n    \"retentionInDays\": 30,\n    \"publicNetworkAccessForIngestion\": \"Enabled\",\n    \"publicNetworkAccessForQuery\": \"Enabled\",\n    \"defaultDataCollectionRuleResourceId\": \"<string>\",\n    \"forceCmkForQuery\": \"<boolean>\",\n    \"workspaceCapping\": {\n      \"dailyQuotaGb\": 10\n    },\n    \"features\": {\n      \"enableDataExport\": \"<boolean>\",\n      \"enableLogAccessUsingOnlyResourcePermissions\": \"<boolean>\",\n      \"immediatePurgeDataOn30Days\": \"<boolean>\",\n      \"disableLocalAuth\": \"<boolean>\",\n      \"clusterResourceId\": \"<string>\"\n    }\n  },\n  \"identity\": {\n    \"type\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ResourceNotFound\",\n    \"message\": \"The specified resource was not found.\",\n    \"target\": \"string\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ],\n    \"additionalInfo\": [\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      },\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "830c98d5-8f16-4135-a0f7-4db834d73ed9",
+          "name": "Azure Log Analytics Delete Workspace",
+          "request": {
+            "name": "Azure Log Analytics Delete Workspace",
+            "description": {
+              "content": "Deletes a workspace resource. To recover the workspace, create it again with the same name, subscription, resource group, and location.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "subscriptions",
+                ":subscriptionId",
+                "resourcegroups",
+                ":resourceGroupName",
+                "providers",
+                "Microsoft.OperationalInsights",
+                "workspaces",
+                ":workspaceName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2025-02-01",
+                  "description": "(Required) The API version to use for this operation."
+                },
+                {
+                  "disabled": false,
+                  "key": "force",
+                  "value": "<boolean>",
+                  "description": "Deletes the workspace without the recovery option."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resourceGroupName",
+                  "description": "(Required) The name of the resource group. The name is case insensitive."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "subscriptionId",
+                  "description": "(Required) The ID of the target subscription."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "workspaceName",
+                  "description": "(Required) The name of the workspace."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "64972e24-ca61-4be2-a568-852a1c7a6179",
+              "name": "OK - Workspace deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    },
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5e3b9d24-e937-4e92-9a88-277f305cc762",
+              "name": "Accepted - Deletion in progress.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    },
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c2e594cb-505e-4a73-804d-473a020747b9",
+              "name": "No Content - Workspace does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    },
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "247c138a-fd26-412d-8b75-a6baf7069c21",
+              "name": "Error response.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "subscriptions",
+                    ":subscriptionId",
+                    "resourcegroups",
+                    ":resourceGroupName",
+                    "providers",
+                    "Microsoft.OperationalInsights",
+                    "workspaces",
+                    ":workspaceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2025-02-01"
+                    },
+                    {
+                      "key": "force",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resourceGroupName",
+                      "description": "(Required) The name of the resource group. The name is case insensitive."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "subscriptionId",
+                      "description": "(Required) The ID of the target subscription."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "workspaceName",
+                      "description": "(Required) The name of the workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"ResourceNotFound\",\n    \"message\": \"The specified resource was not found.\",\n    \"target\": \"string\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ],\n    \"additionalInfo\": [\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      },\n      {\n        \"type\": \"string\",\n        \"info\": {}\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "The data collection endpoint URL",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "my-dce.eastus-1.ingest.monitor.azure.com",
+      "key": "endpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{endpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ff660c92-e82a-4e1e-915b-54c0339979f0",
+    "name": "Azure Log Analytics Ingestion Workspaces API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.\n\nContact Support:\n Name: Microsoft Azure Support",
+      "type": "text/plain"
+    }
+  }
+}

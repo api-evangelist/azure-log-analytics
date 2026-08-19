@@ -1,0 +1,965 @@
+{
+  "item": [
+    {
+      "id": "e34c9fb6-58ce-44d1-a14c-82c81e71cf53",
+      "name": "Ingestion",
+      "description": {
+        "content": "Send log data to Log Analytics workspaces",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "09abc47a-0320-4801-8777-72062693cbe7",
+          "name": "Azure Log Analytics Upload Logs",
+          "request": {
+            "name": "Azure Log Analytics Upload Logs",
+            "description": {
+              "content": "Send custom log data to a Log Analytics workspace via a data collection rule. The data must be a JSON array matching the stream schema defined in the DCR. Transformations defined in the DCR are applied before data reaches the target table.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataCollectionRules",
+                ":dcrImmutableId",
+                "streams",
+                ":streamName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "api-version",
+                  "value": "2023-01-01",
+                  "description": "(Required) The API version to use."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dcrImmutableId",
+                  "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "streamName",
+                  "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Set to gzip for compressed payloads.",
+                "key": "Content-Encoding",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "String-formatted GUID for request tracking.",
+                "key": "x-ms-client-request-id",
+                "value": "<uuid>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"TimeGenerated\": \"<dateTime>\",\n    \"Computer\": \"<string>\",\n    \"AdditionalContext\": \"<string>\"\n  }\n]",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4d0f451e-0d3f-42bd-af95-8a55cd233b5b",
+              "name": "No Content - Data accepted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1e7f63f2-d865-4a6f-8abe-b05c713eddf1",
+              "name": "Bad request - malformed payload or schema mismatch.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edc9fdd0-8fe8-46ef-8212-6f5cc77702c8",
+              "name": "Unauthorized - invalid or missing Bearer token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46db7c94-06e6-4bfd-89a7-7ea02f9b532c",
+              "name": "Forbidden - insufficient permissions on the DCR.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4b0b456-9ced-4985-bee0-447492dc9f76",
+              "name": "Not found - DCR or stream does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62115614-e4be-4dea-9bf7-ab5d34f60be4",
+              "name": "Payload too large - exceeds maximum size limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6847135-a836-4036-9605-4ad90c575943",
+              "name": "Too many requests - rate limit exceeded.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec364466-e646-4c0d-a493-4799d075f480",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1d411ac-d862-486c-bc10-1fdbc6c23c7c",
+              "name": "Service unavailable - temporary server issue.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataCollectionRules",
+                    ":dcrImmutableId",
+                    "streams",
+                    ":streamName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "api-version",
+                      "value": "2023-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dcrImmutableId",
+                      "description": "(Required) The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "streamName",
+                      "description": "(Required) The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Set to gzip for compressed payloads.",
+                    "key": "Content-Encoding",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "String-formatted GUID for request tracking.",
+                    "key": "x-ms-client-request-id",
+                    "value": "<uuid>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\n  {\n    \"TimeGenerated\": \"2025-03-15T14:30:00Z\",\n    \"Computer\": \"web-server-01\",\n    \"AdditionalContext\": \"Application startup complete\"\n  },\n  {\n    \"TimeGenerated\": \"2025-03-15T14:31:00Z\",\n    \"Computer\": \"web-server-02\",\n    \"AdditionalContext\": \"Health check passed\"\n  }\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"InvalidPayload\",\n    \"message\": \"The payload does not match the expected stream schema.\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "The data collection endpoint URL",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "my-dce.eastus-1.ingest.monitor.azure.com",
+      "key": "endpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{endpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4b16ed99-f865-40d9-9819-979bba61aab3",
+    "name": "Azure Log Analytics Ingestion API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.\n\nContact Support:\n Name: Microsoft Azure Support",
+      "type": "text/plain"
+    }
+  }
+}

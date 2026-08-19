@@ -1,0 +1,194 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Azure Log Analytics Ingestion Tables API",
+    "version": "2023-01-01"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Azure Log Analytics List Tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/tables",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ]
+          },
+          "docs": "Gets all the tables for the specified Log Analytics workspace."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Get Table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/tables/:tableName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the table."
+              }
+            ]
+          },
+          "docs": "Gets a Log Analytics workspace table."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Create or Update Table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/tables/:tableName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the table."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update or create a Log Analytics workspace table."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Delete Table",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/tables/:tableName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "tableName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the table."
+              }
+            ]
+          },
+          "docs": "Delete a Log Analytics workspace table."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

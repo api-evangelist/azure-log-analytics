@@ -1,0 +1,194 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Azure Log Analytics Ingestion Saved Searches API",
+    "version": "2023-01-01"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Saved Searches",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Azure Log Analytics List Saved Searches",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/savedSearches",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ]
+          },
+          "docs": "Gets the saved searches for a given Log Analytics workspace."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Get Saved Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/savedSearches/:savedSearchId",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "savedSearchId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the saved search."
+              }
+            ]
+          },
+          "docs": "Gets the specified saved search for a given workspace."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Create or Update Saved Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/savedSearches/:savedSearchId",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "savedSearchId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the saved search."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates or updates a saved search for a given workspace."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Delete Saved Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName/savedSearches/:savedSearchId",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "savedSearchId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the saved search."
+              }
+            ]
+          },
+          "docs": "Deletes the specified saved search in a given workspace."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Azure Log Analytics Ingestion Query API",
+    "version": "2023-01-01"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Azure Log Analytics Get Query",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/workspaces/:workspaceId/query",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1",
+                "type": "path",
+                "description": "The ID of the Log Analytics workspace."
+              },
+              {
+                "name": "query",
+                "value": "AzureActivity | summarize count() by Category",
+                "type": "query",
+                "description": "The Analytics query using Kusto Query Language (KQL)."
+              },
+              {
+                "name": "timespan",
+                "value": "P1D",
+                "type": "query",
+                "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression."
+              }
+            ]
+          },
+          "docs": "Execute a KQL query against a Log Analytics workspace using GET method. The query is passed as a URL-encoded query parameter."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Post Query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{endpoint}/workspaces/:workspaceId/query",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "a0a0a0a0-bbbb-cccc-dddd-e1e1e1e1e1e1",
+                "type": "path",
+                "description": "The ID of the Log Analytics workspace."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute a KQL query against a Log Analytics workspace using POST method. The query and optional timespan are passed in the JSON request body."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

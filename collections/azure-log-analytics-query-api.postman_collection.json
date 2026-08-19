@@ -1,0 +1,718 @@
+{
+  "item": [
+    {
+      "id": "a4381625-6efb-41a9-ad68-349cbdf92707",
+      "name": "Query",
+      "description": {
+        "content": "Execute KQL queries against Log Analytics workspaces",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1fb064c8-6eca-4ddb-a3b7-e2aeca43e9ec",
+          "name": "Azure Log Analytics Get Query",
+          "request": {
+            "name": "Azure Log Analytics Get Query",
+            "description": {
+              "content": "Execute a KQL query against a Log Analytics workspace using GET method. The query is passed as a URL-encoded query parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "workspaces",
+                ":workspaceId",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "(Required) The Analytics query using Kusto Query Language (KQL)."
+                },
+                {
+                  "disabled": false,
+                  "key": "timespan",
+                  "value": "<string>",
+                  "description": "ISO 8601 duration or time interval over which to query data. Applied in addition to any timespan specified in the query expression."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workspaceId",
+                  "description": "(Required) The ID of the Log Analytics workspace."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "2fe96712-9dff-4f64-88f1-ac91c9dd8550",
+              "name": "Successful query execution returning tabular results.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "AzureActivity | summarize count() by Category"
+                    },
+                    {
+                      "key": "timespan",
+                      "value": "P1D"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tables\": [\n    {\n      \"name\": \"PrimaryResult\",\n      \"columns\": [\n        {\n          \"name\": \"Category\",\n          \"type\": \"string\"\n        },\n        {\n          \"name\": \"count_\",\n          \"type\": \"long\"\n        }\n      ],\n      \"rows\": [\n        [\n          \"Administrative\",\n          20839\n        ],\n        [\n          \"Recommendation\",\n          122\n        ]\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb8933ed-722a-4463-8a85-c2630b5edbca",
+              "name": "Bad request due to malformed query or parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "AzureActivity | summarize count() by Category"
+                    },
+                    {
+                      "key": "timespan",
+                      "value": "P1D"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"BadArgumentError\",\n    \"message\": \"The request had some invalid properties\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34b32407-3ede-4b64-bd3b-e7f726af6e7e",
+              "name": "Unauthorized - invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "AzureActivity | summarize count() by Category"
+                    },
+                    {
+                      "key": "timespan",
+                      "value": "P1D"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"BadArgumentError\",\n    \"message\": \"The request had some invalid properties\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a8c654c-6807-4833-98d8-fe6958266d12",
+              "name": "Forbidden - insufficient permissions to access the workspace.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "AzureActivity | summarize count() by Category"
+                    },
+                    {
+                      "key": "timespan",
+                      "value": "P1D"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"BadArgumentError\",\n    \"message\": \"The request had some invalid properties\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b996083-fcf0-4075-889a-789f14f4930f",
+          "name": "Azure Log Analytics Post Query",
+          "request": {
+            "name": "Azure Log Analytics Post Query",
+            "description": {
+              "content": "Execute a KQL query against a Log Analytics workspace using POST method. The query and optional timespan are passed in the JSON request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "workspaces",
+                ":workspaceId",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workspaceId",
+                  "description": "(Required) The ID of the Log Analytics workspace."
+                },
+                {
+                  "description": "The data collection endpoint URL",
+                  "type": "any",
+                  "value": "{{endpoint}}",
+                  "key": "endpoint"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"timespan\": \"<string>\",\n  \"workspaces\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "aa322bf2-a4f6-4e39-a54f-2e2fdfb7103b",
+              "name": "Successful query execution returning tabular results.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"AzureActivity | summarize count() by Category\",\n  \"timespan\": \"P1D\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tables\": [\n    {\n      \"name\": \"PrimaryResult\",\n      \"columns\": [\n        {\n          \"name\": \"Category\",\n          \"type\": \"string\"\n        },\n        {\n          \"name\": \"count_\",\n          \"type\": \"long\"\n        }\n      ],\n      \"rows\": [\n        [\n          \"Administrative\",\n          20839\n        ],\n        [\n          \"Alert\",\n          64\n        ]\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "605f204f-2aba-4129-9e53-c85a735dd0f3",
+              "name": "Bad request due to malformed query or parameters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"AzureActivity | summarize count() by Category\",\n  \"timespan\": \"P1D\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"BadArgumentError\",\n    \"message\": \"The request had some invalid properties\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73fe861e-e031-4491-b40b-ac0492e29c45",
+              "name": "Unauthorized - invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"AzureActivity | summarize count() by Category\",\n  \"timespan\": \"P1D\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"BadArgumentError\",\n    \"message\": \"The request had some invalid properties\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "abb59811-d8f8-4897-bf28-37ba62533c9a",
+              "name": "Forbidden - insufficient permissions to access the workspace.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "workspaces",
+                    ":workspaceId",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workspaceId",
+                      "description": "(Required) The ID of the Log Analytics workspace."
+                    },
+                    {
+                      "description": "The data collection endpoint URL",
+                      "type": "any",
+                      "value": "{{endpoint}}",
+                      "key": "endpoint"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"AzureActivity | summarize count() by Category\",\n  \"timespan\": \"P1D\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"BadArgumentError\",\n    \"message\": \"The request had some invalid properties\",\n    \"details\": [\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      },\n      {\n        \"value\": \"<Circular reference to #/components/schemas/ErrorDetail detected>\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "The data collection endpoint URL",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "my-dce.eastus-1.ingest.monitor.azure.com",
+      "key": "endpoint"
+    },
+    {
+      "type": "string",
+      "value": "https://{{endpoint}}",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "527e3dde-0c40-4a13-a550-5c412572caf9",
+    "name": "Azure Log Analytics Ingestion Query API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.\n\nContact Support:\n Name: Microsoft Azure Support",
+      "type": "text/plain"
+    }
+  }
+}

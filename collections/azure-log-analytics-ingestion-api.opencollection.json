@@ -1,0 +1,69 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Azure Log Analytics Ingestion API",
+    "version": "2023-01-01"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ingestion",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Azure Log Analytics Upload Logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://{endpoint}/dataCollectionRules/:dcrImmutableId/streams/:streamName",
+            "headers": [
+              {
+                "name": "Content-Encoding",
+                "value": ""
+              },
+              {
+                "name": "x-ms-client-request-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "dcrImmutableId",
+                "value": "dcr-000a00a000a00000a000000aa000a0aa",
+                "type": "path",
+                "description": "The immutable ID of the data collection rule. Found on the DCR overview page in the Azure portal."
+              },
+              {
+                "name": "streamName",
+                "value": "Custom-MyTable",
+                "type": "path",
+                "description": "The stream name in the DCR that should handle the data. Use Custom-TableName for custom tables."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send custom log data to a Log Analytics workspace via a data collection rule. The data must be a JSON array matching the stream schema defined in the DCR. Transformations defined in the DCR are applied before data reaches the target table."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

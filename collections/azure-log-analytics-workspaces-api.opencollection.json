@@ -1,0 +1,242 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Azure Log Analytics Ingestion Workspaces API",
+    "version": "2023-01-01"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Azure Log Analytics List Workspaces",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/providers/Microsoft.OperationalInsights/workspaces",
+            "params": [
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ]
+          },
+          "docs": "Gets the workspaces in a subscription."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics List Workspaces by Resource Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ]
+          },
+          "docs": "Gets workspaces in a resource group."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Get Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ]
+          },
+          "docs": "Gets a workspace instance."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Create or Update Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update a workspace."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Update Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a workspace."
+        },
+        {
+          "info": {
+            "name": "Azure Log Analytics Delete Workspace",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://{endpoint}/subscriptions/:subscriptionId/resourcegroups/:resourceGroupName/providers/Microsoft.OperationalInsights/workspaces/:workspaceName",
+            "params": [
+              {
+                "name": "resourceGroupName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the resource group. The name is case insensitive."
+              },
+              {
+                "name": "subscriptionId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the target subscription."
+              },
+              {
+                "name": "workspaceName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the workspace."
+              },
+              {
+                "name": "api-version",
+                "value": "",
+                "type": "query",
+                "description": "The API version to use for this operation."
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Deletes the workspace without the recovery option."
+              }
+            ]
+          },
+          "docs": "Deletes a workspace resource. To recover the workspace, create it again with the same name, subscription, resource group, and location."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
