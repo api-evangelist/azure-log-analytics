@@ -12,14 +12,14 @@ info:
     descriptions.
   version: 1.0.0
 sourceDescriptions:
-- name: managementApi
-  url: ../openapi/azure-log-analytics-management-api.yaml
-  type: openapi
 - name: ingestionApi
-  url: ../openapi/azure-log-analytics-ingestion-api.yaml
+  url: ../openapi/azure-log-analytics-ingestion-api-openapi.yml
   type: openapi
 - name: queryApi
-  url: ../openapi/azure-log-analytics-query-api.yaml
+  url: ../openapi/azure-log-analytics-query-api-openapi.yml
+  type: openapi
+- name: tablesApi
+  url: ../openapi/azure-log-analytics-tables-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: ingest-and-verify

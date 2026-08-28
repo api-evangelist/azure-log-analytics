@@ -11,11 +11,11 @@ info:
     descriptions.
   version: 1.0.0
 sourceDescriptions:
-- name: managementApi
-  url: ../openapi/azure-log-analytics-management-api.yaml
-  type: openapi
 - name: queryApi
-  url: ../openapi/azure-log-analytics-query-api.yaml
+  url: ../openapi/azure-log-analytics-query-api-openapi.yml
+  type: openapi
+- name: workspacesApi
+  url: ../openapi/azure-log-analytics-workspaces-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: query-workspace-by-name

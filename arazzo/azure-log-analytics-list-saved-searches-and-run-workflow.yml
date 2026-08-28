@@ -12,11 +12,11 @@ info:
     descriptions.
   version: 1.0.0
 sourceDescriptions:
-- name: managementApi
-  url: ../openapi/azure-log-analytics-management-api.yaml
-  type: openapi
 - name: queryApi
-  url: ../openapi/azure-log-analytics-query-api.yaml
+  url: ../openapi/azure-log-analytics-query-api-openapi.yml
+  type: openapi
+- name: savedSearchesApi
+  url: ../openapi/azure-log-analytics-saved-searches-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: list-saved-searches-and-run

@@ -11,8 +11,11 @@ info:
     can be read and executed without opening the underlying OpenAPI descriptions.
   version: 1.0.0
 sourceDescriptions:
-- name: managementApi
-  url: ../openapi/azure-log-analytics-management-api.yaml
+- name: tablesApi
+  url: ../openapi/azure-log-analytics-tables-api-openapi.yml
+  type: openapi
+- name: workspacesApi
+  url: ../openapi/azure-log-analytics-workspaces-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: create-workspace-and-baseline-table

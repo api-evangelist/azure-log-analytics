@@ -11,8 +11,8 @@ info:
     opening the underlying OpenAPI descriptions.
   version: 1.0.0
 sourceDescriptions:
-- name: managementApi
-  url: ../openapi/azure-log-analytics-management-api.yaml
+- name: workspacesApi
+  url: ../openapi/azure-log-analytics-workspaces-api-openapi.yml
   type: openapi
 workflows:
 - workflowId: update-workspace-retention
