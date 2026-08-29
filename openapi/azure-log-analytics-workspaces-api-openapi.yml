@@ -1,8 +1,8 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Azure Log Analytics Ingestion Workspaces API
-  description: The Logs Ingestion API in Azure Monitor lets you send data to a Log Analytics workspace using REST API calls or client libraries. Send data to supported Azure tables or custom tables using data collection rules (DCR) for transformation and routing.
-  version: '2023-01-01'
+  title: Azure Log Analytics Management Workspaces API
+  description: REST API for managing Log Analytics workspaces, data sources, saved searches, linked services, storage insights, clusters, and tables through Azure Resource Manager.
+  version: '2025-02-01'
   contact:
     name: Microsoft Azure Support
     url: https://azure.microsoft.com/en-us/support/
@@ -12,14 +12,11 @@ info:
   x-generated-from: documentation
   x-last-validated: '2026-04-18'
 servers:
-- url: https://{endpoint}
-  description: Data collection endpoint or DCR logs ingestion endpoint
-  variables:
-    endpoint:
-      default: my-dce.eastus-1.ingest.monitor.azure.com
-      description: The data collection endpoint URL
+- url: https://management.azure.com
+  description: Azure Resource Manager endpoint
 security:
-- bearerAuth: []
+- oauth2:
+  - user_impersonation
 tags:
 - name: Workspaces
   description: Manage Log Analytics workspaces
@@ -253,14 +250,6 @@ paths:
         dispatcher: FALLBACK
 components:
   parameters:
-    SubscriptionIdParameter:
-      name: subscriptionId
-      in: path
-      required: true
-      description: The ID of the target subscription.
-      schema:
-        type: string
-        minLength: 1
     WorkspaceNameParameter:
       name: workspaceName
       in: path
@@ -271,6 +260,14 @@ components:
         minLength: 4
         maxLength: 63
         pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
     ApiVersionParameter:
       name: api-version
       in: query
@@ -289,6 +286,57 @@ components:
         minLength: 1
         maxLength: 90
   schemas:
+    SystemData:
+      type: object
+      description: Metadata pertaining to creation and last modification.
+      properties:
+        createdBy:
+          type: string
+          description: The identity that created the resource.
+        createdByType:
+          type: string
+          enum:
+          - User
+          - Application
+          - ManagedIdentity
+          - Key
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of resource creation (UTC).
+        lastModifiedBy:
+          type: string
+          description: The identity that last modified the resource.
+        lastModifiedByType:
+          type: string
+          enum:
+          - User
+          - Application
+          - ManagedIdentity
+          - Key
+        lastModifiedAt:
+          type: string
+          format: date-time
+          description: Timestamp of resource last modification (UTC).
+    WorkspaceFeatures:
+      type: object
+      description: Workspace features configuration.
+      properties:
+        enableDataExport:
+          type: boolean
+          description: Flag indicating if data should be exported.
+        enableLogAccessUsingOnlyResourcePermissions:
+          type: boolean
+          description: Permission mode flag.
+        immediatePurgeDataOn30Days:
+          type: boolean
+          description: Remove data after 30 days flag.
+        disableLocalAuth:
+          type: boolean
+          description: Disable non-AAD based authentication.
+        clusterResourceId:
+          type: string
+          description: Dedicated LA cluster resource ID.
     Workspace:
       type: object
       description: The top level Workspace resource container.
@@ -326,81 +374,29 @@ components:
           $ref: '#/components/schemas/Identity'
         systemData:
           $ref: '#/components/schemas/SystemData'
-    SystemData:
+    ErrorDetail:
       type: object
-      description: Metadata pertaining to creation and last modification.
+      description: Error detail.
       properties:
-        createdBy:
+        code:
           type: string
-          description: The identity that created the resource.
-        createdByType:
+          description: The error code.
+          example: ResourceNotFound
+        message:
           type: string
-          enum:
-          - User
-          - Application
-          - ManagedIdentity
-          - Key
-        createdAt:
+          description: The error message.
+          example: The specified resource was not found.
+        target:
           type: string
-          format: date-time
-          description: Timestamp of resource creation (UTC).
-        lastModifiedBy:
-          type: string
-          description: The identity that last modified the resource.
-        lastModifiedByType:
-          type: string
-          enum:
-          - User
-          - Application
-          - ManagedIdentity
-          - Key
-        lastModifiedAt:
-          type: string
-          format: date-time
-          description: Timestamp of resource last modification (UTC).
-    WorkspaceCapping:
-      type: object
-      description: The daily volume cap for ingestion.
-      properties:
-        dailyQuotaGb:
-          type: number
-          format: double
-          description: The workspace daily quota for ingestion in GB.
-          example: 10.0
-        dataIngestionStatus:
-          type: string
-          description: The status of data ingestion.
-          enum:
-          - RespectQuota
-          - ForceOn
-          - ForceOff
-          - OverQuota
-          - SubscriptionSuspended
-          - ApproachingQuota
-          readOnly: true
-        quotaNextResetTime:
-          type: string
-          description: The time when the quota will be reset.
-          readOnly: true
-    Identity:
-      type: object
-      description: The identity of the resource.
-      properties:
-        principalId:
-          type: string
-          description: The principal ID of resource identity.
-          readOnly: true
-        tenantId:
-          type: string
-          description: The tenant ID of resource.
-          readOnly: true
-        type:
-          type: string
-          description: Type of managed service identity.
-          enum:
-          - SystemAssigned
-          - UserAssigned
-          - None
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
     WorkspaceSku:
       type: object
       description: The SKU of the workspace.
@@ -441,18 +437,30 @@ components:
           format: date-time
           description: The last time the SKU was updated.
           readOnly: true
-    WorkspacePatch:
+    WorkspaceCapping:
       type: object
-      description: Workspace patch payload for updates.
+      description: The daily volume cap for ingestion.
       properties:
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-        properties:
-          $ref: '#/components/schemas/WorkspaceProperties'
-        identity:
-          $ref: '#/components/schemas/Identity'
+        dailyQuotaGb:
+          type: number
+          format: double
+          description: The workspace daily quota for ingestion in GB.
+          example: 10.0
+        dataIngestionStatus:
+          type: string
+          description: The status of data ingestion.
+          enum:
+          - RespectQuota
+          - ForceOn
+          - ForceOff
+          - OverQuota
+          - SubscriptionSuspended
+          - ApproachingQuota
+          readOnly: true
+        quotaNextResetTime:
+          type: string
+          description: The time when the quota will be reset.
+          readOnly: true
     WorkspaceProperties:
       type: object
       description: Workspace properties.
@@ -517,29 +525,12 @@ components:
           $ref: '#/components/schemas/WorkspaceCapping'
         features:
           $ref: '#/components/schemas/WorkspaceFeatures'
-    ErrorDetail:
+    ErrorResponse:
       type: object
-      description: Error detail.
+      description: Error response.
       properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     WorkspaceListResult:
       type: object
       description: List of workspaces result.
@@ -548,12 +539,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Workspace'
-    ErrorResponse:
+    WorkspacePatch:
       type: object
-      description: Error response.
+      description: Workspace patch payload for updates.
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        properties:
+          $ref: '#/components/schemas/WorkspaceProperties'
+        identity:
+          $ref: '#/components/schemas/Identity'
     ErrorAdditionalInfo:
       type: object
       description: Error additional info.
@@ -562,28 +559,31 @@ components:
           type: string
         info:
           type: object
-    WorkspaceFeatures:
+    Identity:
       type: object
-      description: Workspace features configuration.
+      description: The identity of the resource.
       properties:
-        enableDataExport:
-          type: boolean
-          description: Flag indicating if data should be exported.
-        enableLogAccessUsingOnlyResourcePermissions:
-          type: boolean
-          description: Permission mode flag.
-        immediatePurgeDataOn30Days:
-          type: boolean
-          description: Remove data after 30 days flag.
-        disableLocalAuth:
-          type: boolean
-          description: Disable non-AAD based authentication.
-        clusterResourceId:
+        principalId:
           type: string
-          description: Dedicated LA cluster resource ID.
+          description: The principal ID of resource identity.
+          readOnly: true
+        tenantId:
+          type: string
+          description: The tenant ID of resource.
+          readOnly: true
+        type:
+          type: string
+          description: Type of managed service identity.
+          enum:
+          - SystemAssigned
+          - UserAssigned
+          - None
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: Microsoft Entra ID OAuth2 Bearer token obtained via client credentials flow. Use scope https://monitor.azure.com/.default for Azure public cloud.
+    oauth2:
+      type: oauth2
+      description: Azure Active Directory OAuth2 implicit flow.
+      flows:
+        implicit:
+          authorizationUrl: https://login.microsoftonline.com/common/oauth2/authorize
+          scopes:
+            user_impersonation: Impersonate your user account

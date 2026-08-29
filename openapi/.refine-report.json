@@ -1,22 +1,31 @@
 {
   "provider": "azure-log-analytics",
   "sources": [
-    "azure-log-analytics-ingestion-api-openapi.yml",
-    "azure-log-analytics-query-api-openapi.yml",
-    "azure-log-analytics-saved-searches-api-openapi.yml",
-    "azure-log-analytics-tables-api-openapi.yml",
-    "azure-log-analytics-workspaces-api-openapi.yml"
+    "_original/azure-log-analytics-ingestion-api.yaml",
+    "_original/azure-log-analytics-management-api.yaml",
+    "_original/azure-log-analytics-query-api.yaml"
   ],
   "outputs": [
     "azure-log-analytics-ingestion-api-openapi.yml",
-    "azure-log-analytics-query-api-openapi.yml",
     "azure-log-analytics-saved-searches-api-openapi.yml",
     "azure-log-analytics-tables-api-openapi.yml",
-    "azure-log-analytics-workspaces-api-openapi.yml"
+    "azure-log-analytics-workspaces-api-openapi.yml",
+    "azure-log-analytics-query-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (3 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "azure-log-analytics-ingestion-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "azure-log-analytics-management-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "azure-log-analytics-query-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0"
+  ],
+  "skipped": [
+    "azure-log-analytics-ingestion-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "azure-log-analytics-query-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "azure-log-analytics-saved-searches-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "azure-log-analytics-tables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "azure-log-analytics-workspaces-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
