@@ -37,7 +37,7 @@ tags:
 - Cloud
 - Logging
 - Monitoring
-url: https://raw.githubusercontent.com/api-evangelist/azure-log-analytics/refs/heads/main/apis.yml
+url: https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-overview
 created: '2024-01-01'
 modified: '2026-05-19'
 specificationVersion: '0.23'
