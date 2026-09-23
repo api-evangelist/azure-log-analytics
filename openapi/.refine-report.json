@@ -1,9 +1,9 @@
 {
   "provider": "azure-log-analytics",
   "sources": [
-    "_original/azure-log-analytics-ingestion-api.yaml",
-    "_original/azure-log-analytics-management-api.yaml",
-    "_original/azure-log-analytics-query-api.yaml"
+    "_ae-authored/azure-log-analytics-ingestion-api.yaml",
+    "_ae-authored/azure-log-analytics-management-api.yaml",
+    "_ae-authored/azure-log-analytics-query-api.yaml"
   ],
   "outputs": [
     "azure-log-analytics-ingestion-api-openapi.yml",
@@ -16,10 +16,11 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "sourced from openapi/_original/ (3 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "azure-log-analytics-ingestion-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
     "azure-log-analytics-management-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "azure-log-analytics-query-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0"
+    "azure-log-analytics-query-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "azure-log-analytics-ingestion-api-openapi.yml: previously refined output, superseded by openapi/_original/",

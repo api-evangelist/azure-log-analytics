@@ -162,12 +162,12 @@ components:
           type: string
           description: Human-readable error message.
           example: The payload does not match the expected stream schema.
-    LogEntryArray:
-      type: array
-      description: Array of log entry objects. Each object must match the stream schema defined in the data collection rule.
-      items:
-        $ref: '#/components/schemas/LogEntry'
-      minItems: 1
+    ErrorResponse:
+      type: object
+      description: Error response from the ingestion API.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     LogEntry:
       type: object
       description: A single log entry. The schema must match the stream declaration in the data collection rule. Custom columns must have the _CF suffix for Azure tables.
@@ -186,12 +186,12 @@ components:
           description: Additional context or message for the log entry.
           example: Application startup complete
       additionalProperties: true
-    ErrorResponse:
-      type: object
-      description: Error response from the ingestion API.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+    LogEntryArray:
+      type: array
+      description: Array of log entry objects. Each object must match the stream schema defined in the data collection rule.
+      items:
+        $ref: '#/components/schemas/LogEntry'
+      minItems: 1
   securitySchemes:
     bearerAuth:
       type: http

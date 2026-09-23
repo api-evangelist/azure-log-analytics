@@ -177,14 +177,6 @@ components:
       schema:
         type: string
         minLength: 1
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
     ResourceGroupNameParameter:
       name: resourceGroupName
       in: path
@@ -194,7 +186,35 @@ components:
         type: string
         minLength: 1
         maxLength: 90
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
   schemas:
+    TablesListResult:
+      type: object
+      description: List of workspace tables result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+    TableSchema:
+      type: object
+      description: Schema of a workspace table.
+      properties:
+        name:
+          type: string
+          description: Table name.
+        columns:
+          type: array
+          description: A list of table custom columns.
+          items:
+            $ref: '#/components/schemas/TableColumn'
     Table:
       type: object
       description: Workspace table definition.
@@ -242,28 +262,6 @@ components:
           - InProgress
           - Deleting
           - Updating
-    TableColumn:
-      type: object
-      description: Table column definition.
-      properties:
-        name:
-          type: string
-          description: Column name.
-        type:
-          type: string
-          description: Column data type.
-          enum:
-          - string
-          - int
-          - long
-          - real
-          - boolean
-          - dateTime
-          - guid
-          - dynamic
-        description:
-          type: string
-          description: Column description.
     ErrorDetail:
       type: object
       description: Error detail.
@@ -287,24 +285,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorAdditionalInfo'
-    ErrorResponse:
+    TableColumn:
       type: object
-      description: Error response.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    TableSchema:
-      type: object
-      description: Schema of a workspace table.
+      description: Table column definition.
       properties:
         name:
           type: string
-          description: Table name.
-        columns:
-          type: array
-          description: A list of table custom columns.
-          items:
-            $ref: '#/components/schemas/TableColumn'
+          description: Column name.
+        type:
+          type: string
+          description: Column data type.
+          enum:
+          - string
+          - int
+          - long
+          - real
+          - boolean
+          - dateTime
+          - guid
+          - dynamic
+        description:
+          type: string
+          description: Column description.
     ErrorAdditionalInfo:
       type: object
       description: Error additional info.
@@ -313,14 +315,12 @@ components:
           type: string
         info:
           type: object
-    TablesListResult:
+    ErrorResponse:
       type: object
-      description: List of workspace tables result.
+      description: Error response.
       properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Table'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     oauth2:
       type: oauth2

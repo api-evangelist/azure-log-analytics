@@ -249,42 +249,6 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  parameters:
-    WorkspaceNameParameter:
-      name: workspaceName
-      in: path
-      required: true
-      description: The name of the workspace.
-      schema:
-        type: string
-        minLength: 4
-        maxLength: 63
-        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
-    SubscriptionIdParameter:
-      name: subscriptionId
-      in: path
-      required: true
-      description: The ID of the target subscription.
-      schema:
-        type: string
-        minLength: 1
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
-    ResourceGroupNameParameter:
-      name: resourceGroupName
-      in: path
-      required: true
-      description: The name of the resource group. The name is case insensitive.
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 90
   schemas:
     SystemData:
       type: object
@@ -318,6 +282,26 @@ components:
           type: string
           format: date-time
           description: Timestamp of resource last modification (UTC).
+    WorkspaceListResult:
+      type: object
+      description: List of workspaces result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
+    WorkspacePatch:
+      type: object
+      description: Workspace patch payload for updates.
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        properties:
+          $ref: '#/components/schemas/WorkspaceProperties'
+        identity:
+          $ref: '#/components/schemas/Identity'
     WorkspaceFeatures:
       type: object
       description: Workspace features configuration.
@@ -337,66 +321,6 @@ components:
         clusterResourceId:
           type: string
           description: Dedicated LA cluster resource ID.
-    Workspace:
-      type: object
-      description: The top level Workspace resource container.
-      properties:
-        id:
-          type: string
-          description: Fully qualified resource ID.
-          readOnly: true
-          example: /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1
-        name:
-          type: string
-          description: The name of the resource.
-          readOnly: true
-          example: ws1
-        type:
-          type: string
-          description: The type of the resource.
-          readOnly: true
-          example: Microsoft.OperationalInsights/workspaces
-        location:
-          type: string
-          description: The geo-location where the resource lives.
-          example: eastus
-        tags:
-          type: object
-          description: Resource tags.
-          additionalProperties:
-            type: string
-        etag:
-          type: string
-          description: The etag of the workspace.
-        properties:
-          $ref: '#/components/schemas/WorkspaceProperties'
-        identity:
-          $ref: '#/components/schemas/Identity'
-        systemData:
-          $ref: '#/components/schemas/SystemData'
-    ErrorDetail:
-      type: object
-      description: Error detail.
-      properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
     WorkspaceSku:
       type: object
       description: The SKU of the workspace.
@@ -437,6 +361,43 @@ components:
           format: date-time
           description: The last time the SKU was updated.
           readOnly: true
+    Workspace:
+      type: object
+      description: The top level Workspace resource container.
+      properties:
+        id:
+          type: string
+          description: Fully qualified resource ID.
+          readOnly: true
+          example: /subscriptions/00000000-0000-0000-0000-000000000000/resourcegroups/rg1/providers/microsoft.operationalinsights/workspaces/ws1
+        name:
+          type: string
+          description: The name of the resource.
+          readOnly: true
+          example: ws1
+        type:
+          type: string
+          description: The type of the resource.
+          readOnly: true
+          example: Microsoft.OperationalInsights/workspaces
+        location:
+          type: string
+          description: The geo-location where the resource lives.
+          example: eastus
+        tags:
+          type: object
+          description: Resource tags.
+          additionalProperties:
+            type: string
+        etag:
+          type: string
+          description: The etag of the workspace.
+        properties:
+          $ref: '#/components/schemas/WorkspaceProperties'
+        identity:
+          $ref: '#/components/schemas/Identity'
+        systemData:
+          $ref: '#/components/schemas/SystemData'
     WorkspaceCapping:
       type: object
       description: The daily volume cap for ingestion.
@@ -461,6 +422,48 @@ components:
           type: string
           description: The time when the quota will be reset.
           readOnly: true
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
+    Identity:
+      type: object
+      description: The identity of the resource.
+      properties:
+        principalId:
+          type: string
+          description: The principal ID of resource identity.
+          readOnly: true
+        tenantId:
+          type: string
+          description: The tenant ID of resource.
+          readOnly: true
+        type:
+          type: string
+          description: Type of managed service identity.
+          enum:
+          - SystemAssigned
+          - UserAssigned
+          - None
     WorkspaceProperties:
       type: object
       description: Workspace properties.
@@ -525,32 +528,6 @@ components:
           $ref: '#/components/schemas/WorkspaceCapping'
         features:
           $ref: '#/components/schemas/WorkspaceFeatures'
-    ErrorResponse:
-      type: object
-      description: Error response.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    WorkspaceListResult:
-      type: object
-      description: List of workspaces result.
-      properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Workspace'
-    WorkspacePatch:
-      type: object
-      description: Workspace patch payload for updates.
-      properties:
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-        properties:
-          $ref: '#/components/schemas/WorkspaceProperties'
-        identity:
-          $ref: '#/components/schemas/Identity'
     ErrorAdditionalInfo:
       type: object
       description: Error additional info.
@@ -559,25 +536,48 @@ components:
           type: string
         info:
           type: object
-    Identity:
+    ErrorResponse:
       type: object
-      description: The identity of the resource.
+      description: Error response.
       properties:
-        principalId:
-          type: string
-          description: The principal ID of resource identity.
-          readOnly: true
-        tenantId:
-          type: string
-          description: The tenant ID of resource.
-          readOnly: true
-        type:
-          type: string
-          description: Type of managed service identity.
-          enum:
-          - SystemAssigned
-          - UserAssigned
-          - None
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+  parameters:
+    WorkspaceNameParameter:
+      name: workspaceName
+      in: path
+      required: true
+      description: The name of the workspace.
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 63
+        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
   securitySchemes:
     oauth2:
       type: oauth2
