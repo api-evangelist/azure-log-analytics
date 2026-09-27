@@ -163,6 +163,14 @@ components:
         minLength: 4
         maxLength: 63
         pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
     SubscriptionIdParameter:
       name: subscriptionId
       in: path
@@ -180,15 +188,57 @@ components:
         type: string
         minLength: 1
         maxLength: 90
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
   schemas:
+    SavedSearch:
+      type: object
+      description: A saved search in a Log Analytics workspace.
+      properties:
+        id:
+          type: string
+          description: Fully qualified resource ID.
+          readOnly: true
+        name:
+          type: string
+          description: The name of the resource.
+          readOnly: true
+        type:
+          type: string
+          description: The type of the resource.
+          readOnly: true
+        etag:
+          type: string
+          description: The ETag of the saved search.
+        properties:
+          $ref: '#/components/schemas/SavedSearchProperties'
+    ErrorResponse:
+      type: object
+      description: Error response.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
     SavedSearchProperties:
       type: object
       description: Properties of a saved search.
@@ -229,58 +279,6 @@ components:
                 type: string
               value:
                 type: string
-    SavedSearch:
-      type: object
-      description: A saved search in a Log Analytics workspace.
-      properties:
-        id:
-          type: string
-          description: Fully qualified resource ID.
-          readOnly: true
-        name:
-          type: string
-          description: The name of the resource.
-          readOnly: true
-        type:
-          type: string
-          description: The type of the resource.
-          readOnly: true
-        etag:
-          type: string
-          description: The ETag of the saved search.
-        properties:
-          $ref: '#/components/schemas/SavedSearchProperties'
-    SavedSearchesListResult:
-      type: object
-      description: The saved search list result.
-      properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/SavedSearch'
-    ErrorDetail:
-      type: object
-      description: Error detail.
-      properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
     ErrorAdditionalInfo:
       type: object
       description: Error additional info.
@@ -289,12 +287,14 @@ components:
           type: string
         info:
           type: object
-    ErrorResponse:
+    SavedSearchesListResult:
       type: object
-      description: Error response.
+      description: The saved search list result.
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/SavedSearch'
   securitySchemes:
     oauth2:
       type: oauth2

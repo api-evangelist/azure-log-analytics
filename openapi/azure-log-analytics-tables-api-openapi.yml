@@ -169,6 +169,14 @@ components:
         minLength: 4
         maxLength: 63
         pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
     SubscriptionIdParameter:
       name: subscriptionId
       in: path
@@ -186,35 +194,36 @@ components:
         type: string
         minLength: 1
         maxLength: 90
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
   schemas:
-    TablesListResult:
+    ErrorResponse:
       type: object
-      description: List of workspace tables result.
+      description: Error response.
       properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Table'
-    TableSchema:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
       type: object
-      description: Schema of a workspace table.
+      description: Error detail.
       properties:
-        name:
+        code:
           type: string
-          description: Table name.
-        columns:
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
           type: array
-          description: A list of table custom columns.
           items:
-            $ref: '#/components/schemas/TableColumn'
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
     Table:
       type: object
       description: Workspace table definition.
@@ -262,29 +271,6 @@ components:
           - InProgress
           - Deleting
           - Updating
-    ErrorDetail:
-      type: object
-      description: Error detail.
-      properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
     TableColumn:
       type: object
       description: Table column definition.
@@ -307,6 +293,26 @@ components:
         description:
           type: string
           description: Column description.
+    TableSchema:
+      type: object
+      description: Schema of a workspace table.
+      properties:
+        name:
+          type: string
+          description: Table name.
+        columns:
+          type: array
+          description: A list of table custom columns.
+          items:
+            $ref: '#/components/schemas/TableColumn'
+    TablesListResult:
+      type: object
+      description: List of workspace tables result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
     ErrorAdditionalInfo:
       type: object
       description: Error additional info.
@@ -315,12 +321,6 @@ components:
           type: string
         info:
           type: object
-    ErrorResponse:
-      type: object
-      description: Error response.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     oauth2:
       type: oauth2
