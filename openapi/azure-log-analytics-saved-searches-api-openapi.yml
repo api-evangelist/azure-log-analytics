@@ -153,6 +153,23 @@ paths:
         dispatcher: FALLBACK
 components:
   parameters:
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
     WorkspaceNameParameter:
       name: workspaceName
       in: path
@@ -171,74 +188,23 @@ components:
       schema:
         type: string
         default: '2025-02-01'
-    SubscriptionIdParameter:
-      name: subscriptionId
-      in: path
-      required: true
-      description: The ID of the target subscription.
-      schema:
-        type: string
-        minLength: 1
-    ResourceGroupNameParameter:
-      name: resourceGroupName
-      in: path
-      required: true
-      description: The name of the resource group. The name is case insensitive.
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 90
   schemas:
-    SavedSearch:
+    ErrorAdditionalInfo:
       type: object
-      description: A saved search in a Log Analytics workspace.
+      description: Error additional info.
       properties:
-        id:
-          type: string
-          description: Fully qualified resource ID.
-          readOnly: true
-        name:
-          type: string
-          description: The name of the resource.
-          readOnly: true
         type:
           type: string
-          description: The type of the resource.
-          readOnly: true
-        etag:
-          type: string
-          description: The ETag of the saved search.
-        properties:
-          $ref: '#/components/schemas/SavedSearchProperties'
-    ErrorResponse:
+        info:
+          type: object
+    SavedSearchesListResult:
       type: object
-      description: Error response.
+      description: The saved search list result.
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    ErrorDetail:
-      type: object
-      description: Error detail.
-      properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
+        value:
           type: array
           items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
+            $ref: '#/components/schemas/SavedSearch'
     SavedSearchProperties:
       type: object
       description: Properties of a saved search.
@@ -279,22 +245,56 @@ components:
                 type: string
               value:
                 type: string
-    ErrorAdditionalInfo:
+    ErrorDetail:
       type: object
-      description: Error additional info.
+      description: Error detail.
       properties:
-        type:
+        code:
           type: string
-        info:
-          type: object
-    SavedSearchesListResult:
-      type: object
-      description: The saved search list result.
-      properties:
-        value:
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
           type: array
           items:
-            $ref: '#/components/schemas/SavedSearch'
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
+    ErrorResponse:
+      type: object
+      description: Error response.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    SavedSearch:
+      type: object
+      description: A saved search in a Log Analytics workspace.
+      properties:
+        id:
+          type: string
+          description: Fully qualified resource ID.
+          readOnly: true
+        name:
+          type: string
+          description: The name of the resource.
+          readOnly: true
+        type:
+          type: string
+          description: The type of the resource.
+          readOnly: true
+        etag:
+          type: string
+          description: The ETag of the saved search.
+        properties:
+          $ref: '#/components/schemas/SavedSearchProperties'
   securitySchemes:
     oauth2:
       type: oauth2

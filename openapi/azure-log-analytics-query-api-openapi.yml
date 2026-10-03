@@ -171,6 +171,17 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
+    QueryResults:
+      type: object
+      description: Response containing tabular query results.
+      properties:
+        tables:
+          type: array
+          description: Array of result tables.
+          items:
+            $ref: '#/components/schemas/Table'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     Column:
       type: object
       description: A column definition in the query result.
@@ -194,40 +205,6 @@ components:
           - string
           - timespan
           example: string
-    ErrorResponse:
-      type: object
-      description: Error response from the API.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    ErrorDetail:
-      type: object
-      description: Detailed error information.
-      properties:
-        code:
-          type: string
-          description: Error code identifier.
-          example: BadArgumentError
-        message:
-          type: string
-          description: Human-readable error message.
-          example: The request had some invalid properties
-        details:
-          type: array
-          description: Additional error details.
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-    QueryResults:
-      type: object
-      description: Response containing tabular query results.
-      properties:
-        tables:
-          type: array
-          description: Array of result tables.
-          items:
-            $ref: '#/components/schemas/Table'
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
     Table:
       type: object
       description: A single result table from a query.
@@ -269,6 +246,29 @@ components:
           example:
           - workspace-id-1
           - workspace-id-2
+    ErrorDetail:
+      type: object
+      description: Detailed error information.
+      properties:
+        code:
+          type: string
+          description: Error code identifier.
+          example: BadArgumentError
+        message:
+          type: string
+          description: Human-readable error message.
+          example: The request had some invalid properties
+        details:
+          type: array
+          description: Additional error details.
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+    ErrorResponse:
+      type: object
+      description: Error response from the API.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     bearerAuth:
       type: http
