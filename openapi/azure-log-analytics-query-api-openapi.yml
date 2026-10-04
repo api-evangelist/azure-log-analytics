@@ -182,48 +182,6 @@ components:
             $ref: '#/components/schemas/Table'
         error:
           $ref: '#/components/schemas/ErrorDetail'
-    Column:
-      type: object
-      description: A column definition in the query result.
-      properties:
-        name:
-          type: string
-          description: The column name.
-          example: Category
-        type:
-          type: string
-          description: The data type of the column.
-          enum:
-          - bool
-          - datetime
-          - decimal
-          - dynamic
-          - guid
-          - int
-          - long
-          - real
-          - string
-          - timespan
-          example: string
-    Table:
-      type: object
-      description: A single result table from a query.
-      properties:
-        name:
-          type: string
-          description: The name of the table (e.g., PrimaryResult).
-          example: PrimaryResult
-        columns:
-          type: array
-          description: Schema of the result columns.
-          items:
-            $ref: '#/components/schemas/Column'
-        rows:
-          type: array
-          description: Array of row data matching the column schema.
-          items:
-            type: array
-            items: {}
     QueryBody:
       type: object
       description: Request body for executing a KQL query.
@@ -269,6 +227,48 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ErrorDetail'
+    Column:
+      type: object
+      description: A column definition in the query result.
+      properties:
+        name:
+          type: string
+          description: The column name.
+          example: Category
+        type:
+          type: string
+          description: The data type of the column.
+          enum:
+          - bool
+          - datetime
+          - decimal
+          - dynamic
+          - guid
+          - int
+          - long
+          - real
+          - string
+          - timespan
+          example: string
+    Table:
+      type: object
+      description: A single result table from a query.
+      properties:
+        name:
+          type: string
+          description: The name of the table (e.g., PrimaryResult).
+          example: PrimaryResult
+        columns:
+          type: array
+          description: Schema of the result columns.
+          items:
+            $ref: '#/components/schemas/Column'
+        rows:
+          type: array
+          description: Array of row data matching the column schema.
+          items:
+            type: array
+            items: {}
   securitySchemes:
     bearerAuth:
       type: http

@@ -158,65 +158,19 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  parameters:
-    SubscriptionIdParameter:
-      name: subscriptionId
-      in: path
-      required: true
-      description: The ID of the target subscription.
-      schema:
-        type: string
-        minLength: 1
-    ResourceGroupNameParameter:
-      name: resourceGroupName
-      in: path
-      required: true
-      description: The name of the resource group. The name is case insensitive.
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 90
-    WorkspaceNameParameter:
-      name: workspaceName
-      in: path
-      required: true
-      description: The name of the workspace.
-      schema:
-        type: string
-        minLength: 4
-        maxLength: 63
-        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
   schemas:
-    TablesListResult:
+    TableSchema:
       type: object
-      description: List of workspace tables result.
+      description: Schema of a workspace table.
       properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Table'
-    Table:
-      type: object
-      description: Workspace table definition.
-      properties:
-        id:
-          type: string
-          readOnly: true
         name:
           type: string
-        type:
-          type: string
-          readOnly: true
-        properties:
-          $ref: '#/components/schemas/TableProperties'
+          description: Table name.
+        columns:
+          type: array
+          description: A list of table custom columns.
+          items:
+            $ref: '#/components/schemas/TableColumn'
     TableProperties:
       type: object
       description: Table properties.
@@ -258,40 +212,6 @@ components:
           type: string
         info:
           type: object
-    TableSchema:
-      type: object
-      description: Schema of a workspace table.
-      properties:
-        name:
-          type: string
-          description: Table name.
-        columns:
-          type: array
-          description: A list of table custom columns.
-          items:
-            $ref: '#/components/schemas/TableColumn'
-    TableColumn:
-      type: object
-      description: Table column definition.
-      properties:
-        name:
-          type: string
-          description: Column name.
-        type:
-          type: string
-          description: Column data type.
-          enum:
-          - string
-          - int
-          - long
-          - real
-          - boolean
-          - dateTime
-          - guid
-          - dynamic
-        description:
-          type: string
-          description: Column description.
     ErrorDetail:
       type: object
       description: Error detail.
@@ -321,6 +241,86 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ErrorDetail'
+    TableColumn:
+      type: object
+      description: Table column definition.
+      properties:
+        name:
+          type: string
+          description: Column name.
+        type:
+          type: string
+          description: Column data type.
+          enum:
+          - string
+          - int
+          - long
+          - real
+          - boolean
+          - dateTime
+          - guid
+          - dynamic
+        description:
+          type: string
+          description: Column description.
+    TablesListResult:
+      type: object
+      description: List of workspace tables result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
+    Table:
+      type: object
+      description: Workspace table definition.
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+          readOnly: true
+        properties:
+          $ref: '#/components/schemas/TableProperties'
+  parameters:
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
+    WorkspaceNameParameter:
+      name: workspaceName
+      in: path
+      required: true
+      description: The name of the workspace.
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 63
+        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
   securitySchemes:
     oauth2:
       type: oauth2

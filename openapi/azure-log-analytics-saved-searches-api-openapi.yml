@@ -152,42 +152,6 @@ paths:
         delay: 0
         dispatcher: FALLBACK
 components:
-  parameters:
-    SubscriptionIdParameter:
-      name: subscriptionId
-      in: path
-      required: true
-      description: The ID of the target subscription.
-      schema:
-        type: string
-        minLength: 1
-    ResourceGroupNameParameter:
-      name: resourceGroupName
-      in: path
-      required: true
-      description: The name of the resource group. The name is case insensitive.
-      schema:
-        type: string
-        minLength: 1
-        maxLength: 90
-    WorkspaceNameParameter:
-      name: workspaceName
-      in: path
-      required: true
-      description: The name of the workspace.
-      schema:
-        type: string
-        minLength: 4
-        maxLength: 63
-        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
   schemas:
     ErrorAdditionalInfo:
       type: object
@@ -197,6 +161,29 @@ components:
           type: string
         info:
           type: object
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
     SavedSearchesListResult:
       type: object
       description: The saved search list result.
@@ -245,29 +232,6 @@ components:
                 type: string
               value:
                 type: string
-    ErrorDetail:
-      type: object
-      description: Error detail.
-      properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
     ErrorResponse:
       type: object
       description: Error response.
@@ -295,6 +259,42 @@ components:
           description: The ETag of the saved search.
         properties:
           $ref: '#/components/schemas/SavedSearchProperties'
+  parameters:
+    ResourceGroupNameParameter:
+      name: resourceGroupName
+      in: path
+      required: true
+      description: The name of the resource group. The name is case insensitive.
+      schema:
+        type: string
+        minLength: 1
+        maxLength: 90
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
+    WorkspaceNameParameter:
+      name: workspaceName
+      in: path
+      required: true
+      description: The name of the workspace.
+      schema:
+        type: string
+        minLength: 4
+        maxLength: 63
+        pattern: ^[A-Za-z0-9][A-Za-z0-9-]+[A-Za-z0-9]$
+    SubscriptionIdParameter:
+      name: subscriptionId
+      in: path
+      required: true
+      description: The ID of the target subscription.
+      schema:
+        type: string
+        minLength: 1
   securitySchemes:
     oauth2:
       type: oauth2
