@@ -320,6 +320,10 @@ apis:
   - type: Examples
     url: examples/ingestion-api-log-entry-example.json
 common:
+  - type: Plans
+    url: plans/azure-log-analytics-plans-pricing.yml
+  - type: FinOps
+    url: finops/azure-log-analytics-finops.yml
   - type: Website
     url: https://www.microsoft.com/
   - type: IssueTracker
