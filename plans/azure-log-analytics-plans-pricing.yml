@@ -168,3 +168,46 @@ plans:
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - metered
+  - subscription
+  units:
+  - data
+  plans:
+  - name: Pay-As-You-Go
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - data
+    periods:
+    - month
+  - name: Commitment Tiers
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - data
+    periods:
+    - day
+  - name: Basic and Auxiliary Logs
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - data
+    periods:
+    - month
+    - per-use
+  - name: Legacy Free Tier (closed)
+    access: freemium
+    model: free
+    model_how: derived
+    units:
+    - data
+    periods:
+    - day
