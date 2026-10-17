@@ -250,154 +250,6 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
-    WorkspacePatch:
-      type: object
-      description: Workspace patch payload for updates.
-      properties:
-        tags:
-          type: object
-          additionalProperties:
-            type: string
-        properties:
-          $ref: '#/components/schemas/WorkspaceProperties'
-        identity:
-          $ref: '#/components/schemas/Identity'
-    Identity:
-      type: object
-      description: The identity of the resource.
-      properties:
-        principalId:
-          type: string
-          description: The principal ID of resource identity.
-          readOnly: true
-        tenantId:
-          type: string
-          description: The tenant ID of resource.
-          readOnly: true
-        type:
-          type: string
-          description: Type of managed service identity.
-          enum:
-          - SystemAssigned
-          - UserAssigned
-          - None
-    SystemData:
-      type: object
-      description: Metadata pertaining to creation and last modification.
-      properties:
-        createdBy:
-          type: string
-          description: The identity that created the resource.
-        createdByType:
-          type: string
-          enum:
-          - User
-          - Application
-          - ManagedIdentity
-          - Key
-        createdAt:
-          type: string
-          format: date-time
-          description: Timestamp of resource creation (UTC).
-        lastModifiedBy:
-          type: string
-          description: The identity that last modified the resource.
-        lastModifiedByType:
-          type: string
-          enum:
-          - User
-          - Application
-          - ManagedIdentity
-          - Key
-        lastModifiedAt:
-          type: string
-          format: date-time
-          description: Timestamp of resource last modification (UTC).
-    ErrorAdditionalInfo:
-      type: object
-      description: Error additional info.
-      properties:
-        type:
-          type: string
-        info:
-          type: object
-    ErrorDetail:
-      type: object
-      description: Error detail.
-      properties:
-        code:
-          type: string
-          description: The error code.
-          example: ResourceNotFound
-        message:
-          type: string
-          description: The error message.
-          example: The specified resource was not found.
-        target:
-          type: string
-          description: The error target.
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-        additionalInfo:
-          type: array
-          items:
-            $ref: '#/components/schemas/ErrorAdditionalInfo'
-    ErrorResponse:
-      type: object
-      description: Error response.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    WorkspaceSku:
-      type: object
-      description: The SKU of the workspace.
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          description: The name of the SKU.
-          enum:
-          - Free
-          - Standard
-          - Premium
-          - PerNode
-          - PerGB2018
-          - Standalone
-          - CapacityReservation
-          - LACluster
-          example: PerGB2018
-        capacityReservationLevel:
-          type: integer
-          format: int32
-          description: The capacity reservation level in GB.
-          enum:
-          - 100
-          - 200
-          - 300
-          - 400
-          - 500
-          - 1000
-          - 2000
-          - 5000
-          - 10000
-          - 25000
-          - 50000
-        lastSkuUpdate:
-          type: string
-          format: date-time
-          description: The last time the SKU was updated.
-          readOnly: true
-    WorkspaceListResult:
-      type: object
-      description: List of workspaces result.
-      properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Workspace'
     WorkspaceProperties:
       type: object
       description: Workspace properties.
@@ -462,6 +314,77 @@ components:
           $ref: '#/components/schemas/WorkspaceCapping'
         features:
           $ref: '#/components/schemas/WorkspaceFeatures'
+    SystemData:
+      type: object
+      description: Metadata pertaining to creation and last modification.
+      properties:
+        createdBy:
+          type: string
+          description: The identity that created the resource.
+        createdByType:
+          type: string
+          enum:
+          - User
+          - Application
+          - ManagedIdentity
+          - Key
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp of resource creation (UTC).
+        lastModifiedBy:
+          type: string
+          description: The identity that last modified the resource.
+        lastModifiedByType:
+          type: string
+          enum:
+          - User
+          - Application
+          - ManagedIdentity
+          - Key
+        lastModifiedAt:
+          type: string
+          format: date-time
+          description: Timestamp of resource last modification (UTC).
+    WorkspacePatch:
+      type: object
+      description: Workspace patch payload for updates.
+      properties:
+        tags:
+          type: object
+          additionalProperties:
+            type: string
+        properties:
+          $ref: '#/components/schemas/WorkspaceProperties'
+        identity:
+          $ref: '#/components/schemas/Identity'
+    Identity:
+      type: object
+      description: The identity of the resource.
+      properties:
+        principalId:
+          type: string
+          description: The principal ID of resource identity.
+          readOnly: true
+        tenantId:
+          type: string
+          description: The tenant ID of resource.
+          readOnly: true
+        type:
+          type: string
+          description: Type of managed service identity.
+          enum:
+          - SystemAssigned
+          - UserAssigned
+          - None
+    ErrorAdditionalInfo:
+      type: object
+      description: Error additional info.
+      properties:
+        type:
+          type: string
+        info:
+          type: object
     WorkspaceFeatures:
       type: object
       description: Workspace features configuration.
@@ -505,6 +428,37 @@ components:
           type: string
           description: The time when the quota will be reset.
           readOnly: true
+    ErrorDetail:
+      type: object
+      description: Error detail.
+      properties:
+        code:
+          type: string
+          description: The error code.
+          example: ResourceNotFound
+        message:
+          type: string
+          description: The error message.
+          example: The specified resource was not found.
+        target:
+          type: string
+          description: The error target.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorAdditionalInfo'
+    WorkspaceListResult:
+      type: object
+      description: List of workspaces result.
+      properties:
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workspace'
     Workspace:
       type: object
       description: The top level Workspace resource container.
@@ -542,6 +496,52 @@ components:
           $ref: '#/components/schemas/Identity'
         systemData:
           $ref: '#/components/schemas/SystemData'
+    WorkspaceSku:
+      type: object
+      description: The SKU of the workspace.
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name of the SKU.
+          enum:
+          - Free
+          - Standard
+          - Premium
+          - PerNode
+          - PerGB2018
+          - Standalone
+          - CapacityReservation
+          - LACluster
+          example: PerGB2018
+        capacityReservationLevel:
+          type: integer
+          format: int32
+          description: The capacity reservation level in GB.
+          enum:
+          - 100
+          - 200
+          - 300
+          - 400
+          - 500
+          - 1000
+          - 2000
+          - 5000
+          - 10000
+          - 25000
+          - 50000
+        lastSkuUpdate:
+          type: string
+          format: date-time
+          description: The last time the SKU was updated.
+          readOnly: true
+    ErrorResponse:
+      type: object
+      description: Error response.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   parameters:
     ResourceGroupNameParameter:
       name: resourceGroupName
@@ -552,14 +552,6 @@ components:
         type: string
         minLength: 1
         maxLength: 90
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
     WorkspaceNameParameter:
       name: workspaceName
       in: path
@@ -578,6 +570,14 @@ components:
       schema:
         type: string
         minLength: 1
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
   securitySchemes:
     oauth2:
       type: oauth2

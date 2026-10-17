@@ -171,6 +171,71 @@ paths:
         dispatcher: FALLBACK
 components:
   schemas:
+    ErrorDetail:
+      type: object
+      description: Detailed error information.
+      properties:
+        code:
+          type: string
+          description: Error code identifier.
+          example: BadArgumentError
+        message:
+          type: string
+          description: Human-readable error message.
+          example: The request had some invalid properties
+        details:
+          type: array
+          description: Additional error details.
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+    Table:
+      type: object
+      description: A single result table from a query.
+      properties:
+        name:
+          type: string
+          description: The name of the table (e.g., PrimaryResult).
+          example: PrimaryResult
+        columns:
+          type: array
+          description: Schema of the result columns.
+          items:
+            $ref: '#/components/schemas/Column'
+        rows:
+          type: array
+          description: Array of row data matching the column schema.
+          items:
+            type: array
+            items: {}
+    Column:
+      type: object
+      description: A column definition in the query result.
+      properties:
+        name:
+          type: string
+          description: The column name.
+          example: Category
+        type:
+          type: string
+          description: The data type of the column.
+          enum:
+          - bool
+          - datetime
+          - decimal
+          - dynamic
+          - guid
+          - int
+          - long
+          - real
+          - string
+          - timespan
+          example: string
+    ErrorResponse:
+      type: object
+      description: Error response from the API.
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     QueryResults:
       type: object
       description: Response containing tabular query results.
@@ -204,71 +269,6 @@ components:
           example:
           - workspace-id-1
           - workspace-id-2
-    ErrorDetail:
-      type: object
-      description: Detailed error information.
-      properties:
-        code:
-          type: string
-          description: Error code identifier.
-          example: BadArgumentError
-        message:
-          type: string
-          description: Human-readable error message.
-          example: The request had some invalid properties
-        details:
-          type: array
-          description: Additional error details.
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-    ErrorResponse:
-      type: object
-      description: Error response from the API.
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    Column:
-      type: object
-      description: A column definition in the query result.
-      properties:
-        name:
-          type: string
-          description: The column name.
-          example: Category
-        type:
-          type: string
-          description: The data type of the column.
-          enum:
-          - bool
-          - datetime
-          - decimal
-          - dynamic
-          - guid
-          - int
-          - long
-          - real
-          - string
-          - timespan
-          example: string
-    Table:
-      type: object
-      description: A single result table from a query.
-      properties:
-        name:
-          type: string
-          description: The name of the table (e.g., PrimaryResult).
-          example: PrimaryResult
-        columns:
-          type: array
-          description: Schema of the result columns.
-          items:
-            $ref: '#/components/schemas/Column'
-        rows:
-          type: array
-          description: Array of row data matching the column schema.
-          items:
-            type: array
-            items: {}
   securitySchemes:
     bearerAuth:
       type: http

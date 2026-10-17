@@ -171,6 +171,14 @@ components:
           description: A list of table custom columns.
           items:
             $ref: '#/components/schemas/TableColumn'
+    ErrorAdditionalInfo:
+      type: object
+      description: Error additional info.
+      properties:
+        type:
+          type: string
+        info:
+          type: object
     TableProperties:
       type: object
       description: Table properties.
@@ -204,14 +212,14 @@ components:
           - InProgress
           - Deleting
           - Updating
-    ErrorAdditionalInfo:
+    TablesListResult:
       type: object
-      description: Error additional info.
+      description: List of workspace tables result.
       properties:
-        type:
-          type: string
-        info:
-          type: object
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/Table'
     ErrorDetail:
       type: object
       description: Error detail.
@@ -235,12 +243,20 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ErrorAdditionalInfo'
-    ErrorResponse:
+    Table:
       type: object
-      description: Error response.
+      description: Workspace table definition.
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+          readOnly: true
+        properties:
+          $ref: '#/components/schemas/TableProperties'
     TableColumn:
       type: object
       description: Table column definition.
@@ -263,28 +279,12 @@ components:
         description:
           type: string
           description: Column description.
-    TablesListResult:
+    ErrorResponse:
       type: object
-      description: List of workspace tables result.
+      description: Error response.
       properties:
-        value:
-          type: array
-          items:
-            $ref: '#/components/schemas/Table'
-    Table:
-      type: object
-      description: Workspace table definition.
-      properties:
-        id:
-          type: string
-          readOnly: true
-        name:
-          type: string
-        type:
-          type: string
-          readOnly: true
-        properties:
-          $ref: '#/components/schemas/TableProperties'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   parameters:
     ResourceGroupNameParameter:
       name: resourceGroupName
@@ -295,14 +295,6 @@ components:
         type: string
         minLength: 1
         maxLength: 90
-    ApiVersionParameter:
-      name: api-version
-      in: query
-      required: true
-      description: The API version to use for this operation.
-      schema:
-        type: string
-        default: '2025-02-01'
     WorkspaceNameParameter:
       name: workspaceName
       in: path
@@ -321,6 +313,14 @@ components:
       schema:
         type: string
         minLength: 1
+    ApiVersionParameter:
+      name: api-version
+      in: query
+      required: true
+      description: The API version to use for this operation.
+      schema:
+        type: string
+        default: '2025-02-01'
   securitySchemes:
     oauth2:
       type: oauth2
