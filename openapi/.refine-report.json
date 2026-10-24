@@ -1,11 +1,13 @@
 {
   "provider": "azure-log-analytics",
   "sources": [
+    "_original/azure-log-analytics-openapi.json",
     "_ae-authored/azure-log-analytics-ingestion-api.yaml",
     "_ae-authored/azure-log-analytics-management-api.yaml",
     "_ae-authored/azure-log-analytics-query-api.yaml"
   ],
   "outputs": [
+    "azure-log-analytics-webapps-api-openapi.yml",
     "azure-log-analytics-ingestion-api-openapi.yml",
     "azure-log-analytics-saved-searches-api-openapi.yml",
     "azure-log-analytics-tables-api-openapi.yml",
@@ -16,11 +18,13 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "sourced from openapi/_original/ (0 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "azure-log-analytics-openapi.json: upgraded swagger 2.0 -> OpenAPI 3.2.0",
+    "azure-log-analytics-openapi.json: declared missing tag: WebApps",
     "azure-log-analytics-ingestion-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
     "azure-log-analytics-management-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
     "azure-log-analytics-query-api.yaml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "apis.yml register: written (+1 apis, 6 total)"
   ],
   "skipped": [
     "azure-log-analytics-ingestion-api-openapi.yml: previously refined output, superseded by openapi/_original/",
